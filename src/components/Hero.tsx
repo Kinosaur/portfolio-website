@@ -5,6 +5,7 @@ import { siteContent } from "@/data/content";
 import TiltCard from "./TiltCard";
 
 export default function Hero() {
+
   return (
     <section
       id="hero"
@@ -31,11 +32,11 @@ export default function Hero() {
 
             {/* Name */}
             <h1
-              className="hero-line"
+              className="hero-line hero-name-display"
               style={{
                 fontSize: "clamp(2rem, 9vw, 3.75rem)",
                 fontWeight: 700,
-                letterSpacing: "-0.035em",
+                letterSpacing: "-0.02em",
                 lineHeight: 1.08,
                 color: "var(--foreground)",
                 marginBottom: "1rem",
@@ -54,7 +55,7 @@ export default function Hero() {
                 marginBottom: "1.1rem",
               }}
             >
-              Hi — I&rsquo;m Kinosaur.
+              Hello — I&rsquo;m <span className="hero-nickname-script">Kinosaur</span>.
             </p>
 
             {/* Positioning */}
@@ -147,9 +148,23 @@ export default function Hero() {
           gap: 3.5rem;
           align-items: center;
         }
+
         .hero-photo-wrap {
           display: flex;
           justify-content: flex-end;
+        }
+        .hero-name-display {
+          font-family: var(--font-display-serif), "Times New Roman", serif;
+          font-variation-settings: "opsz" 32;
+        }
+        .hero-nickname-script {
+          font-family: var(--font-accent-script), "Brush Script MT", cursive;
+          font-size: 1.55em;
+          line-height: 1;
+          letter-spacing: 0.01em;
+          display: inline-block;
+          vertical-align: -0.04em;
+          color: color-mix(in srgb, var(--accent) 62%, var(--foreground));
         }
         .hero-actions {
           display: flex;
@@ -259,6 +274,9 @@ export default function Hero() {
         }
 
         @media (hover: none) {
+          .hero-bg::before {
+            display: none;
+          }
           .hero-photo-card:hover {
             transform: none;
             box-shadow: 0 8px 32px rgba(0,0,0,0.35), 0 2px 8px rgba(0,0,0,0.2);
@@ -319,6 +337,12 @@ export default function Hero() {
           .hero-status-dot {
             width: 7px;
             height: 7px;
+          }
+        }
+
+        @media (prefers-reduced-motion: reduce) {
+          .hero-bg::before {
+            display: none;
           }
         }
 

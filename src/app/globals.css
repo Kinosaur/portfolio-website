@@ -9,6 +9,9 @@
   --accent: #3b82f6;
   --accent-muted: #1d4ed8;
   --building-bg: #0d1526;
+  --shadow-sm: 0 2px 8px rgba(0, 0, 0, 0.3);
+  --shadow-md: 0 8px 24px rgba(0, 0, 0, 0.35);
+  --shadow-lg: 0 16px 48px rgba(0, 0, 0, 0.45);
 }
 
 @media (prefers-color-scheme: light) {
@@ -21,6 +24,9 @@
     --accent: #2563eb;
     --accent-muted: #1d4ed8;
     --building-bg: #eff6ff;
+    --shadow-sm: 0 2px 8px rgba(0, 0, 0, 0.06);
+    --shadow-md: 0 8px 24px rgba(0, 0, 0, 0.09);
+    --shadow-lg: 0 16px 48px rgba(0, 0, 0, 0.12);
   }
 }
 
@@ -46,7 +52,8 @@ body {
   color: #fff;
 }
 
-/* Section spacing */
+/* ─── Layout ─────────────────────────────────────── */
+
 .section {
   padding: 5rem 0;
 }
@@ -61,8 +68,10 @@ body {
   padding: 0 1.5rem;
 }
 
-/* Label / eyebrow text */
+/* ─── Typography ─────────────────────────────────── */
+
 .label {
+  display: block;
   font-size: 0.7rem;
   font-weight: 600;
   letter-spacing: 0.1em;
@@ -70,7 +79,171 @@ body {
   color: var(--muted);
 }
 
-/* Subtle border */
-.border-subtle {
-  border-color: var(--border);
+/* ─── Hero dot-grid background ───────────────────── */
+
+.hero-bg {
+  position: absolute;
+  inset: 0;
+  background-image: radial-gradient(circle, var(--border) 1px, transparent 1px);
+  background-size: 28px 28px;
+  mask-image: radial-gradient(ellipse 80% 70% at 50% 0%, black 40%, transparent 100%);
+  -webkit-mask-image: radial-gradient(ellipse 80% 70% at 50% 0%, black 40%, transparent 100%);
+  pointer-events: none;
+}
+
+/* ─── Animations ──────────────────────────────────── */
+
+@keyframes fadeUp {
+  from {
+    opacity: 0;
+    transform: translateY(18px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes pulse-dot {
+  0%, 100% { opacity: 1; }
+  50%       { opacity: 0.3; }
+}
+
+/* Hero staggered load */
+.hero-line {
+  opacity: 0;
+  animation: fadeUp 0.55s ease forwards;
+}
+.hero-line:nth-child(1) { animation-delay: 0.05s; }
+.hero-line:nth-child(2) { animation-delay: 0.15s; }
+.hero-line:nth-child(3) { animation-delay: 0.25s; }
+.hero-line:nth-child(4) { animation-delay: 0.38s; }
+
+/* Scroll-triggered fade-up */
+.fade-up {
+  opacity: 0;
+  transform: translateY(20px);
+  transition: opacity 0.5s ease, transform 0.5s ease;
+}
+.fade-up.in-view {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+/* ─── Card hover ──────────────────────────────────── */
+
+.card-lift {
+  transition: transform 0.22s ease, box-shadow 0.22s ease, border-color 0.22s ease;
+}
+.card-lift:hover {
+  transform: translateY(-5px);
+  box-shadow: var(--shadow-lg);
+}
+
+/* ─── Nav link underline ──────────────────────────── */
+
+.nav-link {
+  position: relative;
+  padding-bottom: 2px;
+  text-decoration: none;
+}
+.nav-link::after {
+  content: "";
+  position: absolute;
+  bottom: -1px;
+  left: 0;
+  width: 100%;
+  height: 1px;
+  background: var(--accent);
+  transform: scaleX(0);
+  transform-origin: right;
+  transition: transform 0.2s ease;
+}
+.nav-link:hover::after,
+.nav-link.active::after {
+  transform: scaleX(1);
+  transform-origin: left;
+}
+.nav-link.active {
+  color: var(--foreground) !important;
+}
+
+/* ─── CTA button arrow bounce ─────────────────────── */
+
+.cta-arrow {
+  transition: transform 0.2s ease;
+}
+.cta-btn:hover .cta-arrow {
+  transform: translateY(3px);
+}
+
+/* ─── Building item arrow slide ───────────────────── */
+
+.building-arrow {
+  transition: transform 0.2s ease;
+}
+.building-item:hover .building-arrow {
+  transform: translateX(4px);
+}
+
+/* ─── In-progress pulse ───────────────────────────── */
+
+.pulse-dot {
+  display: inline-block;
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background: #d97706;
+  animation: pulse-dot 1.8s ease-in-out infinite;
+  vertical-align: middle;
+  margin-right: 5px;
+}
+
+/* ─── Skill tag hover ─────────────────────────────── */
+
+.skill-tag {
+  transition: border-color 0.15s, color 0.15s;
+  cursor: default;
+}
+.skill-tag:hover {
+  border-color: var(--accent) !important;
+  color: var(--foreground) !important;
+}
+
+/* ─── Section heading accent line ─────────────────── */
+
+.section-heading {
+  position: relative;
+  padding-left: 0.85rem;
+}
+.section-heading::before {
+  content: "";
+  position: absolute;
+  left: 0;
+  top: 0.15em;
+  bottom: 0.15em;
+  width: 3px;
+  background: var(--accent);
+  border-radius: 2px;
+}
+
+/* ─── Responsive ──────────────────────────────────── */
+
+.desktop-nav { display: flex; }
+.mobile-menu-btn { display: none; }
+
+@media (max-width: 640px) {
+  .desktop-nav { display: none; }
+  .mobile-menu-btn { display: block; }
+}
+
+@media (max-width: 600px) {
+  .approach-row {
+    grid-template-columns: 1fr !important;
+    gap: 0.25rem !important;
+  }
+  .skill-row {
+    grid-template-columns: 1fr !important;
+    gap: 0.3rem !important;
+  }
 }

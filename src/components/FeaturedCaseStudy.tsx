@@ -1,6 +1,7 @@
 "use client";
 
 import { siteContent } from "@/data/content";
+import InView from "./InView";
 
 export default function FeaturedCaseStudy() {
   const { featuredCaseStudy: cs } = siteContent;
@@ -8,163 +9,183 @@ export default function FeaturedCaseStudy() {
   return (
     <section id="featured" className="section">
       <div className="container">
-        {/* Section label */}
-        <p className="label" style={{ marginBottom: "2.5rem" }}>
-          {cs.label}
-        </p>
-
-        <div
-          style={{
-            border: "1px solid var(--border)",
-            borderRadius: "12px",
-            overflow: "hidden",
-          }}
-        >
-          {/* Header */}
-          <div
+        <InView>
+          <p className="label" style={{ marginBottom: "0.5rem" }}>
+            {cs.label}
+          </p>
+          <h2
+            className="section-heading"
             style={{
-              padding: "2rem 2.5rem",
-              borderBottom: "1px solid var(--border)",
-              background: "var(--card)",
+              fontSize: "clamp(1.5rem, 3vw, 2rem)",
+              fontWeight: 700,
+              letterSpacing: "-0.025em",
+              color: "var(--foreground)",
+              marginBottom: "0.35rem",
+              marginTop: "0",
             }}
           >
-            <h2
-              style={{
-                fontSize: "clamp(1.5rem, 3vw, 2rem)",
-                fontWeight: 700,
-                letterSpacing: "-0.02em",
-                color: "var(--foreground)",
-                marginBottom: "0.35rem",
-              }}
-            >
-              {cs.title}
-            </h2>
-            <p style={{ color: "var(--muted)", fontSize: "0.9rem" }}>{cs.tagline}</p>
-          </div>
+            {cs.title}
+          </h2>
+          <p style={{ color: "var(--muted)", fontSize: "0.9rem", marginBottom: "2rem" }}>
+            {cs.tagline}
+          </p>
+        </InView>
 
-          <div style={{ padding: "2rem 2.5rem", background: "var(--card)" }}>
-            {/* Problem */}
-            <div style={{ marginBottom: "2rem" }}>
-              <p
-                className="label"
-                style={{ marginBottom: "0.6rem", color: "var(--accent)" }}
-              >
-                Problem
-              </p>
-              <p style={{ color: "var(--muted)", lineHeight: 1.7, fontSize: "0.95rem" }}>
-                {cs.problem}
-              </p>
-            </div>
+        <InView delay={80}>
+          <div
+            style={{
+              border: "1px solid var(--border)",
+              borderRadius: "12px",
+              overflow: "hidden",
+            }}
+          >
+            <div style={{ padding: "2rem 2.5rem", background: "var(--card)" }}>
+              {/* Problem */}
+              <div style={{ marginBottom: "2rem" }}>
+                <p className="label" style={{ marginBottom: "0.6rem", color: "var(--accent)" }}>
+                  Problem
+                </p>
+                <p style={{ color: "var(--muted)", lineHeight: 1.75, fontSize: "0.95rem" }}>
+                  {cs.problem}
+                </p>
+              </div>
 
-            {/* Approach */}
-            <div style={{ marginBottom: "2rem" }}>
-              <p
-                className="label"
-                style={{ marginBottom: "1rem", color: "var(--accent)" }}
-              >
-                Approach
-              </p>
-              <div style={{ display: "flex", flexDirection: "column", gap: "0.9rem" }}>
-                {cs.approach.map((step) => (
-                  <div
-                    key={step.label}
-                    style={{
-                      display: "grid",
-                      gridTemplateColumns: "120px 1fr",
-                      gap: "1rem",
-                      alignItems: "start",
-                    }}
-                    className="approach-row"
-                  >
-                    <span
+              {/* Approach */}
+              <div style={{ marginBottom: "2rem" }}>
+                <p className="label" style={{ marginBottom: "1rem", color: "var(--accent)" }}>
+                  Approach
+                </p>
+                <div
+                  style={{
+                    display: "flex",
+                    flexDirection: "column",
+                    gap: "0",
+                    border: "1px solid var(--border)",
+                    borderRadius: "8px",
+                    overflow: "hidden",
+                  }}
+                >
+                  {cs.approach.map((step, i) => (
+                    <div
+                      key={step.label}
+                      className="approach-row"
                       style={{
-                        fontSize: "0.78rem",
-                        fontWeight: 600,
-                        color: "var(--foreground)",
-                        paddingTop: "0.15rem",
+                        display: "grid",
+                        gridTemplateColumns: "120px 1fr",
+                        gap: "1.25rem",
+                        alignItems: "start",
+                        padding: "0.9rem 1.25rem",
+                        borderBottom:
+                          i < cs.approach.length - 1 ? "1px solid var(--border)" : "none",
+                        background:
+                          i % 2 === 0 ? "transparent" : "rgba(255,255,255,0.015)",
                       }}
                     >
-                      {step.label}
-                    </span>
-                    <span style={{ color: "var(--muted)", lineHeight: 1.65, fontSize: "0.9rem" }}>
-                      {step.text}
-                    </span>
-                  </div>
-                ))}
+                      <span
+                        style={{
+                          fontSize: "0.75rem",
+                          fontWeight: 700,
+                          color: "var(--foreground)",
+                          paddingTop: "0.1rem",
+                          letterSpacing: "0.01em",
+                        }}
+                      >
+                        {step.label}
+                      </span>
+                      <span style={{ color: "var(--muted)", lineHeight: 1.68, fontSize: "0.88rem" }}>
+                        {step.text}
+                      </span>
+                    </div>
+                  ))}
+                </div>
+              </div>
+
+              {/* What this demonstrates */}
+              <div style={{ marginBottom: "2rem" }}>
+                <p className="label" style={{ marginBottom: "0.8rem", color: "var(--accent)" }}>
+                  What This Demonstrates
+                </p>
+                <ul
+                  style={{
+                    display: "flex",
+                    flexDirection: "column",
+                    gap: "0.45rem",
+                    paddingLeft: 0,
+                    listStyle: "none",
+                  }}
+                >
+                  {cs.demonstrates.map((point) => (
+                    <li
+                      key={point}
+                      style={{
+                        display: "flex",
+                        gap: "0.65rem",
+                        alignItems: "flex-start",
+                        color: "var(--muted)",
+                        fontSize: "0.9rem",
+                        lineHeight: 1.65,
+                      }}
+                    >
+                      <span style={{ color: "var(--accent)", marginTop: "0.28rem", flexShrink: 0, fontWeight: 700 }}>
+                        —
+                      </span>
+                      {point}
+                    </li>
+                  ))}
+                </ul>
+              </div>
+
+              {/* Links */}
+              <div style={{ display: "flex", gap: "0.75rem", flexWrap: "wrap" }}>
+                <a
+                  href={cs.githubUrl}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  style={ghostLinkStyle}
+                  onMouseEnter={(e) => {
+                    e.currentTarget.style.borderColor = "var(--foreground)";
+                    e.currentTarget.style.color = "var(--foreground)";
+                  }}
+                  onMouseLeave={(e) => {
+                    e.currentTarget.style.borderColor = "var(--border)";
+                    e.currentTarget.style.color = "var(--muted)";
+                  }}
+                >
+                  GitHub ↗
+                </a>
+                <a
+                  href={cs.liveUrl}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  style={{
+                    ...ghostLinkStyle,
+                    background: "var(--accent)",
+                    color: "#fff",
+                    borderColor: "var(--accent)",
+                    boxShadow: "0 4px 14px color-mix(in srgb, var(--accent) 35%, transparent)",
+                  }}
+                  onMouseEnter={(e) => (e.currentTarget.style.opacity = "0.85")}
+                  onMouseLeave={(e) => (e.currentTarget.style.opacity = "1")}
+                >
+                  Live Demo ↗
+                </a>
               </div>
             </div>
-
-            {/* What this demonstrates */}
-            <div style={{ marginBottom: "2rem" }}>
-              <p
-                className="label"
-                style={{ marginBottom: "0.8rem", color: "var(--accent)" }}
-              >
-                What This Demonstrates
-              </p>
-              <ul style={{ display: "flex", flexDirection: "column", gap: "0.45rem", paddingLeft: 0, listStyle: "none" }}>
-                {cs.demonstrates.map((point) => (
-                  <li
-                    key={point}
-                    style={{
-                      display: "flex",
-                      gap: "0.6rem",
-                      alignItems: "flex-start",
-                      color: "var(--muted)",
-                      fontSize: "0.9rem",
-                      lineHeight: 1.6,
-                    }}
-                  >
-                    <span style={{ color: "var(--accent)", marginTop: "0.3rem", flexShrink: 0 }}>—</span>
-                    {point}
-                  </li>
-                ))}
-              </ul>
-            </div>
-
-            {/* Links */}
-            <div style={{ display: "flex", gap: "0.75rem", flexWrap: "wrap" }}>
-              <a
-                href={cs.githubUrl}
-                target="_blank"
-                rel="noopener noreferrer"
-                style={linkStyle}
-              >
-                GitHub →
-              </a>
-              <a
-                href={cs.liveUrl}
-                target="_blank"
-                rel="noopener noreferrer"
-                style={{ ...linkStyle, background: "var(--accent)", color: "#fff", borderColor: "var(--accent)" }}
-              >
-                Live Demo →
-              </a>
-            </div>
           </div>
-        </div>
+        </InView>
       </div>
-
-      <style>{`
-        @media (max-width: 600px) {
-          .approach-row {
-            grid-template-columns: 1fr !important;
-            gap: 0.25rem !important;
-          }
-        }
-      `}</style>
     </section>
   );
 }
 
-const linkStyle: React.CSSProperties = {
+const ghostLinkStyle: React.CSSProperties = {
   display: "inline-block",
-  padding: "0.5rem 1.1rem",
+  padding: "0.55rem 1.15rem",
   border: "1px solid var(--border)",
-  borderRadius: "6px",
-  color: "var(--foreground)",
+  borderRadius: "7px",
+  color: "var(--muted)",
   textDecoration: "none",
   fontSize: "0.85rem",
   fontWeight: 500,
-  transition: "border-color 0.15s, color 0.15s",
+  transition: "border-color 0.15s, color 0.15s, opacity 0.15s",
 };

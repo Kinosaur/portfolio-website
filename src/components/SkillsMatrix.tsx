@@ -1,4 +1,5 @@
 import { skills } from "@/data/skills";
+import InView from "./InView";
 
 const tierAccent: Record<string, string> = {
   proficient: "var(--accent)",
@@ -10,27 +11,30 @@ export default function SkillsMatrix() {
   return (
     <section id="skills" className="section">
       <div className="container">
-        <p className="label" style={{ marginBottom: "0.5rem" }}>
-          Skills
-        </p>
-        <h2
-          style={{
-            fontSize: "clamp(1.4rem, 3vw, 1.8rem)",
-            fontWeight: 700,
-            letterSpacing: "-0.02em",
-            marginBottom: "2.5rem",
-            color: "var(--foreground)",
-          }}
-        >
-          Technical Stack
-        </h2>
+        <InView>
+          <p className="label" style={{ marginBottom: "0.5rem" }}>
+            Skills
+          </p>
+          <h2
+            className="section-heading"
+            style={{
+              fontSize: "clamp(1.4rem, 3vw, 1.8rem)",
+              fontWeight: 700,
+              letterSpacing: "-0.02em",
+              marginBottom: "2.5rem",
+              color: "var(--foreground)",
+            }}
+          >
+            Technical Stack
+          </h2>
+        </InView>
 
-        <div style={{ display: "flex", flexDirection: "column", gap: "1.5rem" }}>
-          {skills.map((tier) => {
+        <div style={{ display: "flex", flexDirection: "column", gap: "1.25rem" }}>
+          {skills.map((tier, i) => {
             const accent = tierAccent[tier.tier];
             return (
+              <InView key={tier.tier} delay={i * 80}>
               <div
-                key={tier.tier}
                 style={{
                   border: "1px solid var(--border)",
                   borderRadius: "10px",
@@ -105,6 +109,7 @@ export default function SkillsMatrix() {
                         {group.items.map((item) => (
                           <span
                             key={item}
+                            className="skill-tag"
                             style={{
                               fontSize: "0.78rem",
                               padding: "0.2rem 0.6rem",
@@ -121,19 +126,11 @@ export default function SkillsMatrix() {
                   ))}
                 </div>
               </div>
+              </InView>
             );
           })}
         </div>
       </div>
-
-      <style>{`
-        @media (max-width: 520px) {
-          .skill-row {
-            grid-template-columns: 1fr !important;
-            gap: 0.3rem !important;
-          }
-        }
-      `}</style>
     </section>
   );
 }

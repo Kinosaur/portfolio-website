@@ -1,25 +1,43 @@
 "use client";
 
 import { useState, useEffect } from "react";
-import { siteContent } from "@/data/content";
 
 const navLinks = [
-  { href: "#featured", label: "Featured" },
-  { href: "#projects", label: "Projects" },
-  { href: "#building", label: "Building" },
-  { href: "#skills", label: "Skills" },
-  { href: "#about", label: "About" },
-  { href: "#contact", label: "Contact" },
+  { href: "#featured", label: "Featured", id: "featured" },
+  { href: "#projects", label: "Projects", id: "projects" },
+  { href: "#building", label: "Building", id: "building" },
+  { href: "#skills",   label: "Skills",   id: "skills"   },
+  { href: "#about",    label: "About",    id: "about"    },
+  { href: "#contact",  label: "Contact",  id: "contact"  },
 ];
 
 export default function Navbar() {
-  const [scrolled, setScrolled] = useState(false);
-  const [menuOpen, setMenuOpen] = useState(false);
+  const [scrolled, setScrolled]     = useState(false);
+  const [menuOpen, setMenuOpen]     = useState(false);
+  const [activeId, setActiveId]     = useState("");
 
   useEffect(() => {
     const onScroll = () => setScrolled(window.scrollY > 20);
     window.addEventListener("scroll", onScroll, { passive: true });
     return () => window.removeEventListener("scroll", onScroll);
+  }, []);
+
+  // Active section via IntersectionObserver
+  useEffect(() => {
+    const sections = navLinks.map((l) => document.getElementById(l.id)).filter(Boolean) as HTMLElement[];
+    const observer = new IntersectionObserver(
+      (entries) => {
+        const visible = entries.filter((e) => e.isIntersecting);
+        if (visible.length > 0) {
+          // Pick the one closest to the top of the viewport
+          const top = visible.sort((a, b) => a.boundingClientRect.top - b.boundingClientRect.top)[0];
+          setActiveId(top.target.id);
+        }
+      },
+      { threshold: 0.25 }
+    );
+    sections.forEach((s) => observer.observe(s));
+    return () => observer.disconnect();
   }, []);
 
   return (
@@ -30,38 +48,68 @@ export default function Navbar() {
         left: 0,
         right: 0,
         zIndex: 50,
-        transition: "background 0.2s, border-color 0.2s",
+        transition: "background 0.25s, border-color 0.25s",
         background: scrolled
-          ? "color-mix(in srgb, var(--background) 90%, transparent)"
+          ? "color-mix(in srgb, var(--background) 88%, transparent)"
           : "transparent",
         borderBottom: scrolled ? "1px solid var(--border)" : "1px solid transparent",
-        backdropFilter: scrolled ? "blur(12px)" : "none",
+        backdropFilter: scrolled ? "blur(14px)" : "none",
+        WebkitBackdropFilter: scrolled ? "blur(14px)" : "none",
       }}
     >
-      <div className="container" style={{ display: "flex", alignItems: "center", justifyContent: "space-between", height: "3.5rem" }}>
-        {/* Logo */}
+      <div
+        className="container"
+        style={{
+          display: "flex",
+          alignItems: "center",
+          justifyContent: "space-between",
+          height: "3.5rem",
+        }}
+      >
+        {/* Logo — "Kino" with accent dot */}
         <a
           href="#"
-          style={{ fontWeight: 600, fontSize: "0.95rem", color: "var(--foreground)", textDecoration: "none", letterSpacing: "-0.01em" }}
+          style={{
+            textDecoration: "none",
+            display: "flex",
+            alignItems: "center",
+            gap: "0.45rem",
+          }}
         >
-          {siteContent.name.split(" ")[0]}{" "}
-          <span style={{ color: "var(--muted)" }}>{siteContent.name.split(" ").slice(1).join(" ")}</span>
+          <span
+            style={{
+              fontWeight: 700,
+              fontSize: "1rem",
+              color: "var(--foreground)",
+              letterSpacing: "-0.02em",
+            }}
+          >
+            Kino
+          </span>
+          <span
+            style={{
+              width: "5px",
+              height: "5px",
+              borderRadius: "50%",
+              background: "var(--accent)",
+              display: "inline-block",
+              marginBottom: "1px",
+            }}
+          />
         </a>
 
         {/* Desktop nav */}
-        <nav style={{ display: "flex", gap: "2rem", alignItems: "center" }} className="desktop-nav">
+        <nav className="desktop-nav" style={{ gap: "1.75rem", alignItems: "center" }}>
           {navLinks.map((link) => (
             <a
               key={link.href}
               href={link.href}
+              className={`nav-link ${activeId === link.id ? "active" : ""}`}
               style={{
                 fontSize: "0.82rem",
-                color: "var(--muted)",
-                textDecoration: "none",
+                color: activeId === link.id ? "var(--foreground)" : "var(--muted)",
                 transition: "color 0.15s",
               }}
-              onMouseEnter={(e) => (e.currentTarget.style.color = "var(--foreground)")}
-              onMouseLeave={(e) => (e.currentTarget.style.color = "var(--muted)")}
             >
               {link.label}
             </a>
@@ -71,9 +119,15 @@ export default function Navbar() {
         {/* Mobile hamburger */}
         <button
           onClick={() => setMenuOpen((v) => !v)}
-          style={{ background: "none", border: "none", cursor: "pointer", color: "var(--foreground)", padding: "0.25rem" }}
-          aria-label="Toggle menu"
           className="mobile-menu-btn"
+          style={{
+            background: "none",
+            border: "none",
+            cursor: "pointer",
+            color: "var(--foreground)",
+            padding: "0.25rem",
+          }}
+          aria-label="Toggle menu"
         >
           <svg width="22" height="22" viewBox="0 0 22 22" fill="none">
             {menuOpen ? (
@@ -83,9 +137,9 @@ export default function Navbar() {
               </>
             ) : (
               <>
-                <line x1="3" y1="6" x2="19" y2="6" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" />
-                <line x1="3" y1="11" x2="19" y2="11" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" />
-                <line x1="3" y1="16" x2="19" y2="16" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" />
+                <line x1="3"  y1="6"  x2="19" y2="6"  stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" />
+                <line x1="3"  y1="11" x2="19" y2="11" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" />
+                <line x1="3"  y1="16" x2="19" y2="16" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" />
               </>
             )}
           </svg>
@@ -98,7 +152,7 @@ export default function Navbar() {
           style={{
             background: "var(--background)",
             borderTop: "1px solid var(--border)",
-            padding: "1rem 1.5rem 1.5rem",
+            padding: "0.5rem 1.5rem 1.25rem",
           }}
         >
           {navLinks.map((link) => (
@@ -108,9 +162,9 @@ export default function Navbar() {
               onClick={() => setMenuOpen(false)}
               style={{
                 display: "block",
-                padding: "0.6rem 0",
+                padding: "0.65rem 0",
                 fontSize: "0.95rem",
-                color: "var(--muted)",
+                color: activeId === link.id ? "var(--foreground)" : "var(--muted)",
                 textDecoration: "none",
                 borderBottom: "1px solid var(--border)",
               }}
@@ -120,15 +174,6 @@ export default function Navbar() {
           ))}
         </div>
       )}
-
-      <style>{`
-        .desktop-nav { display: flex; }
-        .mobile-menu-btn { display: none; }
-        @media (max-width: 640px) {
-          .desktop-nav { display: none; }
-          .mobile-menu-btn { display: block; }
-        }
-      `}</style>
     </header>
   );
 }

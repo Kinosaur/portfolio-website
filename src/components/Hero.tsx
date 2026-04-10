@@ -74,8 +74,8 @@ export default function Hero() {
               now.
             </p>
             <p className="hero-line hero-mobile-summary">
-              CS senior in Bangkok pivoting into data engineering, focused on Python
-              data workflows and analytics.
+              Final-year CS student in Bangkok moving into data engineering,
+              focused on Python pipelines and data visualization.
             </p>
 
             {/* CTA */}

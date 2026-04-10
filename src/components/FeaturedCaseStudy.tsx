@@ -1,10 +1,13 @@
 "use client";
 
+import { useState } from "react";
 import { siteContent } from "@/data/content";
 import InView from "./InView";
 
 export default function FeaturedCaseStudy() {
   const { featuredCaseStudy: cs } = siteContent;
+  const [mobileProblemExpanded, setMobileProblemExpanded] = useState(false);
+  const [mobileApproachExpanded, setMobileApproachExpanded] = useState(false);
 
   return (
     <section id="featured" className="section">
@@ -47,9 +50,20 @@ export default function FeaturedCaseStudy() {
                   <p className="label" style={{ marginBottom: "0.6rem", color: "var(--accent)" }}>
                     Problem
                   </p>
-                  <p style={{ color: "color-mix(in srgb, var(--foreground) 72%, var(--muted))", lineHeight: 1.84, fontSize: "1.02rem" }}>
+                  <p
+                    className={`featured-problem-text${mobileProblemExpanded ? " is-expanded" : ""}`}
+                    style={{ color: "color-mix(in srgb, var(--foreground) 72%, var(--muted))", lineHeight: 1.84, fontSize: "1.02rem" }}
+                  >
                     {cs.problem}
                   </p>
+                  <button
+                    type="button"
+                    className="featured-mobile-toggle"
+                    onClick={() => setMobileProblemExpanded((v) => !v)}
+                    aria-expanded={mobileProblemExpanded}
+                  >
+                    {mobileProblemExpanded ? "Show less" : "Read full context"}
+                  </button>
                 </div>
 
                 {/* Approach */}
@@ -70,7 +84,7 @@ export default function FeaturedCaseStudy() {
                     {cs.approach.map((step, i) => (
                       <div
                         key={step.label}
-                        className="approach-row"
+                        className={`approach-row${!mobileApproachExpanded && i >= 2 ? " approach-row-mobile-hidden" : ""}`}
                         style={{
                           display: "grid",
                           gridTemplateColumns: "120px 1fr",
@@ -100,6 +114,14 @@ export default function FeaturedCaseStudy() {
                       </div>
                     ))}
                   </div>
+                  <button
+                    type="button"
+                    className="featured-mobile-toggle"
+                    onClick={() => setMobileApproachExpanded((v) => !v)}
+                    aria-expanded={mobileApproachExpanded}
+                  >
+                    {mobileApproachExpanded ? "Show fewer steps" : "See full approach"}
+                  </button>
                 </div>
 
                 {/* Links */}
@@ -160,6 +182,21 @@ export default function FeaturedCaseStudy() {
           .featured-link-button {
             min-width: 9.75rem;
           }
+          .featured-mobile-toggle {
+            display: none;
+            margin-top: 0.65rem;
+            border: none;
+            background: none;
+            color: var(--accent);
+            font-size: 0.84rem;
+            font-weight: 600;
+            letter-spacing: 0.01em;
+            padding: 0;
+            cursor: pointer;
+          }
+          .featured-mobile-toggle:hover {
+            opacity: 0.82;
+          }
 
           /* Stat tiles */
           .stat-tile {
@@ -206,6 +243,23 @@ export default function FeaturedCaseStudy() {
             }
             .featured-sidebar {
               padding: 1.2rem 1rem !important;
+            }
+            .featured-mobile-toggle {
+              display: inline-flex;
+              align-items: center;
+            }
+            .featured-problem-text {
+              display: -webkit-box;
+              -webkit-line-clamp: 4;
+              -webkit-box-orient: vertical;
+              overflow: hidden;
+            }
+            .featured-problem-text.is-expanded {
+              display: block;
+              -webkit-line-clamp: unset;
+            }
+            .approach-row-mobile-hidden {
+              display: none !important;
             }
           }
         `}</style>

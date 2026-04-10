@@ -36,8 +36,8 @@ export const siteContent = {
       "Thinking about the boundary between processing and serving",
       "Owning a project end-to-end, from raw export to deployed UI",
     ],
-    githubUrl: "https://github.com/Kinosaur",
-    liveUrl: "#",
+    githubUrl: "https://github.com/Kinosaur/transparent-city",
+    liveUrl: "https://transparent-city.vercel.app/",
   },
   about: {
     paragraphs: [

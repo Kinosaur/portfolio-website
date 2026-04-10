@@ -45,7 +45,7 @@ export const projects: Project[] = [
     description:
       "Solved using interval dynamic programming and memoization. Included because data engineering work eventually requires reasoning about algorithmic cost — not just calling library functions.",
     stack: ["Python", "dynamic programming"],
-    githubUrl: "https://github.com/Kinosaur",
+    githubUrl: "https://github.com/Kinosaur/algorithm-design-term-project",
     liveLabel: "Writeup",
   },
   {
@@ -56,7 +56,7 @@ export const projects: Project[] = [
     description:
       "Cleaning, validation, and exploratory analysis on messy public datasets. Practice ground for the boring but essential half of data work.",
     stack: ["Python", "pandas", "NumPy", "Jupyter", "Matplotlib"],
-    githubUrl: "https://github.com/Kinosaur",
+    githubUrl: "https://github.com/Kinosaur/data-cleaning-eda-portfolio",
     liveLabel: "Notebook",
   },
   {
@@ -67,7 +67,8 @@ export const projects: Project[] = [
     description:
       "Senior capstone built around a CV model. Included here for the data side: ingestion, preprocessing, and storage of unstructured image data — a concern that scales differently than tabular pipelines.",
     stack: ["TypeScript", "CV libraries", "image processing"],
-    githubUrl: "https://github.com/Kinosaur",
+    githubUrl: "https://github.com/Kinosaur/SEEiT-CV",
+    liveUrl: "https://github.com/Kinosaur/SEEiT-CV/blob/main/docs/SEEiT_Senior_Porject_1_report.pdf",
     liveLabel: "Documentation",
   },
 ];

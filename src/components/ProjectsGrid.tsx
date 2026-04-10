@@ -260,7 +260,11 @@ export default function ProjectsGrid() {
         @media (max-width: 700px) {
           .project-stack-row { display: none; }
           .project-row-header { grid-template-columns: 2.5rem 1fr; }
-          .project-desc { max-height: none !important; padding-bottom: 1rem; }
+          .project-desc {
+            max-height: none !important;
+            padding-bottom: 1rem;
+            padding-left: calc(2.5rem + 1.5rem);
+          }
           .project-desc-text { padding-top: 0.3rem; }
           .project-stack-expanded { display: flex; }
         }

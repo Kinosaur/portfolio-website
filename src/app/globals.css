@@ -109,7 +109,7 @@ section[id] {
 }
 
 .container {
-  max-width: 1200px;
+  max-width: 1060px;
   margin: 0 auto;
   padding: 0 2rem;
 }
@@ -339,6 +339,15 @@ section[id] {
   .mobile-menu-btn { display: block; }
   .container { padding: 0 1.25rem; }
   .section { padding: 4rem 0; }
+}
+
+/* ─── Approach row hover ──────────────────────────── */
+
+.approach-row {
+  transition: background 0.15s;
+}
+.approach-row:hover {
+  background: color-mix(in srgb, var(--accent) 5%, transparent) !important;
 }
 
 @media (max-width: 600px) {

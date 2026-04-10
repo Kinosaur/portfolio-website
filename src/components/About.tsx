@@ -66,7 +66,7 @@ export default function About() {
             </TiltCard>
           </InView>
 
-          <div style={{ maxWidth: "640px" }}>
+          <div>
             {about.paragraphs.map((para, i) => (
               <InView key={i} delay={i * 100}>
                 <p
@@ -88,15 +88,15 @@ export default function About() {
       <style>{`
         .about-grid {
           display: grid;
-          grid-template-columns: minmax(220px, 320px) 1fr;
-          gap: 2rem;
+          grid-template-columns: minmax(260px, 340px) 1fr;
+          gap: 4rem;
           align-items: start;
         }
 
         @media (max-width: 860px) {
           .about-grid {
             grid-template-columns: 1fr;
-            gap: 1.35rem;
+            gap: 1.5rem;
           }
         }
       `}</style>

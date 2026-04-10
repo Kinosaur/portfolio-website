@@ -20,7 +20,7 @@ export default function Hero() {
     >
       <div className="hero-bg" />
 
-      <div className="container" style={{ position: "relative", zIndex: 1, width: "100%" }}>
+      <div className="container hero-container" style={{ position: "relative", zIndex: 1, width: "100%" }}>
         <div className="hero-layout">
           {/* ── Left: text ── */}
           <div className="hero-text">
@@ -119,7 +119,7 @@ export default function Hero() {
 
           {/* ── Right: photo card ── */}
           <div className="hero-photo-wrap hero-line" style={{ animationDelay: "0.6s" }}>
-            <TiltCard style={{ borderRadius: "14px", width: "100%", maxWidth: "340px" }} maxTilt={6}>
+            <TiltCard style={{ borderRadius: "14px", width: "100%", maxWidth: "100%" }} maxTilt={6}>
               <figure className="hero-photo-card">
                 <div className="hero-photo-frame">
                   <Image
@@ -147,9 +147,12 @@ export default function Hero() {
       <style>{`
         .hero-layout {
           display: grid;
-          grid-template-columns: 1fr minmax(260px, 360px);
-          gap: 3.5rem;
+          grid-template-columns: 1fr minmax(300px, 430px);
+          gap: 2.5rem;
           align-items: center;
+        }
+        .hero-container {
+          max-width: 1160px !important;
         }
         .hero-photo-wrap {
           display: flex;

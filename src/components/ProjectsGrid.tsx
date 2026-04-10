@@ -127,6 +127,7 @@ export default function ProjectsGrid() {
           border-bottom: 1px solid var(--border);
           cursor: default;
           transition: background 0.18s;
+          overflow: clip;
         }
         .project-row:hover {
           background: color-mix(in srgb, var(--card) 60%, var(--background) 40%);
@@ -140,13 +141,6 @@ export default function ProjectsGrid() {
           align-items: center;
           gap: 1.5rem;
           padding: 1.4rem 0.5rem 1.4rem 0;
-          transition: padding 0.18s;
-        }
-        .project-row:hover .project-row-header {
-          padding-left: 0.3rem;
-        }
-        .project-row:focus-within .project-row-header {
-          padding-left: 0.3rem;
         }
 
         /* Number */
@@ -190,13 +184,6 @@ export default function ProjectsGrid() {
           color: var(--foreground);
           letter-spacing: -0.02em;
           line-height: 1.3;
-          transition: letter-spacing 0.18s;
-        }
-        .project-row:hover .project-title {
-          letter-spacing: -0.01em;
-        }
-        .project-row:focus-within .project-title {
-          letter-spacing: -0.01em;
         }
 
         /* Stack chips — desktop right column */
@@ -220,14 +207,20 @@ export default function ProjectsGrid() {
         .project-desc {
           max-height: 0;
           overflow: hidden;
-          transition: max-height 0.48s cubic-bezier(0.16, 1, 0.3, 1);
+          opacity: 0;
+          will-change: max-height, opacity;
+          transition: max-height 0.3s cubic-bezier(0.4, 0, 0.2, 1), opacity 0.16s ease;
           padding-left: calc(3rem + 1.5rem);
         }
         .project-row:hover .project-desc {
           max-height: 260px;
+          opacity: 1;
+          transition-delay: 70ms;
         }
         .project-row:focus-within .project-desc {
           max-height: 260px;
+          opacity: 1;
+          transition-delay: 0s;
         }
         .project-desc-text {
           font-size: 0.95rem;
@@ -262,6 +255,7 @@ export default function ProjectsGrid() {
           .project-row-header { grid-template-columns: 2.5rem 1fr; }
           .project-desc {
             max-height: none !important;
+            opacity: 1 !important;
             padding-bottom: 1rem;
             padding-left: calc(2.5rem + 1.5rem);
           }
@@ -271,7 +265,7 @@ export default function ProjectsGrid() {
 
         /* Touch devices — also always show */
         @media (hover: none) {
-          .project-desc { max-height: none !important; padding-bottom: 1rem; }
+          .project-desc { max-height: none !important; opacity: 1 !important; padding-bottom: 1rem; }
           .project-stack-expanded { display: flex; }
         }
       `}</style>

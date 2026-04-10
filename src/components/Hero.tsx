@@ -69,8 +69,7 @@ export default function Hero() {
                 maxWidth: "540px",
               }}
             >
-              Final-year CS student at Assumption University, Bangkok, originally from
-              Myanmar. Moving toward data engineering — currently strongest in Python
+              Moving toward data engineering — currently strongest in Python
               data processing and visualization, learning warehousing and orchestration
               now.
             </p>

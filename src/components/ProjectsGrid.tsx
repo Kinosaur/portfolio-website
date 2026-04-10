@@ -64,7 +64,10 @@ export default function ProjectsGrid() {
                       <span className="project-tag-badge" style={{ color, borderColor: `color-mix(in srgb, ${color} 30%, transparent)` }}>
                         {project.tag}
                       </span>
-                      <h3 className="project-title">{project.title}</h3>
+                      <div className="project-title-row">
+                        <h3 className="project-title">{project.title}</h3>
+                        <span className="project-title-arrow">↗</span>
+                      </div>
                     </div>
 
                     {/* Stack — right side, desktop only */}
@@ -89,7 +92,8 @@ export default function ProjectsGrid() {
                         className="project-link"
                         style={{ color: "var(--muted)" }}
                       >
-                        GitHub ↗
+                        GitHub
+                        <span className="project-link-arrow" aria-hidden="true">↗</span>
                       </a>
                       {project.liveUrl ? (
                         <a
@@ -99,7 +103,8 @@ export default function ProjectsGrid() {
                           className="project-link"
                           style={{ color }}
                         >
-                          {project.liveLabel ?? "Live"} ↗
+                          {project.liveLabel ?? "Live"}
+                          <span className="project-link-arrow" aria-hidden="true">↗</span>
                         </a>
                       ) : project.liveLabel ? (
                         <span className="project-link" style={{ opacity: 0.35, cursor: "default", color: "var(--muted)" }}>
@@ -172,6 +177,12 @@ export default function ProjectsGrid() {
           gap: 0.3rem;
           min-width: 0;
         }
+        .project-title-row {
+          display: flex;
+          align-items: center;
+          gap: 0.45rem;
+          min-width: 0;
+        }
         .project-tag-badge {
           font-size: 0.67rem;
           font-weight: 700;
@@ -189,6 +200,22 @@ export default function ProjectsGrid() {
           color: var(--foreground);
           letter-spacing: -0.02em;
           line-height: 1.3;
+          flex: 1;
+        }
+        .project-title-arrow {
+          color: var(--muted);
+          font-size: 0.95rem;
+          transition: transform 0.18s ease, color 0.18s ease;
+          flex-shrink: 0;
+        }
+        .project-row:hover .project-title-arrow,
+        .project-row:focus-within .project-title-arrow {
+          transform: translate(2px, -2px);
+          color: var(--foreground);
+        }
+        .project-row:hover .project-tag-badge,
+        .project-row:focus-within .project-tag-badge {
+          background: color-mix(in srgb, var(--card) 84%, var(--background) 16%);
         }
 
         /* Stack chips — desktop right column */
@@ -242,12 +269,26 @@ export default function ProjectsGrid() {
           align-items: center;
         }
         .project-link {
+          display: inline-flex;
+          align-items: center;
+          gap: 0.25rem;
           font-size: 0.88rem;
           font-weight: 500;
           text-decoration: none;
-          transition: opacity 0.15s;
+          transition: color 0.18s, opacity 0.18s;
         }
-        .project-link:hover { opacity: 0.7; }
+        .project-link:hover,
+        .project-link:focus-visible {
+          opacity: 0.78;
+        }
+        .project-link-arrow {
+          display: inline-block;
+          transition: transform 0.18s ease;
+        }
+        .project-link:hover .project-link-arrow,
+        .project-link:focus-visible .project-link-arrow {
+          transform: translate(2px, -2px);
+        }
         .project-stack-expanded {
           display: flex;
           flex-wrap: wrap;

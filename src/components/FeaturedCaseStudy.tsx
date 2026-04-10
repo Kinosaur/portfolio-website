@@ -108,33 +108,19 @@ export default function FeaturedCaseStudy() {
                     href={cs.githubUrl}
                     target="_blank"
                     rel="noopener noreferrer"
-                    style={ghostLinkStyle}
-                    onMouseEnter={(e) => {
-                      e.currentTarget.style.borderColor = "var(--foreground)";
-                      e.currentTarget.style.color = "var(--foreground)";
-                    }}
-                    onMouseLeave={(e) => {
-                      e.currentTarget.style.borderColor = "var(--border)";
-                      e.currentTarget.style.color = "var(--muted)";
-                    }}
+                    className="action-button featured-link-button"
                   >
-                    GitHub ↗
+                    GitHub
+                    <span className="action-arrow" aria-hidden="true">↗</span>
                   </a>
                   <a
                     href={cs.liveUrl}
                     target="_blank"
                     rel="noopener noreferrer"
-                    style={{
-                      ...ghostLinkStyle,
-                      background: "var(--accent)",
-                      color: "#fff",
-                      borderColor: "var(--accent)",
-                      boxShadow: "0 4px 14px color-mix(in srgb, var(--accent) 35%, transparent)",
-                    }}
-                    onMouseEnter={(e) => (e.currentTarget.style.opacity = "0.85")}
-                    onMouseLeave={(e) => (e.currentTarget.style.opacity = "1")}
+                    className="action-button action-button--solid featured-link-button"
                   >
-                    Live Demo ↗
+                    Live Demo
+                    <span className="action-arrow" aria-hidden="true">↗</span>
                   </a>
                 </div>
               </div>
@@ -169,6 +155,10 @@ export default function FeaturedCaseStudy() {
           .featured-sidebar {
             padding: 2rem 1.75rem;
             border-left: 1px solid var(--border);
+          }
+
+          .featured-link-button {
+            min-width: 9.75rem;
           }
 
           /* Stat tiles */
@@ -223,15 +213,3 @@ export default function FeaturedCaseStudy() {
     </section>
   );
 }
-
-const ghostLinkStyle: React.CSSProperties = {
-  display: "inline-block",
-  padding: "0.55rem 1.15rem",
-  border: "1px solid var(--border)",
-  borderRadius: "7px",
-  color: "var(--muted)",
-  textDecoration: "none",
-  fontSize: "0.85rem",
-  fontWeight: 500,
-  transition: "border-color 0.15s, color 0.15s, opacity 0.15s",
-};

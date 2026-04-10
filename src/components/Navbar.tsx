@@ -129,7 +129,7 @@ export default function Navbar() {
         </a>
 
         {/* Desktop nav + theme toggle */}
-        <div className="desktop-nav" style={{ gap: "1.75rem", alignItems: "center" }}>
+        <div className="desktop-nav" style={{ gap: "1.55rem", alignItems: "center" }}>
           {navLinks.map((link) => (
             <a
               key={link.href}
@@ -232,7 +232,7 @@ export default function Navbar() {
           style={{
             background: "var(--background)",
             borderTop: "1px solid var(--border)",
-            padding: "0.5rem 1.5rem 1.25rem",
+            padding: "0.65rem 1.5rem 1.35rem",
           }}
         >
           {navLinks.map((link) => (
@@ -242,7 +242,7 @@ export default function Navbar() {
               onClick={() => setMenuOpen(false)}
               style={{
                 display: "block",
-                padding: "0.85rem 0",
+                padding: "0.95rem 0.1rem",
                 fontSize: "0.95rem",
                 color: activeId === link.id ? "var(--foreground)" : "var(--muted)",
                 textDecoration: "none",

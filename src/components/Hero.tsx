@@ -75,46 +75,41 @@ export default function Hero() {
             </p>
 
             {/* CTA */}
-            <a
-              href="#featured"
-              className="cta-btn hero-line"
-              style={{
-                display: "inline-flex",
-                alignItems: "center",
-                gap: "0.5rem",
-                padding: "0.8rem 1.65rem",
-                background: "var(--accent)",
-                color: "#fff",
-                borderRadius: "8px",
-                textDecoration: "none",
-                fontWeight: 600,
-                fontSize: "0.88rem",
-                letterSpacing: "0.01em",
-                boxShadow: "0 4px 16px color-mix(in srgb, var(--accent) 40%, transparent)",
-                transition: "box-shadow 0.2s, transform 0.2s",
-              }}
-              onMouseEnter={(e) => {
-                e.currentTarget.style.boxShadow =
-                  "0 6px 24px color-mix(in srgb, var(--accent) 55%, transparent)";
-                e.currentTarget.style.transform = "translateY(-2px)";
-              }}
-              onMouseLeave={(e) => {
-                e.currentTarget.style.boxShadow =
-                  "0 4px 16px color-mix(in srgb, var(--accent) 40%, transparent)";
-                e.currentTarget.style.transform = "translateY(0)";
-              }}
-            >
-              {siteContent.hero.cta}
-              <svg className="cta-arrow" width="15" height="15" viewBox="0 0 16 16" fill="none">
-                <path
-                  d="M8 3v10M3 8l5 5 5-5"
-                  stroke="currentColor"
-                  strokeWidth="1.6"
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                />
-              </svg>
-            </a>
+            <div className="hero-actions hero-line">
+              <a
+                href="#featured"
+                className="action-button action-button--solid hero-primary-cta"
+              >
+                {siteContent.hero.cta}
+                <svg className="action-arrow action-arrow--down" width="15" height="15" viewBox="0 0 16 16" fill="none">
+                  <path
+                    d="M8 3v10M3 8l5 5 5-5"
+                    stroke="currentColor"
+                    strokeWidth="1.6"
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                  />
+                </svg>
+              </a>
+
+              <a
+                href="#contact"
+                className="action-button hero-secondary-cta"
+              >
+                <span className="hero-secondary-cta-main">
+                  Contact me
+                  <svg className="action-arrow action-arrow--up-right" width="14" height="14" viewBox="0 0 16 16" fill="none" aria-hidden="true">
+                    <path
+                      d="M3.5 8h9M8.5 4.5 12 8l-3.5 3.5"
+                      stroke="currentColor"
+                      strokeWidth="1.6"
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                    />
+                  </svg>
+                </span>
+              </a>
+            </div>
           </div>
 
           {/* ── Right: photo card ── */}
@@ -156,6 +151,31 @@ export default function Hero() {
           display: flex;
           justify-content: flex-end;
         }
+        .hero-actions {
+          display: flex;
+          align-items: center;
+          gap: 0.8rem;
+          flex-wrap: wrap;
+        }
+        .hero-actions > a {
+          inline-size: 14.5rem;
+          block-size: 3.25rem;
+          flex: 0 0 14.5rem;
+          box-sizing: border-box;
+        }
+        .hero-secondary-cta {
+          min-width: 0;
+        }
+        .hero-secondary-cta-main {
+          display: inline-flex;
+          align-items: center;
+          gap: 0.45rem;
+          font-size: 0.9rem;
+          line-height: 1;
+        }
+        .hero-primary-cta {
+          min-width: 0;
+        }
         .hero-photo-card {
           margin: 0;
           border: 1px solid var(--border);
@@ -164,6 +184,11 @@ export default function Hero() {
           background: var(--card);
           box-shadow: 0 8px 32px rgba(0,0,0,0.35), 0 2px 8px rgba(0,0,0,0.2);
           width: 100%;
+          transition: transform 0.22s ease, box-shadow 0.22s ease;
+        }
+        .hero-photo-card:hover {
+          transform: translateY(-3px);
+          box-shadow: 0 14px 40px rgba(0,0,0,0.22), 0 4px 12px rgba(0,0,0,0.12);
         }
         .hero-photo-frame {
           width: 100%;
@@ -187,12 +212,8 @@ export default function Hero() {
           pointer-events: none;
         }
 
-        :global(:root[data-theme="light"]) .hero-photo-frame::after {
-          background: linear-gradient(
-            to bottom,
-            transparent 64%,
-            rgba(255, 255, 255, 0.34) 100%
-          );
+        :root[data-theme="light"] .hero-photo-frame::after {
+          content: none;
         }
         .hero-photo-caption {
           display: flex;
@@ -200,7 +221,7 @@ export default function Hero() {
           gap: 0.4rem;
           padding: 1rem 1.25rem;
           border-top: 1px solid var(--border);
-          background: color-mix(in srgb, var(--accent) 6%, var(--card));
+          background: color-mix(in srgb, var(--accent) 4%, var(--card));
         }
         .hero-photo-status {
           display: flex;
@@ -236,6 +257,13 @@ export default function Hero() {
           }
         }
 
+        @media (hover: none) {
+          .hero-photo-card:hover {
+            transform: none;
+            box-shadow: 0 8px 32px rgba(0,0,0,0.35), 0 2px 8px rgba(0,0,0,0.2);
+          }
+        }
+
         @media (max-width: 640px) {
           .hero-section {
             min-height: auto !important;
@@ -249,10 +277,25 @@ export default function Hero() {
           .hero-photo-wrap {
             justify-content: flex-start;
           }
-          .hero-text .cta-btn {
+          .hero-text .action-button {
             width: 100%;
             justify-content: center;
             padding: 0.85rem 1.1rem;
+          }
+          .hero-actions {
+            flex-direction: column;
+            align-items: stretch;
+          }
+          .hero-actions > a {
+            inline-size: 100%;
+            block-size: auto;
+            flex: 1 1 auto;
+          }
+          .hero-secondary-cta {
+            width: 100%;
+          }
+          .hero-secondary-cta-main {
+            justify-content: center;
           }
           .hero-photo-card {
             max-width: 205px;

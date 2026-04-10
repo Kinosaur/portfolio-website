@@ -140,15 +140,16 @@ export default function CurrentlyBuilding() {
                         href={item.repoUrl}
                         target="_blank"
                         rel="noopener noreferrer"
+                        className="project-link project-link--action building-repo-link"
                         style={{
-                          display: "inline-block",
                           marginTop: "0.5rem",
                           fontSize: "0.78rem",
                           color: "var(--accent)",
                           textDecoration: "none",
                         }}
                       >
-                        View repo →
+                        View repo
+                        <span className="action-arrow" aria-hidden="true">→</span>
                       </a>
                     )}
                   </div>

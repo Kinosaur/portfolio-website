@@ -114,7 +114,7 @@ export default function Contact() {
         }
         .footer-link:hover {
           color: var(--foreground);
-          transform: translateX(4px);
+          transform: translateX(2px);
         }
         .footer-bottom {
           padding-top: 1.75rem;

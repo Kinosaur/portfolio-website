@@ -13,7 +13,7 @@ export const buildingItems: BuildingItem[] = [
     id: "datacamp-de",
     title: "DataCamp Data Engineering Career Track",
     description:
-      "Working through warehousing, orchestration, and pipeline tooling — SQL, dbt, Airflow. Directly filling the gaps between what I can do now and a full DE stack.",
+      "Just started this track. Learning warehousing, orchestration, and pipeline tooling — SQL, dbt, Airflow — to fill the gaps between what I can do now and a full DE stack.",
     status: "in_progress",
   },
   {

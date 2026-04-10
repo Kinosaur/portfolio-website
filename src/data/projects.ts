@@ -20,8 +20,8 @@ export const projects: Project[] = [
     description:
       "End-to-end project taking raw Traffy Fondue exports through cleaning, geolocation handling, and aggregation into an interactive dashboard. Weekly-refreshed snapshot of Bangkok's civic feedback data.",
     stack: ["Python", "pandas", "TypeScript", "Next.js", "D3.js", "Vercel"],
-    githubUrl: "https://github.com/Kinosaur",
-    liveUrl: "#",
+    githubUrl: "https://github.com/Kinosaur/transparent-city",
+    liveUrl: "https://transparent-city.vercel.app/",
     liveLabel: "Live Demo",
     featured: true,
   },
@@ -33,8 +33,8 @@ export const projects: Project[] = [
     description:
       "Multi-source environmental data aggregated into a decision-support dashboard for travel and outdoor planning across Southeast Asia.",
     stack: ["TypeScript", "Next.js", "D3.js", "environmental APIs"],
-    githubUrl: "https://github.com/Kinosaur",
-    liveUrl: "#",
+    githubUrl: "https://github.com/Kinosaur/breath-before-you-go",
+    liveUrl: "https://breath-before-you-go.vercel.app/",
     liveLabel: "Live Demo",
   },
   {

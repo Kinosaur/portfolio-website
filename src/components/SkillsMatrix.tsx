@@ -1,0 +1,139 @@
+import { skills } from "@/data/skills";
+
+const tierAccent: Record<string, string> = {
+  proficient: "var(--accent)",
+  learning: "#d97706",
+  exploring: "var(--muted)",
+};
+
+export default function SkillsMatrix() {
+  return (
+    <section id="skills" className="section">
+      <div className="container">
+        <p className="label" style={{ marginBottom: "0.5rem" }}>
+          Skills
+        </p>
+        <h2
+          style={{
+            fontSize: "clamp(1.4rem, 3vw, 1.8rem)",
+            fontWeight: 700,
+            letterSpacing: "-0.02em",
+            marginBottom: "2.5rem",
+            color: "var(--foreground)",
+          }}
+        >
+          Technical Stack
+        </h2>
+
+        <div style={{ display: "flex", flexDirection: "column", gap: "1.5rem" }}>
+          {skills.map((tier) => {
+            const accent = tierAccent[tier.tier];
+            return (
+              <div
+                key={tier.tier}
+                style={{
+                  border: "1px solid var(--border)",
+                  borderRadius: "10px",
+                  overflow: "hidden",
+                }}
+              >
+                {/* Tier header */}
+                <div
+                  style={{
+                    padding: "1rem 1.5rem",
+                    borderBottom: "1px solid var(--border)",
+                    background: "var(--card)",
+                    display: "flex",
+                    alignItems: "baseline",
+                    gap: "1rem",
+                    flexWrap: "wrap",
+                  }}
+                >
+                  <span
+                    style={{
+                      fontWeight: 700,
+                      fontSize: "0.88rem",
+                      color: accent,
+                      textTransform: "uppercase",
+                      letterSpacing: "0.06em",
+                    }}
+                  >
+                    {tier.label}
+                  </span>
+                  <span
+                    style={{
+                      fontSize: "0.8rem",
+                      color: "var(--muted)",
+                    }}
+                  >
+                    {tier.description}
+                  </span>
+                </div>
+
+                {/* Groups */}
+                <div
+                  style={{
+                    padding: "1.25rem 1.5rem",
+                    background: "var(--card)",
+                    display: "flex",
+                    flexDirection: "column",
+                    gap: "0.9rem",
+                  }}
+                >
+                  {tier.groups.map((group) => (
+                    <div
+                      key={group.category}
+                      style={{
+                        display: "grid",
+                        gridTemplateColumns: "140px 1fr",
+                        gap: "1rem",
+                        alignItems: "start",
+                      }}
+                      className="skill-row"
+                    >
+                      <span
+                        style={{
+                          fontSize: "0.75rem",
+                          fontWeight: 600,
+                          color: "var(--foreground)",
+                          paddingTop: "0.1rem",
+                        }}
+                      >
+                        {group.category}
+                      </span>
+                      <div style={{ display: "flex", flexWrap: "wrap", gap: "0.4rem" }}>
+                        {group.items.map((item) => (
+                          <span
+                            key={item}
+                            style={{
+                              fontSize: "0.78rem",
+                              padding: "0.2rem 0.6rem",
+                              borderRadius: "4px",
+                              border: "1px solid var(--border)",
+                              color: "var(--muted)",
+                            }}
+                          >
+                            {item}
+                          </span>
+                        ))}
+                      </div>
+                    </div>
+                  ))}
+                </div>
+              </div>
+            );
+          })}
+        </div>
+      </div>
+
+      <style>{`
+        @media (max-width: 520px) {
+          .skill-row {
+            grid-template-columns: 1fr !important;
+            gap: 0.3rem !important;
+          }
+        }
+      `}</style>
+    </section>
+  );
+}

@@ -111,7 +111,7 @@ export default function FeaturedCaseStudy() {
                     className="action-button featured-link-button"
                   >
                     GitHub
-                    <span className="action-arrow" aria-hidden="true">↗</span>
+                    <span className="action-arrow action-arrow--up-right" aria-hidden="true">↗</span>
                   </a>
                   <a
                     href={cs.liveUrl}
@@ -120,7 +120,7 @@ export default function FeaturedCaseStudy() {
                     className="action-button action-button--solid featured-link-button"
                   >
                     Live Demo
-                    <span className="action-arrow" aria-hidden="true">↗</span>
+                    <span className="action-arrow action-arrow--up-right" aria-hidden="true">↗</span>
                   </a>
                 </div>
               </div>

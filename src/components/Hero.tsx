@@ -100,7 +100,7 @@ export default function Hero() {
                   Contact me
                   <svg className="action-arrow action-arrow--up-right" width="14" height="14" viewBox="0 0 16 16" fill="none" aria-hidden="true">
                     <path
-                      d="M3.5 8h9M8.5 4.5 12 8l-3.5 3.5"
+                      d="M4 12L12 4M6 4h6v6"
                       stroke="currentColor"
                       strokeWidth="1.6"
                       strokeLinecap="round"
@@ -162,6 +162,8 @@ export default function Hero() {
           block-size: 3.25rem;
           flex: 0 0 14.5rem;
           box-sizing: border-box;
+          font-size: 0.92rem;
+          font-weight: 600;
         }
         .hero-secondary-cta {
           min-width: 0;
@@ -170,7 +172,6 @@ export default function Hero() {
           display: inline-flex;
           align-items: center;
           gap: 0.45rem;
-          font-size: 0.9rem;
           line-height: 1;
         }
         .hero-primary-cta {

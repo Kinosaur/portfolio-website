@@ -314,42 +314,33 @@ section[id] {
 }
 
 .action-arrow {
-  display: inline-block;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  line-height: 1;
+  flex-shrink: 0;
+  transition: transform 0.18s ease;
 }
 
-.action-arrow--down {
-  animation: arrow-drift-down 1.9s ease-in-out infinite;
-}
-
-.action-arrow--up-right {
-  animation: arrow-drift-up-right 1.9s ease-in-out infinite;
+.action-arrow svg {
+  display: block;
 }
 
 .action-button:hover .action-arrow--down,
 .action-button:focus-visible .action-arrow--down,
 .action-button:hover .action-arrow--up-right,
 .action-button:focus-visible .action-arrow--up-right {
-  animation-duration: 1.15s;
+  transition-duration: 0.15s;
 }
 
-@keyframes arrow-drift-down {
-  0%,
-  100% {
-    transform: translateY(0);
-  }
-  50% {
-    transform: translateY(2px);
-  }
+.action-button:hover .action-arrow--down,
+.action-button:focus-visible .action-arrow--down {
+  transform: translateY(2px);
 }
 
-@keyframes arrow-drift-up-right {
-  0%,
-  100% {
-    transform: translate(0, 0);
-  }
-  50% {
-    transform: translate(2px, -2px);
-  }
+.action-button:hover .action-arrow--up-right,
+.action-button:focus-visible .action-arrow--up-right {
+  transform: translate(2px, -2px);
 }
 
 /* ─── Building item arrow slide ───────────────────── */

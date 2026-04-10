@@ -336,62 +336,40 @@ section[id] {
 
 /* ─── Custom cursor (mouse/trackpad only) ─────────── */
 
-@media (pointer: fine) {
-  html.has-custom-cursor * { cursor: none !important; }
-}
+html.has-custom-cursor * { cursor: none !important; }
 
-.cursor-dot {
+.cursor {
+  /* Centered exactly on mouse position */
   position: fixed;
   top: 0;
   left: 0;
-  width: 8px;
-  height: 8px;
-  border-radius: 50%;
-  background: var(--accent);
+  translate: -50% -50%;
   pointer-events: none;
   z-index: 9999;
   opacity: 0;
   will-change: transform;
-  /* dot snaps — lerp is handled in JS */
-  transition: opacity 0.25s, background 0.15s, scale 0.15s;
-  scale: 1;
-}
-.cursor-dot[data-hover="1"] {
-  scale: 0.6;
-  background: var(--foreground);
-}
 
-.cursor-dot[data-editable="1"] {
-  scale: 0.35;
-  background: var(--foreground);
-}
-
-.cursor-ring {
-  position: fixed;
-  top: 0;
-  left: 0;
-  width: 36px;
-  height: 36px;
+  /* Default: small filled accent dot */
+  width: 6px;
+  height: 6px;
   border-radius: 50%;
-  border: 1.5px solid var(--accent);
-  pointer-events: none;
-  z-index: 9998;
-  opacity: 0;
-  will-change: transform;
-  /* ring position set via JS; scale/color via CSS */
-  transition: opacity 0.25s, border-color 0.2s, scale 0.22s cubic-bezier(0.34, 1.56, 0.64, 1), background 0.2s;
-  scale: 1;
-}
-.cursor-ring[data-hover="1"] {
-  scale: 1.6;
-  border-color: var(--foreground);
-  background: rgba(59, 130, 246, 0.07);
+  background: var(--accent);
+  border: 1.5px solid transparent;
+
+  transition:
+    opacity 0.2s,
+    width  0.22s cubic-bezier(0.34, 1.56, 0.64, 1),
+    height 0.22s cubic-bezier(0.34, 1.56, 0.64, 1),
+    background 0.15s,
+    border-color 0.15s;
 }
 
-.cursor-ring[data-editable="1"] {
-  scale: 0.9;
-  border-color: var(--foreground);
+/* Over a real clickable: dot opens into a hollow ring */
+.cursor[data-state="click"] {
+  width: 26px;
+  height: 26px;
   background: transparent;
+  border-color: var(--foreground);
 }
 
 @media (prefers-reduced-motion: reduce) {
@@ -417,8 +395,7 @@ section[id] {
   .logo-dot,
   .cta-arrow,
   .building-arrow,
-  .cursor-dot,
-  .cursor-ring {
+  .cursor {
     transition: none !important;
   }
 }

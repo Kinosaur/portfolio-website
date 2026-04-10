@@ -81,6 +81,9 @@ export default function ProjectsGrid() {
                       <div className="project-title-row">
                         <h3 className="project-title">{project.title}</h3>
                         <span className="project-title-arrow">↗</span>
+                        <span className="project-mobile-toggle-indicator" aria-hidden="true">
+                          {isOpen ? "−" : "+"}
+                        </span>
                       </div>
                     </div>
 
@@ -132,6 +135,13 @@ export default function ProjectsGrid() {
                         <span key={tech} className="skill-tag project-stack-chip">{tech}</span>
                       ))}
                     </div>
+                    <button
+                      type="button"
+                      className="project-mobile-close"
+                      onClick={() => setOpenProjectId(null)}
+                    >
+                      Close details
+                    </button>
                   </div>
                 </div>
               </InView>
@@ -237,6 +247,16 @@ export default function ProjectsGrid() {
           transition: transform 0.18s ease, color 0.18s ease;
           flex-shrink: 0;
         }
+        .project-mobile-toggle-indicator {
+          display: none;
+          width: 1.4rem;
+          text-align: center;
+          color: var(--muted);
+          font-size: 1.05rem;
+          line-height: 1;
+          flex-shrink: 0;
+          transform: translateY(-1px);
+        }
         .project-row:hover .project-title-arrow,
         .project-row:focus-within .project-title-arrow {
           transform: translate(2px, -2px);
@@ -336,11 +356,18 @@ export default function ProjectsGrid() {
           gap: 0.35rem;
           padding-bottom: 1.25rem;
         }
+        .project-mobile-close {
+          display: none;
+        }
 
         /* Mobile — tap to reveal description, hide right stack column */
         @media (max-width: 700px) {
           .project-stack-row { display: none; }
           .project-row-header { grid-template-columns: 2.5rem 1fr; }
+          .project-row-toggle { padding: 1.1rem 0.4rem 1.1rem 0; }
+          .project-title-arrow { display: none; }
+          .project-mobile-toggle-indicator { display: inline-block; }
+          .project-row.is-open .project-mobile-toggle-indicator { color: var(--foreground); }
           .project-row { grid-template-rows: auto 0fr !important; }
           .project-desc {
             opacity: 0 !important;
@@ -353,6 +380,19 @@ export default function ProjectsGrid() {
             opacity: 1 !important;
             transform: none !important;
             padding-bottom: 1rem;
+          }
+          .project-mobile-close {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            border: 1px solid var(--border);
+            background: color-mix(in srgb, var(--card) 88%, transparent);
+            color: var(--foreground);
+            border-radius: 8px;
+            padding: 0.45rem 0.75rem;
+            font-size: 0.8rem;
+            font-weight: 600;
+            margin-top: 0.25rem;
           }
           .project-desc-text { padding-top: 0.3rem; }
           .project-stack-expanded { display: flex; }

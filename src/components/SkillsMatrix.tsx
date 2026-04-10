@@ -16,7 +16,7 @@ export default function SkillsMatrix() {
             Skills
           </p>
           <h2
-            className="section-heading"
+            className="section-heading heading-reveal"
             style={{
               fontSize: "clamp(1.4rem, 3vw, 1.8rem)",
               fontWeight: 700,

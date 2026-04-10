@@ -27,7 +27,7 @@ export default function ProjectsGrid() {
             }}
           >
             <h2
-              className="section-heading"
+              className="section-heading heading-reveal"
               style={{
                 fontSize: "clamp(1.4rem, 3vw, 1.8rem)",
                 fontWeight: 700,
@@ -220,7 +220,7 @@ export default function ProjectsGrid() {
         .project-desc {
           max-height: 0;
           overflow: hidden;
-          transition: max-height 0.35s cubic-bezier(0.4, 0, 0.2, 1);
+          transition: max-height 0.48s cubic-bezier(0.16, 1, 0.3, 1);
           padding-left: calc(3rem + 1.5rem);
         }
         .project-row:hover .project-desc {

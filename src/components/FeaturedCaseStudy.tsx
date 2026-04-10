@@ -14,7 +14,7 @@ export default function FeaturedCaseStudy() {
             {cs.label}
           </p>
           <h2
-            className="section-heading"
+            className="section-heading heading-reveal"
             style={{
               fontSize: "clamp(1.5rem, 3vw, 2rem)",
               fontWeight: 700,

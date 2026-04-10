@@ -177,6 +177,24 @@ section[id] {
   transform: translateY(0);
 }
 
+/* ─── Heading reveal (clip-path sweep) ───────────── */
+
+/*
+  Headings start fully clipped from the right.
+  When the parent InView fires (adds .in-view), the clip
+  opens left-to-right. The ::before accent bar is at left:0
+  so it appears first, then text sweeps out from it.
+  Delay of 0.15s lets the parent fade-up get underway first.
+*/
+.heading-reveal {
+  clip-path: inset(0 101% 0 0);
+  transition: clip-path 0.72s cubic-bezier(0.16, 1, 0.3, 1) 0.15s;
+  will-change: clip-path;
+}
+.in-view .heading-reveal {
+  clip-path: inset(0 0% 0 0);
+}
+
 /* ─── Card hover ──────────────────────────────────── */
 
 .card-lift {
@@ -229,7 +247,7 @@ section[id] {
 }
 .logo-text {
   font-weight: 700;
-  font-size: 1rem;
+  font-size: 1.15rem;
   color: var(--foreground);
   letter-spacing: -0.02em;
   transition: color 0.2s, letter-spacing 0.2s;
@@ -354,22 +372,19 @@ html.has-custom-cursor * { cursor: none !important; }
   height: 6px;
   border-radius: 50%;
   background: var(--accent);
-  border: 1.5px solid transparent;
 
-  transition:
-    opacity 0.2s,
-    width  0.22s cubic-bezier(0.34, 1.56, 0.64, 1),
-    height 0.22s cubic-bezier(0.34, 1.56, 0.64, 1),
-    background 0.15s,
-    border-color 0.15s;
+  transition: opacity 0.2s, background 0.12s, width 0.12s, height 0.12s;
 }
 
-/* Over a real clickable: dot opens into a hollow ring */
+/*
+  Over a clickable: shift to foreground + tiny grow.
+  Stays small so it never obscures the target or fights the
+  element's own hover feedback (underline, card lift, etc.).
+*/
 .cursor[data-state="click"] {
-  width: 26px;
-  height: 26px;
-  background: transparent;
-  border-color: var(--foreground);
+  width: 9px;
+  height: 9px;
+  background: var(--foreground);
 }
 
 @media (prefers-reduced-motion: reduce) {

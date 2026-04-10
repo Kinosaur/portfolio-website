@@ -8,6 +8,7 @@ const LERP = 0.13;
 
 // Elements considered interactive for cursor state change
 const INTERACTIVE = "a, button, label, [role='button'], .card-lift, .skill-tag, .building-item, .nav-link, .logo-link, .cta-btn";
+const EDITABLE = "input, textarea, select, [contenteditable='true'], [contenteditable=''], [role='textbox']";
 
 export default function Cursor() {
   const dotRef  = useRef<HTMLDivElement>(null);
@@ -17,7 +18,11 @@ export default function Cursor() {
   const raf = useRef<number>(0);
 
   useEffect(() => {
-    if (!window.matchMedia("(pointer: fine)").matches) return;
+    const supportsFinePointer = window.matchMedia("(pointer: fine)").matches;
+    const reducedMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+    if (!supportsFinePointer || reducedMotion) return;
+
+    document.documentElement.classList.add("has-custom-cursor");
 
     const dot  = dotRef.current!;
     const ring = ringRef.current!;
@@ -39,8 +44,11 @@ export default function Cursor() {
 
       const el = e.target as Element;
       const interactive = !!el.closest(INTERACTIVE);
+      const editable = !!el.closest(EDITABLE);
       dot.dataset.hover  = interactive ? "1" : "0";
       ring.dataset.hover = interactive ? "1" : "0";
+      dot.dataset.editable = editable ? "1" : "0";
+      ring.dataset.editable = editable ? "1" : "0";
     }
 
     function onLeave() {
@@ -63,6 +71,7 @@ export default function Cursor() {
       document.removeEventListener("mouseleave", onLeave);
       document.removeEventListener("mouseenter", onEnter as EventListener);
       cancelAnimationFrame(raf.current);
+      document.documentElement.classList.remove("has-custom-cursor");
     };
   }, []);
 

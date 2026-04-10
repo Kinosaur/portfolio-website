@@ -1,3 +1,4 @@
+import Image from "next/image";
 import { siteContent } from "@/data/content";
 import InView from "./InView";
 
@@ -25,23 +26,77 @@ export default function About() {
           </h2>
         </InView>
 
-        <div style={{ maxWidth: "640px" }}>
-          {about.paragraphs.map((para, i) => (
-            <InView key={i} delay={i * 100}>
-              <p
+        <div className="about-grid">
+          <InView delay={80}>
+            <figure
+              style={{
+                margin: 0,
+                border: "1px solid var(--border)",
+                borderRadius: "12px",
+                overflow: "hidden",
+                background: "var(--card)",
+                boxShadow: "var(--shadow-md)",
+              }}
+            >
+              <Image
+                src="/images/profile.jpg"
+                alt="Kaung Khant Lin"
+                width={768}
+                height={1024}
                 style={{
-                  fontSize: "1rem",
-                  lineHeight: 1.85,
+                  width: "100%",
+                  height: "auto",
+                  display: "block",
+                }}
+                priority
+              />
+              <figcaption
+                style={{
+                  padding: "0.65rem 0.9rem",
+                  fontSize: "0.8rem",
                   color: "var(--muted)",
-                  marginBottom: i < about.paragraphs.length - 1 ? "1.35rem" : 0,
+                  borderTop: "1px solid var(--border)",
                 }}
               >
-                {para}
-              </p>
-            </InView>
-          ))}
+                Bangkok, Thailand
+              </figcaption>
+            </figure>
+          </InView>
+
+          <div style={{ maxWidth: "640px" }}>
+            {about.paragraphs.map((para, i) => (
+              <InView key={i} delay={i * 100}>
+                <p
+                  style={{
+                    fontSize: "1rem",
+                    lineHeight: 1.85,
+                    color: "var(--muted)",
+                    marginBottom: i < about.paragraphs.length - 1 ? "1.35rem" : 0,
+                  }}
+                >
+                  {para}
+                </p>
+              </InView>
+            ))}
+          </div>
         </div>
       </div>
+
+      <style>{`
+        .about-grid {
+          display: grid;
+          grid-template-columns: minmax(220px, 320px) 1fr;
+          gap: 2rem;
+          align-items: start;
+        }
+
+        @media (max-width: 860px) {
+          .about-grid {
+            grid-template-columns: 1fr;
+            gap: 1.35rem;
+          }
+        }
+      `}</style>
     </section>
   );
 }

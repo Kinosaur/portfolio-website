@@ -46,6 +46,26 @@ export default function Navbar() {
     return () => window.removeEventListener("scroll", onScroll);
   }, []);
 
+  useEffect(() => {
+    if (!menuOpen) return;
+
+    const onKeyDown = (e: KeyboardEvent) => {
+      if (e.key === "Escape") {
+        setMenuOpen(false);
+      }
+    };
+
+    document.addEventListener("keydown", onKeyDown);
+    return () => document.removeEventListener("keydown", onKeyDown);
+  }, [menuOpen]);
+
+  useEffect(() => {
+    document.body.style.overflow = menuOpen ? "hidden" : "";
+    return () => {
+      document.body.style.overflow = "";
+    };
+  }, [menuOpen]);
+
   // Active section tracking
   useEffect(() => {
     const sections = navLinks
@@ -184,6 +204,8 @@ export default function Navbar() {
               padding: "0.25rem",
             }}
             aria-label="Toggle menu"
+            aria-expanded={menuOpen}
+            aria-controls="mobile-nav-drawer"
           >
             <svg width="22" height="22" viewBox="0 0 22 22" fill="none">
               {menuOpen ? (
@@ -206,6 +228,7 @@ export default function Navbar() {
       {/* Mobile drawer */}
       {menuOpen && (
         <div
+          id="mobile-nav-drawer"
           style={{
             background: "var(--background)",
             borderTop: "1px solid var(--border)",

@@ -131,6 +131,9 @@ export default function ProjectsGrid() {
         .project-row:hover {
           background: color-mix(in srgb, var(--card) 60%, var(--background) 40%);
         }
+        .project-row:focus-within {
+          background: color-mix(in srgb, var(--card) 60%, var(--background) 40%);
+        }
         .project-row-header {
           display: grid;
           grid-template-columns: 3rem 1fr 210px;
@@ -140,6 +143,9 @@ export default function ProjectsGrid() {
           transition: padding 0.18s;
         }
         .project-row:hover .project-row-header {
+          padding-left: 0.3rem;
+        }
+        .project-row:focus-within .project-row-header {
           padding-left: 0.3rem;
         }
 
@@ -154,6 +160,9 @@ export default function ProjectsGrid() {
           flex-shrink: 0;
         }
         .project-row:hover .project-num {
+          color: var(--muted);
+        }
+        .project-row:focus-within .project-num {
           color: var(--muted);
         }
 
@@ -186,6 +195,9 @@ export default function ProjectsGrid() {
         .project-row:hover .project-title {
           letter-spacing: -0.01em;
         }
+        .project-row:focus-within .project-title {
+          letter-spacing: -0.01em;
+        }
 
         /* Stack chips — desktop right column */
         .project-stack-row {
@@ -212,6 +224,9 @@ export default function ProjectsGrid() {
           padding-left: calc(3rem + 1.5rem);
         }
         .project-row:hover .project-desc {
+          max-height: 260px;
+        }
+        .project-row:focus-within .project-desc {
           max-height: 260px;
         }
         .project-desc-text {

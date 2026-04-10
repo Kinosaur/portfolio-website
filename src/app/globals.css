@@ -81,6 +81,12 @@ body {
   line-height: 1.6;
 }
 
+:where(a, button, input, textarea, select, [role="button"], [tabindex]):focus-visible {
+  outline: 2px solid var(--accent);
+  outline-offset: 2px;
+  border-radius: 6px;
+}
+
 ::selection {
   background-color: var(--accent);
   color: #fff;
@@ -201,11 +207,16 @@ section[id] {
   transition: transform 0.2s ease;
 }
 .nav-link:hover::after,
+.nav-link:focus-visible::after,
 .nav-link.active::after {
   transform: scaleX(1);
   transform-origin: left;
 }
 .nav-link.active {
+  color: var(--foreground) !important;
+}
+
+.nav-link:focus-visible {
   color: var(--foreground) !important;
 }
 
@@ -326,7 +337,7 @@ section[id] {
 /* ─── Custom cursor (mouse/trackpad only) ─────────── */
 
 @media (pointer: fine) {
-  * { cursor: none !important; }
+  html.has-custom-cursor * { cursor: none !important; }
 }
 
 .cursor-dot {
@@ -350,6 +361,11 @@ section[id] {
   background: var(--foreground);
 }
 
+.cursor-dot[data-editable="1"] {
+  scale: 0.35;
+  background: var(--foreground);
+}
+
 .cursor-ring {
   position: fixed;
   top: 0;
@@ -370,4 +386,39 @@ section[id] {
   scale: 1.6;
   border-color: var(--foreground);
   background: rgba(59, 130, 246, 0.07);
+}
+
+.cursor-ring[data-editable="1"] {
+  scale: 0.9;
+  border-color: var(--foreground);
+  background: transparent;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  html {
+    scroll-behavior: auto;
+  }
+
+  .hero-line,
+  .fade-up {
+    opacity: 1 !important;
+    transform: none !important;
+    animation: none !important;
+    transition: none !important;
+  }
+
+  .pulse-dot {
+    animation: none;
+  }
+
+  .card-lift,
+  .nav-link::after,
+  .logo-text,
+  .logo-dot,
+  .cta-arrow,
+  .building-arrow,
+  .cursor-dot,
+  .cursor-ring {
+    transition: none !important;
+  }
 }

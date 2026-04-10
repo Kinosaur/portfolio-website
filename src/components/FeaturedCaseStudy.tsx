@@ -41,7 +41,7 @@ export default function FeaturedCaseStudy() {
           >
             <div className="featured-grid" style={{ background: "var(--card)" }}>
               {/* ── Left: main content ── */}
-              <div style={{ padding: "2rem 2.5rem" }}>
+              <div className="featured-main" style={{ padding: "2rem 2.5rem" }}>
                 {/* Problem */}
                 <div style={{ marginBottom: "2rem" }}>
                   <p className="label" style={{ marginBottom: "0.6rem", color: "var(--accent)" }}>
@@ -207,6 +207,15 @@ export default function FeaturedCaseStudy() {
               border-left: none;
               border-top: 1px solid var(--border);
               padding: 1.75rem 2.5rem;
+            }
+          }
+
+          @media (max-width: 640px) {
+            .featured-main {
+              padding: 1.4rem 1rem !important;
+            }
+            .featured-sidebar {
+              padding: 1.2rem 1rem !important;
             }
           }
         `}</style>

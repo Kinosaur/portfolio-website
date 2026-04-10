@@ -11,7 +11,7 @@ export const siteContent = {
     title: "Transparent City",
     tagline: "Civic Data Visualization Platform",
     problem:
-      "Bangkok's Traffy Fondue platform has generated 1.1M+ civic feedback tickets, but residents have no unified view to see what's been reported, where, or whether anything is moving.",
+      "Bangkok's Traffy Fondue platform has generated 1.1M+ civic feedback tickets, but residents have no unified view to see what's been reported, where, or whether anything is moving. Most public-facing views are Thai-first, which can limit access for non-Thai users.",
     approach: [
       {
         label: "Ingestion",
@@ -27,7 +27,7 @@ export const siteContent = {
       },
       {
         label: "Visualization",
-        text: "Interactive D3.js dashboard surfacing categories, geography, and temporal patterns.",
+        text: "Interactive D3.js dashboard surfacing categories, geography, and temporal patterns, available in both Thai and English.",
       },
     ],
     demonstrates: [

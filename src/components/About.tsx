@@ -29,7 +29,7 @@ export default function About() {
 
         <div className="about-grid">
           <InView delay={80}>
-            <TiltCard style={{ borderRadius: "12px" }}>
+            <TiltCard className="about-photo-wrap" style={{ borderRadius: "12px" }}>
               <figure
                 style={{
                   margin: 0,
@@ -97,6 +97,22 @@ export default function About() {
           .about-grid {
             grid-template-columns: 1fr;
             gap: 1.5rem;
+          }
+          .about-photo-wrap {
+            max-width: 260px;
+            margin: 0 auto;
+          }
+        }
+
+        @media (max-width: 640px) {
+          .about-photo-wrap {
+            max-width: 220px;
+          }
+        }
+
+        @media (max-width: 400px) {
+          .about-photo-wrap {
+            max-width: 190px;
           }
         }
       `}</style>

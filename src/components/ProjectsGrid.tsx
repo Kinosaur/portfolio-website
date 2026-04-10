@@ -40,7 +40,7 @@ export default function ProjectsGrid() {
             <span
               style={{ fontSize: "0.78rem", color: "var(--muted)", letterSpacing: "0.05em" }}
             >
-              {projects.length} projects — hover to read
+              {projects.length} projects — hover or tap to read
             </span>
           </div>
         </InView>

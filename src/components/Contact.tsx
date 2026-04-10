@@ -25,7 +25,7 @@ export default function Contact() {
 
   return (
     <footer id="contact" style={{ borderTop: "1px solid var(--border)" }}>
-      <div className="container" style={{ padding: "4.5rem 2rem 2.5rem" }}>
+      <div className="container contact-container" style={{ padding: "4.5rem 2rem 2.5rem" }}>
 
         <div className="footer-top">
           {/* ── Brand ── */}
@@ -133,6 +133,9 @@ export default function Contact() {
           }
         }
         @media (max-width: 640px) {
+          .contact-container {
+            padding: 3.5rem 1.25rem 2rem !important;
+          }
           .footer-top {
             grid-template-columns: 1fr;
             gap: 2.25rem;

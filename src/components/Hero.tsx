@@ -8,6 +8,7 @@ export default function Hero() {
   return (
     <section
       id="hero"
+      className="hero-section"
       style={{
         position: "relative",
         minHeight: "100svh",
@@ -32,7 +33,7 @@ export default function Hero() {
             <h1
               className="hero-line"
               style={{
-                fontSize: "clamp(2.4rem, 6vw, 3.75rem)",
+                fontSize: "clamp(2rem, 9vw, 3.75rem)",
                 fontWeight: 700,
                 letterSpacing: "-0.035em",
                 lineHeight: 1.08,
@@ -126,7 +127,7 @@ export default function Hero() {
                     alt="Kaung Khant Lin"
                     width={768}
                     height={1024}
-                    style={{ width: "100%", height: "100%", display: "block", objectFit: "cover" }}
+                    style={{ width: "100%", height: "100%", display: "block", objectFit: "cover", objectPosition: "center top" }}
                     priority
                   />
                 </div>
@@ -167,6 +168,18 @@ export default function Hero() {
           aspect-ratio: 3 / 4;
           overflow: hidden;
           max-height: 420px;
+          position: relative;
+        }
+        .hero-photo-frame::after {
+          content: '';
+          position: absolute;
+          inset: 0;
+          background: linear-gradient(
+            to bottom,
+            transparent 45%,
+            color-mix(in srgb, var(--card) 90%, transparent) 100%
+          );
+          pointer-events: none;
         }
         .hero-photo-caption {
           display: flex;
@@ -203,10 +216,50 @@ export default function Hero() {
             gap: 2rem;
           }
           .hero-photo-wrap {
-            justify-content: flex-start;
+            justify-content: center;
           }
           .hero-photo-card {
             max-width: 260px;
+          }
+        }
+
+        @media (max-width: 640px) {
+          .hero-section {
+            min-height: auto !important;
+            padding-top: 5.5rem !important;
+            padding-bottom: 2.25rem;
+          }
+          .hero-layout {
+            gap: 1.5rem;
+          }
+          .hero-text .cta-btn {
+            width: 100%;
+            justify-content: center;
+            padding: 0.85rem 1.1rem;
+          }
+          .hero-photo-card {
+            max-width: 205px;
+          }
+          .hero-photo-caption {
+            padding: 0.72rem 0.85rem;
+            gap: 0.28rem;
+          }
+          .hero-photo-status {
+            font-size: 0.84rem;
+          }
+          .hero-photo-location {
+            font-size: 0.72rem;
+            padding-left: 1.15rem;
+          }
+          .hero-status-dot {
+            width: 7px;
+            height: 7px;
+          }
+        }
+
+        @media (max-width: 400px) {
+          .hero-photo-card {
+            max-width: 185px;
           }
         }
       `}</style>

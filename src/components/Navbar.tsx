@@ -242,7 +242,7 @@ export default function Navbar() {
               onClick={() => setMenuOpen(false)}
               style={{
                 display: "block",
-                padding: "0.65rem 0",
+                padding: "0.85rem 0",
                 fontSize: "0.95rem",
                 color: activeId === link.id ? "var(--foreground)" : "var(--muted)",
                 textDecoration: "none",

@@ -1,11 +1,15 @@
 import type { Metadata } from "next";
 import "./globals.css";
 import Navbar from "@/components/Navbar";
+import Cursor from "@/components/Cursor";
 
 export const metadata: Metadata = {
   title: "Kaung Khant Lin — Data Engineering Portfolio",
   description:
     "Final-year CS student at Assumption University, Bangkok. Moving toward data engineering — Python data processing, visualization, and learning warehousing and orchestration.",
+  icons: {
+    icon: "/favicon.svg",
+  },
   openGraph: {
     title: "Kaung Khant Lin — Data Engineering Portfolio",
     description:
@@ -40,6 +44,7 @@ export default function RootLayout({
         <script dangerouslySetInnerHTML={{ __html: themeScript }} />
       </head>
       <body>
+        <Cursor />
         <Navbar />
         {children}
       </body>

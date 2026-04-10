@@ -128,12 +128,17 @@ export default function ProjectsGrid() {
           cursor: default;
           transition: background 0.18s;
           overflow: clip;
+          display: grid;
+          grid-template-rows: auto 0fr;
+          transition: background 0.18s, grid-template-rows 0.28s cubic-bezier(0.4, 0, 0.2, 1);
         }
         .project-row:hover {
           background: color-mix(in srgb, var(--card) 60%, var(--background) 40%);
+          grid-template-rows: auto 1fr;
         }
         .project-row:focus-within {
           background: color-mix(in srgb, var(--card) 60%, var(--background) 40%);
+          grid-template-rows: auto 1fr;
         }
         .project-row-header {
           display: grid;
@@ -205,21 +210,22 @@ export default function ProjectsGrid() {
 
         /* Description expand */
         .project-desc {
-          max-height: 0;
+          min-height: 0;
           overflow: hidden;
           opacity: 0;
-          will-change: max-height, opacity;
-          transition: max-height 0.3s cubic-bezier(0.4, 0, 0.2, 1), opacity 0.16s ease;
+          transform: translateY(-4px);
+          will-change: opacity, transform;
+          transition: opacity 0.2s ease, transform 0.2s ease;
           padding-left: calc(3rem + 1.5rem);
         }
         .project-row:hover .project-desc {
-          max-height: 260px;
           opacity: 1;
-          transition-delay: 70ms;
+          transform: translateY(0);
+          transition-delay: 45ms;
         }
         .project-row:focus-within .project-desc {
-          max-height: 260px;
           opacity: 1;
+          transform: translateY(0);
           transition-delay: 0s;
         }
         .project-desc-text {
@@ -253,9 +259,10 @@ export default function ProjectsGrid() {
         @media (max-width: 700px) {
           .project-stack-row { display: none; }
           .project-row-header { grid-template-columns: 2.5rem 1fr; }
+          .project-row { grid-template-rows: auto 1fr !important; }
           .project-desc {
-            max-height: none !important;
             opacity: 1 !important;
+            transform: none !important;
             padding-bottom: 1rem;
             padding-left: calc(2.5rem + 1.5rem);
           }
@@ -265,7 +272,8 @@ export default function ProjectsGrid() {
 
         /* Touch devices — also always show */
         @media (hover: none) {
-          .project-desc { max-height: none !important; opacity: 1 !important; padding-bottom: 1rem; }
+          .project-row { grid-template-rows: auto 1fr !important; }
+          .project-desc { opacity: 1 !important; transform: none !important; padding-bottom: 1rem; }
           .project-stack-expanded { display: flex; }
         }
       `}</style>

@@ -20,7 +20,7 @@ export default function Hero() {
     >
       <div className="hero-bg" />
 
-      <div className="container hero-container" style={{ position: "relative", zIndex: 1, width: "100%" }}>
+      <div className="container" style={{ position: "relative", zIndex: 1, width: "100%" }}>
         <div className="hero-layout">
           {/* ── Left: text ── */}
           <div className="hero-text">
@@ -125,9 +125,10 @@ export default function Hero() {
                   <Image
                     src="/images/profile.jpg"
                     alt="Kaung Khant Lin"
-                    width={768}
-                    height={1024}
-                    style={{ width: "100%", height: "100%", display: "block", objectFit: "cover", objectPosition: "center top" }}
+                    fill
+                    sizes="(max-width: 640px) 205px, (max-width: 860px) 260px, 360px"
+                    className="hero-profile-image"
+                    style={{ objectFit: "cover", objectPosition: "center top" }}
                     priority
                   />
                 </div>
@@ -147,12 +148,9 @@ export default function Hero() {
       <style>{`
         .hero-layout {
           display: grid;
-          grid-template-columns: 1fr minmax(300px, 430px);
-          gap: 2.5rem;
+          grid-template-columns: 1fr minmax(260px, 360px);
+          gap: 3.5rem;
           align-items: center;
-        }
-        .hero-container {
-          max-width: 1160px !important;
         }
         .hero-photo-wrap {
           display: flex;
@@ -168,10 +166,14 @@ export default function Hero() {
           width: 100%;
         }
         .hero-photo-frame {
+          width: 100%;
           aspect-ratio: 3 / 4;
           overflow: hidden;
-          max-height: 420px;
           position: relative;
+        }
+        .hero-profile-image {
+          transform: scale(1.14);
+          transform-origin: center 18%;
         }
         .hero-photo-frame::after {
           content: '';
@@ -243,6 +245,10 @@ export default function Hero() {
           .hero-photo-card {
             max-width: 205px;
           }
+          .hero-profile-image {
+            transform: scale(1.06);
+            transform-origin: center 15%;
+          }
           .hero-photo-caption {
             padding: 0.72rem 0.85rem;
             gap: 0.28rem;
@@ -263,6 +269,9 @@ export default function Hero() {
         @media (max-width: 400px) {
           .hero-photo-card {
             max-width: 185px;
+          }
+          .hero-profile-image {
+            transform: scale(1.03);
           }
         }
       `}</style>

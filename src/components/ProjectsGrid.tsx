@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { projects } from "@/data/projects";
 import InView from "./InView";
 
@@ -14,10 +14,29 @@ const tagColors: Record<string, string> = {
 
 export default function ProjectsGrid() {
   const [openProjectId, setOpenProjectId] = useState<string | null>(null);
+  const rowRefs = useRef<Record<string, HTMLDivElement | null>>({});
 
   const toggleProject = (projectId: string) => {
     setOpenProjectId((current) => (current === projectId ? null : projectId));
   };
+
+  useEffect(() => {
+    if (!openProjectId) return;
+    if (typeof window === "undefined") return;
+
+    const isMobileContext = window.matchMedia("(max-width: 700px), (hover: none)").matches;
+    if (!isMobileContext) return;
+
+    const row = rowRefs.current[openProjectId];
+    if (!row) return;
+
+    const timer = window.setTimeout(() => {
+      const top = row.getBoundingClientRect().top + window.scrollY - 92;
+      window.scrollTo({ top, behavior: "smooth" });
+    }, 120);
+
+    return () => window.clearTimeout(timer);
+  }, [openProjectId]);
 
   return (
     <section id="projects" className="section">
@@ -61,7 +80,12 @@ export default function ProjectsGrid() {
 
             return (
               <InView key={project.id} delay={i * 55}>
-                <div className={`project-row${isOpen ? " is-open" : ""}`}>
+                <div
+                  className={`project-row${isOpen ? " is-open" : ""}`}
+                  ref={(el) => {
+                    rowRefs.current[project.id] = el;
+                  }}
+                >
                   {/* ── visible row ── */}
                   <button
                     type="button"
@@ -155,11 +179,10 @@ export default function ProjectsGrid() {
         .project-row {
           border-bottom: 1px solid var(--border);
           cursor: default;
-          transition: background 0.18s;
           overflow: clip;
           display: grid;
           grid-template-rows: auto 0fr;
-          transition: background 0.18s, grid-template-rows 0.28s cubic-bezier(0.4, 0, 0.2, 1);
+          transition: background 0.2s ease, grid-template-rows 0.34s cubic-bezier(0.22, 1, 0.36, 1);
         }
         .project-row:hover {
           background: color-mix(in srgb, var(--card) 60%, var(--background) 40%);
@@ -296,9 +319,9 @@ export default function ProjectsGrid() {
           min-height: 0;
           overflow: hidden;
           opacity: 0;
-          transform: translateY(-4px);
+          transform: translateY(-6px);
           will-change: opacity, transform;
-          transition: opacity 0.2s ease, transform 0.2s ease;
+          transition: opacity 0.24s ease, transform 0.24s ease, padding 0.24s ease;
           padding-left: calc(3rem + 1.5rem);
         }
         .project-row:hover .project-desc {
@@ -364,22 +387,26 @@ export default function ProjectsGrid() {
         @media (max-width: 700px) {
           .project-stack-row { display: none; }
           .project-row-header { grid-template-columns: 2.5rem 1fr; }
-          .project-row-toggle { padding: 1.1rem 0.4rem 1.1rem 0; }
+          .project-row { scroll-margin-top: 5rem; }
+          .project-row-toggle {
+            padding: 1.1rem 0.4rem 1.1rem 0;
+            touch-action: manipulation;
+          }
           .project-title-arrow { display: none; }
           .project-mobile-toggle-indicator { display: inline-block; }
           .project-row.is-open .project-mobile-toggle-indicator { color: var(--foreground); }
           .project-row { grid-template-rows: auto 0fr !important; }
           .project-desc {
             opacity: 0 !important;
-            transform: translateY(-4px) !important;
+            transform: translateY(-8px) !important;
             padding-bottom: 0;
             padding-left: calc(2.5rem + 1.5rem);
           }
           .project-row.is-open { grid-template-rows: auto 1fr !important; }
           .project-row.is-open .project-desc {
             opacity: 1 !important;
-            transform: none !important;
-            padding-bottom: 1rem;
+            transform: translateY(0) !important;
+            padding-bottom: 0.95rem;
           }
           .project-mobile-close {
             display: inline-flex;
@@ -401,9 +428,9 @@ export default function ProjectsGrid() {
         /* Touch devices — tap to reveal */
         @media (hover: none) {
           .project-row { grid-template-rows: auto 0fr !important; }
-          .project-desc { opacity: 0 !important; transform: translateY(-4px) !important; padding-bottom: 0; }
+          .project-desc { opacity: 0 !important; transform: translateY(-8px) !important; padding-bottom: 0; }
           .project-row.is-open { grid-template-rows: auto 1fr !important; }
-          .project-row.is-open .project-desc { opacity: 1 !important; transform: none !important; padding-bottom: 1rem; }
+          .project-row.is-open .project-desc { opacity: 1 !important; transform: translateY(0) !important; padding-bottom: 0.95rem; }
           .project-stack-expanded { display: flex; }
         }
       `}</style>

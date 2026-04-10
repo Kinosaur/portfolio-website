@@ -48,6 +48,6 @@ export const siteContent = {
   contact: {
     email: "kaungkhantlin999@gmail.com",
     github: "https://github.com/Kinosaur",
-    linkedin: "https://www.linkedin.com/in/kaung-khant-lin-kino/",
+    linkedin: "https://www.linkedin.com/in/kaungkhantlin-kinosaur/",
   },
 };

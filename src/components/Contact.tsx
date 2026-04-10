@@ -62,7 +62,7 @@ export default function Contact() {
                 </a>
                 <a href={contact.linkedin} target="_blank" rel="noopener noreferrer" className="footer-link">
                   <LinkedInIcon />
-                  <span>linkedin.com/in/kaung-khant-lin-kino</span>
+                  <span>linkedin.com/in/kaungkhantlin-kinosaur</span>
                 </a>
               </div>
             </div>

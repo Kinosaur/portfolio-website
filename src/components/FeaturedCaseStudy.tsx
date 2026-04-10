@@ -26,7 +26,7 @@ export default function FeaturedCaseStudy() {
           >
             {cs.title}
           </h2>
-          <p style={{ color: "var(--muted)", fontSize: "0.9rem", marginBottom: "2rem" }}>
+          <p style={{ color: "var(--muted)", fontSize: "0.98rem", marginBottom: "2rem" }}>
             {cs.tagline}
           </p>
         </InView>
@@ -47,7 +47,7 @@ export default function FeaturedCaseStudy() {
                   <p className="label" style={{ marginBottom: "0.6rem", color: "var(--accent)" }}>
                     Problem
                   </p>
-                  <p style={{ color: "var(--muted)", lineHeight: 1.8, fontSize: "1rem" }}>
+                  <p style={{ color: "color-mix(in srgb, var(--foreground) 72%, var(--muted))", lineHeight: 1.84, fontSize: "1.02rem" }}>
                     {cs.problem}
                   </p>
                 </div>
@@ -94,7 +94,7 @@ export default function FeaturedCaseStudy() {
                         >
                           {step.label}
                         </span>
-                        <span style={{ color: "var(--muted)", lineHeight: 1.75, fontSize: "0.95rem" }}>
+                        <span style={{ color: "color-mix(in srgb, var(--foreground) 70%, var(--muted))", lineHeight: 1.78, fontSize: "1rem" }}>
                           {step.text}
                         </span>
                       </div>

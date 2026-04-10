@@ -60,11 +60,11 @@ export default function Hero() {
 
             {/* Positioning */}
             <p
-              className="hero-line"
+              className="hero-line hero-positioning"
               style={{
-                fontSize: "1.05rem",
+                fontSize: "1.08rem",
                 lineHeight: 1.85,
-                color: "var(--muted)",
+                color: "color-mix(in srgb, var(--foreground) 76%, var(--muted))",
                 marginBottom: "2.75rem",
                 maxWidth: "540px",
               }}
@@ -73,6 +73,10 @@ export default function Hero() {
               Myanmar. Moving toward data engineering — currently strongest in Python
               data processing and visualization, learning warehousing and orchestration
               now.
+            </p>
+            <p className="hero-line hero-mobile-summary">
+              CS senior in Bangkok pivoting into data engineering, focused on Python
+              data workflows and analytics.
             </p>
 
             {/* CTA */}
@@ -171,6 +175,9 @@ export default function Hero() {
           align-items: center;
           gap: 0.8rem;
           flex-wrap: wrap;
+        }
+        .hero-mobile-summary {
+          display: none;
         }
         .hero-actions > a {
           inline-size: 14.5rem;
@@ -286,15 +293,26 @@ export default function Hero() {
         @media (max-width: 640px) {
           .hero-section {
             min-height: auto !important;
-            padding-top: 5.5rem !important;
+            padding-top: 5rem !important;
             padding-bottom: 2.25rem;
           }
           .hero-layout {
-            gap: 1.5rem;
+            gap: 1.25rem;
             align-items: start;
           }
           .hero-photo-wrap {
-            justify-content: flex-start;
+            justify-content: center;
+          }
+          .hero-positioning {
+            display: none;
+          }
+          .hero-mobile-summary {
+            display: block;
+            font-size: 1rem;
+            line-height: 1.6;
+            color: color-mix(in srgb, var(--foreground) 72%, var(--muted));
+            margin-bottom: 1.6rem;
+            max-width: 34ch;
           }
           .hero-text .action-button {
             width: 100%;
@@ -317,10 +335,11 @@ export default function Hero() {
             justify-content: center;
           }
           .hero-photo-card {
-            max-width: 205px;
+            max-width: 195px;
+            margin-inline: auto;
           }
           .hero-profile-image {
-            transform: scale(1.06);
+            transform: scale(1.03);
             transform-origin: center 15%;
           }
           .hero-photo-caption {
@@ -348,10 +367,10 @@ export default function Hero() {
 
         @media (max-width: 400px) {
           .hero-photo-card {
-            max-width: 185px;
+            max-width: 176px;
           }
           .hero-profile-image {
-            transform: scale(1.03);
+            transform: scale(1.01);
           }
         }
       `}</style>

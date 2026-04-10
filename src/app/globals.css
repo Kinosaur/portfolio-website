@@ -3,7 +3,7 @@
 :root {
   --background: #0f1117;
   --foreground: #e8eaf0;
-  --muted: #8b92a5;
+  --muted: #a3abbe;
   --border: #1e2130;
   --card: #141720;
   --accent: #3b82f6;
@@ -19,7 +19,7 @@
   :root:not([data-theme="dark"]) {
     --background: #f5f7fb;
     --foreground: #161b26;
-    --muted: #667085;
+    --muted: #4f5f78;
     --border: #d9dee9;
     --card: #fbfcfe;
     --accent: #2563eb;
@@ -35,7 +35,7 @@
 :root[data-theme="light"] {
   --background: #f5f7fb;
   --foreground: #161b26;
-  --muted: #667085;
+  --muted: #4f5f78;
   --border: #d9dee9;
   --card: #fbfcfe;
   --accent: #2563eb;
@@ -50,7 +50,7 @@
 :root[data-theme="dark"] {
   --background: #0f1117;
   --foreground: #e8eaf0;
-  --muted: #8b92a5;
+  --muted: #a3abbe;
   --border: #1e2130;
   --card: #141720;
   --accent: #3b82f6;
@@ -69,7 +69,7 @@
 
 html {
   scroll-behavior: smooth;
-  font-size: 16px; /* explicit baseline */
+  font-size: clamp(16px, 0.35vw + 15px, 17px);
 }
 
 body {
@@ -78,7 +78,7 @@ body {
   font-family: var(--font-ui-sans), "Geist", "Inter", ui-sans-serif, system-ui, sans-serif;
   -webkit-font-smoothing: antialiased;
   font-size: 1rem;
-  line-height: 1.6;
+  line-height: 1.68;
 }
 
 :where(a, button, input, textarea, select, [role="button"], [tabindex]):focus-visible {

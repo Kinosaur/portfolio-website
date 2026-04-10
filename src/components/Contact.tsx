@@ -32,7 +32,7 @@ export default function Contact() {
           <InView>
             <div>
               <a href="#" className="logo-link footer-logo-link" style={{ textDecoration: "none", marginBottom: "1.1rem" }}>
-                <span className="footer-logo-text">Kino</span>
+                <span className="footer-logo-text">Kinosaur</span>
                 <span className="logo-dot" style={{ width: "6px", height: "6px" }} />
               </a>
               <p style={{

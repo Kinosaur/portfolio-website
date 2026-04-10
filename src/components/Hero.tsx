@@ -54,7 +54,7 @@ export default function Hero() {
                 marginBottom: "1.1rem",
               }}
             >
-              Hi — I&rsquo;m Kino.
+              Hi — I&rsquo;m Kinosaur.
             </p>
 
             {/* Positioning */}
@@ -181,10 +181,18 @@ export default function Hero() {
           inset: 0;
           background: linear-gradient(
             to bottom,
-            transparent 45%,
-            color-mix(in srgb, var(--card) 90%, transparent) 100%
+            transparent 56%,
+            color-mix(in srgb, var(--card) 72%, transparent) 100%
           );
           pointer-events: none;
+        }
+
+        :global(:root[data-theme="light"]) .hero-photo-frame::after {
+          background: linear-gradient(
+            to bottom,
+            transparent 64%,
+            rgba(255, 255, 255, 0.34) 100%
+          );
         }
         .hero-photo-caption {
           display: flex;
@@ -236,6 +244,10 @@ export default function Hero() {
           }
           .hero-layout {
             gap: 1.5rem;
+            align-items: start;
+          }
+          .hero-photo-wrap {
+            justify-content: flex-start;
           }
           .hero-text .cta-btn {
             width: 100%;

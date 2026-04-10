@@ -124,7 +124,7 @@ export default function Navbar() {
       >
         {/* Logo */}
         <a href="#" className="logo-link" style={{ textDecoration: "none", flexShrink: 0 }}>
-          <span className="logo-text">Kino</span>
+          <span className="logo-text">Kinosaur</span>
           <span className="logo-dot" />
         </a>
 

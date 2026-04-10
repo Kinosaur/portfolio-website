@@ -14,6 +14,20 @@ export const metadata: Metadata = {
   },
 };
 
+// Runs before React hydrates — prevents flash of wrong theme
+const themeScript = `
+  try {
+    var stored = localStorage.getItem('kino-theme');
+    if (stored === 'light' || stored === 'dark') {
+      document.documentElement.setAttribute('data-theme', stored);
+    } else if (window.matchMedia('(prefers-color-scheme: light)').matches) {
+      document.documentElement.setAttribute('data-theme', 'light');
+    } else {
+      document.documentElement.setAttribute('data-theme', 'dark');
+    }
+  } catch(e) {}
+`;
+
 export default function RootLayout({
   children,
 }: {
@@ -21,6 +35,10 @@ export default function RootLayout({
 }) {
   return (
     <html lang="en" suppressHydrationWarning>
+      <head>
+        {/* eslint-disable-next-line @next/next/no-before-interactive-script-outside-document */}
+        <script dangerouslySetInnerHTML={{ __html: themeScript }} />
+      </head>
       <body>
         <Navbar />
         {children}

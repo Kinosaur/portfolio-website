@@ -3,8 +3,6 @@
 import { siteContent } from "@/data/content";
 
 export default function Hero() {
-  const { hero } = siteContent;
-
   return (
     <section
       id="hero"
@@ -17,18 +15,17 @@ export default function Hero() {
         overflow: "hidden",
       }}
     >
-      {/* Dot-grid background */}
       <div className="hero-bg" />
 
       <div className="container" style={{ position: "relative", zIndex: 1 }}>
-        <div style={{ maxWidth: "660px" }}>
+        <div style={{ maxWidth: "680px" }}>
 
-          {/* Line 1 — eyebrow */}
-          <p className="label hero-line" style={{ marginBottom: "1.25rem" }}>
+          {/* Eyebrow */}
+          <p className="label hero-line" style={{ marginBottom: "1.5rem" }}>
             Portfolio · Data Engineering
           </p>
 
-          {/* Line 2 — full name */}
+          {/* Name */}
           <h1
             className="hero-line"
             style={{
@@ -37,69 +34,46 @@ export default function Hero() {
               letterSpacing: "-0.035em",
               lineHeight: 1.08,
               color: "var(--foreground)",
-              marginBottom: "0.5rem",
+              marginBottom: "1rem",
             }}
           >
-            {hero.headline}
+            {siteContent.name}
           </h1>
 
-          {/* Line 3 — handle */}
+          {/* Human intro */}
           <p
             className="hero-line"
             style={{
-              fontSize: "1rem",
-              color: "var(--muted)",
-              marginBottom: "1.75rem",
-              display: "flex",
-              alignItems: "center",
-              gap: "0.5rem",
+              fontSize: "1.2rem",
+              fontWeight: 500,
+              color: "var(--foreground)",
+              marginBottom: "1.1rem",
             }}
           >
-            <span
-              style={{
-                fontWeight: 600,
-                color: "var(--accent)",
-                fontSize: "0.85rem",
-                padding: "0.15rem 0.55rem",
-                border: "1px solid color-mix(in srgb, var(--accent) 35%, transparent)",
-                borderRadius: "4px",
-                letterSpacing: "0.02em",
-              }}
-            >
-              — Kino
-            </span>
-            <span
-              style={{
-                fontSize: "0.78rem",
-                color: "var(--muted)",
-                opacity: 0.6,
-              }}
-            >
-              @Kinosaur on GitHub
-            </span>
+            Hi — I&rsquo;m Kino.
           </p>
 
-          {/* Line 4 — positioning */}
+          {/* Positioning */}
           <p
             className="hero-line"
             style={{
               fontSize: "1.05rem",
-              lineHeight: 1.8,
+              lineHeight: 1.85,
               color: "var(--muted)",
               marginBottom: "2.75rem",
               maxWidth: "540px",
             }}
           >
-            Final-year CS student at Assumption University, Bangkok.
-            <br />
-            Moving toward data engineering — currently strongest in Python data
-            processing and visualization, learning warehousing and orchestration now.
+            Final-year CS student at Assumption University, Bangkok, originally from
+            Myanmar. Moving toward data engineering — currently strongest in Python
+            data processing and visualization, learning warehousing and orchestration
+            now.
           </p>
 
           {/* CTA */}
           <a
             href="#featured"
-            className="cta-btn"
+            className="cta-btn hero-line"
             style={{
               display: "inline-flex",
               alignItems: "center",
@@ -118,7 +92,7 @@ export default function Hero() {
             onMouseEnter={(e) => {
               e.currentTarget.style.boxShadow =
                 "0 6px 24px color-mix(in srgb, var(--accent) 55%, transparent)";
-              e.currentTarget.style.transform = "translateY(-1px)";
+              e.currentTarget.style.transform = "translateY(-2px)";
             }}
             onMouseLeave={(e) => {
               e.currentTarget.style.boxShadow =
@@ -126,7 +100,7 @@ export default function Hero() {
               e.currentTarget.style.transform = "translateY(0)";
             }}
           >
-            {hero.cta}
+            {siteContent.hero.cta}
             <svg className="cta-arrow" width="15" height="15" viewBox="0 0 16 16" fill="none">
               <path
                 d="M8 3v10M3 8l5 5 5-5"

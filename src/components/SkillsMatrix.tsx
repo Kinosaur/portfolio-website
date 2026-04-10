@@ -44,7 +44,7 @@ export default function SkillsMatrix() {
                 {/* Tier header */}
                 <div
                   style={{
-                    padding: "1rem 1.5rem",
+                    padding: "1.1rem 1.75rem",
                     borderBottom: "1px solid var(--border)",
                     background: "var(--card)",
                     display: "flex",
@@ -56,7 +56,7 @@ export default function SkillsMatrix() {
                   <span
                     style={{
                       fontWeight: 700,
-                      fontSize: "0.88rem",
+                      fontSize: "0.9rem",
                       color: accent,
                       textTransform: "uppercase",
                       letterSpacing: "0.06em",
@@ -66,7 +66,7 @@ export default function SkillsMatrix() {
                   </span>
                   <span
                     style={{
-                      fontSize: "0.8rem",
+                      fontSize: "0.88rem",
                       color: "var(--muted)",
                     }}
                   >
@@ -77,11 +77,11 @@ export default function SkillsMatrix() {
                 {/* Groups */}
                 <div
                   style={{
-                    padding: "1.25rem 1.5rem",
+                    padding: "1.4rem 1.75rem",
                     background: "var(--card)",
                     display: "flex",
                     flexDirection: "column",
-                    gap: "0.9rem",
+                    gap: "1rem",
                   }}
                 >
                   {tier.groups.map((group) => (
@@ -89,7 +89,7 @@ export default function SkillsMatrix() {
                       key={group.category}
                       style={{
                         display: "grid",
-                        gridTemplateColumns: "140px 1fr",
+                        gridTemplateColumns: "160px 1fr",
                         gap: "1rem",
                         alignItems: "start",
                       }}
@@ -97,7 +97,7 @@ export default function SkillsMatrix() {
                     >
                       <span
                         style={{
-                          fontSize: "0.75rem",
+                          fontSize: "0.85rem",
                           fontWeight: 600,
                           color: "var(--foreground)",
                           paddingTop: "0.1rem",
@@ -111,8 +111,8 @@ export default function SkillsMatrix() {
                             key={item}
                             className="skill-tag"
                             style={{
-                              fontSize: "0.78rem",
-                              padding: "0.2rem 0.6rem",
+                              fontSize: "0.85rem",
+                              padding: "0.25rem 0.65rem",
                               borderRadius: "4px",
                               border: "1px solid var(--border)",
                               color: "var(--muted)",

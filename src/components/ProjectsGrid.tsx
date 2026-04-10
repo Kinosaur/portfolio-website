@@ -16,167 +16,103 @@ export default function ProjectsGrid() {
     <section id="projects" className="section">
       <div className="container">
         <InView>
-          <p className="label" style={{ marginBottom: "0.5rem" }}>
-            Projects
-          </p>
-          <h2
-            className="section-heading"
+          <div
             style={{
-              fontSize: "clamp(1.4rem, 3vw, 1.8rem)",
-              fontWeight: 700,
-              letterSpacing: "-0.02em",
+              display: "flex",
+              alignItems: "baseline",
+              justifyContent: "space-between",
               marginBottom: "2.5rem",
-              color: "var(--foreground)",
+              flexWrap: "wrap",
+              gap: "0.5rem",
             }}
           >
-            Selected Work
-          </h2>
+            <h2
+              className="section-heading"
+              style={{
+                fontSize: "clamp(1.4rem, 3vw, 1.8rem)",
+                fontWeight: 700,
+                letterSpacing: "-0.02em",
+                color: "var(--foreground)",
+              }}
+            >
+              Selected Work
+            </h2>
+            <span
+              style={{ fontSize: "0.78rem", color: "var(--muted)", letterSpacing: "0.05em" }}
+            >
+              {projects.length} projects — hover to read
+            </span>
+          </div>
         </InView>
 
-        <div
-          style={{
-            display: "grid",
-            gridTemplateColumns: "repeat(auto-fill, minmax(300px, 1fr))",
-            gap: "1rem",
-          }}
-        >
+        {/* List */}
+        <div style={{ borderTop: "1px solid var(--border)" }}>
           {projects.map((project, i) => {
-            const tagColor = tagColors[project.tag] ?? "var(--accent)";
+            const color = tagColors[project.tag] ?? "var(--accent)";
+            const num = String(i + 1).padStart(2, "0");
+
             return (
-              <InView key={project.id} delay={i * 60}>
-                <div
-                  className="card-lift"
-                  style={{
-                    background: "var(--card)",
-                    border: "1px solid var(--border)",
-                    borderRadius: "10px",
-                    padding: "1.5rem 1.5rem 1.5rem 1.75rem",
-                    display: "flex",
-                    flexDirection: "column",
-                    gap: "0.75rem",
-                    height: "100%",
-                    position: "relative",
-                    overflow: "hidden",
-                  }}
-                >
-                  {/* Left accent bar */}
-                  <div
-                    style={{
-                      position: "absolute",
-                      top: "1rem",
-                      left: 0,
-                      bottom: "1rem",
-                      width: "3px",
-                      background: tagColor,
-                      borderRadius: "0 2px 2px 0",
-                      opacity: 0.7,
-                    }}
-                  />
+              <InView key={project.id} delay={i * 55}>
+                <div className="project-row">
+                  {/* ── visible row ── */}
+                  <div className="project-row-header">
+                    {/* Number */}
+                    <span className="project-num">{num}</span>
 
-                  {/* Tag */}
-                  <span
-                    style={{
-                      fontSize: "0.65rem",
-                      fontWeight: 700,
-                      letterSpacing: "0.09em",
-                      textTransform: "uppercase",
-                      color: tagColor,
-                    }}
-                  >
-                    {project.tag}
-                  </span>
-
-                  {/* Title */}
-                  <h3
-                    style={{
-                      fontSize: "1rem",
-                      fontWeight: 600,
-                      color: "var(--foreground)",
-                      letterSpacing: "-0.01em",
-                      lineHeight: 1.3,
-                    }}
-                  >
-                    {project.title}
-                  </h3>
-
-                  {/* Subtitle */}
-                  <p
-                    style={{
-                      fontSize: "0.82rem",
-                      color: tagColor,
-                      fontWeight: 500,
-                      opacity: 0.9,
-                    }}
-                  >
-                    ↳ {project.subtitle}
-                  </p>
-
-                  {/* Description */}
-                  <p
-                    style={{
-                      fontSize: "0.85rem",
-                      color: "var(--muted)",
-                      lineHeight: 1.68,
-                      flexGrow: 1,
-                    }}
-                  >
-                    {project.description}
-                  </p>
-
-                  {/* Stack */}
-                  <div style={{ display: "flex", flexWrap: "wrap", gap: "0.35rem" }}>
-                    {project.stack.map((tech) => (
-                      <span
-                        key={tech}
-                        className="skill-tag"
-                        style={{
-                          fontSize: "0.68rem",
-                          padding: "0.18rem 0.5rem",
-                          border: "1px solid var(--border)",
-                          borderRadius: "4px",
-                          color: "var(--muted)",
-                        }}
-                      >
-                        {tech}
+                    {/* Title block */}
+                    <div className="project-title-block">
+                      <span className="project-tag-badge" style={{ color, borderColor: `color-mix(in srgb, ${color} 30%, transparent)` }}>
+                        {project.tag}
                       </span>
-                    ))}
+                      <h3 className="project-title">{project.title}</h3>
+                    </div>
+
+                    {/* Stack — right side, desktop only */}
+                    <div className="project-stack-row">
+                      {project.stack.slice(0, 3).map((tech) => (
+                        <span key={tech} className="project-stack-chip">{tech}</span>
+                      ))}
+                      {project.stack.length > 3 && (
+                        <span className="project-stack-chip">+{project.stack.length - 3}</span>
+                      )}
+                    </div>
                   </div>
 
-                  {/* Links */}
-                  <div style={{ display: "flex", gap: "0.9rem", paddingTop: "0.15rem", borderTop: "1px solid var(--border)" }}>
-                    <a
-                      href={project.githubUrl}
-                      target="_blank"
-                      rel="noopener noreferrer"
-                      style={linkStyle}
-                      onMouseEnter={(e) => {
-                        e.currentTarget.style.color = "var(--foreground)";
-                        e.currentTarget.style.borderColor = "var(--foreground)";
-                      }}
-                      onMouseLeave={(e) => {
-                        e.currentTarget.style.color = "var(--muted)";
-                        e.currentTarget.style.borderColor = "var(--border)";
-                      }}
-                    >
-                      GitHub ↗
-                    </a>
-                    {project.liveUrl && (
+                  {/* ── expanded description (hover reveals) ── */}
+                  <div className="project-desc">
+                    <p className="project-desc-text">{project.description}</p>
+                    <div className="project-links">
                       <a
-                        href={project.liveUrl}
+                        href={project.githubUrl}
                         target="_blank"
                         rel="noopener noreferrer"
-                        style={{ ...linkStyle, color: tagColor, borderColor: "transparent" }}
-                        onMouseEnter={(e) => (e.currentTarget.style.opacity = "0.75")}
-                        onMouseLeave={(e) => (e.currentTarget.style.opacity = "1")}
+                        className="project-link"
+                        style={{ color: "var(--muted)" }}
                       >
-                        {project.liveLabel ?? "Live"} ↗
+                        GitHub ↗
                       </a>
-                    )}
-                    {!project.liveUrl && project.liveLabel && (
-                      <span style={{ ...linkStyle, opacity: 0.3, cursor: "default", borderColor: "transparent" }}>
-                        {project.liveLabel}
-                      </span>
-                    )}
+                      {project.liveUrl ? (
+                        <a
+                          href={project.liveUrl}
+                          target="_blank"
+                          rel="noopener noreferrer"
+                          className="project-link"
+                          style={{ color }}
+                        >
+                          {project.liveLabel ?? "Live"} ↗
+                        </a>
+                      ) : project.liveLabel ? (
+                        <span className="project-link" style={{ opacity: 0.35, cursor: "default", color: "var(--muted)" }}>
+                          {project.liveLabel}
+                        </span>
+                      ) : null}
+                    </div>
+                    {/* All stack chips visible in expanded state */}
+                    <div className="project-stack-expanded">
+                      {project.stack.map((tech) => (
+                        <span key={tech} className="skill-tag project-stack-chip">{tech}</span>
+                      ))}
+                    </div>
                   </div>
                 </div>
               </InView>
@@ -184,16 +120,142 @@ export default function ProjectsGrid() {
           })}
         </div>
       </div>
+
+      <style>{`
+        /* ── Row layout ── */
+        .project-row {
+          border-bottom: 1px solid var(--border);
+          cursor: default;
+          transition: background 0.18s;
+        }
+        .project-row:hover {
+          background: color-mix(in srgb, var(--card) 60%, var(--background) 40%);
+        }
+        .project-row-header {
+          display: grid;
+          grid-template-columns: 3rem 1fr 210px;
+          align-items: center;
+          gap: 1.5rem;
+          padding: 1.4rem 0.5rem 1.4rem 0;
+          transition: padding 0.18s;
+        }
+        .project-row:hover .project-row-header {
+          padding-left: 0.3rem;
+        }
+
+        /* Number */
+        .project-num {
+          font-size: 0.8rem;
+          font-weight: 700;
+          color: var(--border);
+          letter-spacing: 0.04em;
+          font-variant-numeric: tabular-nums;
+          transition: color 0.18s;
+          flex-shrink: 0;
+        }
+        .project-row:hover .project-num {
+          color: var(--muted);
+        }
+
+        /* Title block */
+        .project-title-block {
+          display: flex;
+          flex-direction: column;
+          gap: 0.3rem;
+          min-width: 0;
+        }
+        .project-tag-badge {
+          font-size: 0.67rem;
+          font-weight: 700;
+          letter-spacing: 0.09em;
+          text-transform: uppercase;
+          border: 1px solid;
+          border-radius: 3px;
+          padding: 0.1rem 0.45rem;
+          display: inline-block;
+          width: fit-content;
+        }
+        .project-title {
+          font-size: 1.15rem;
+          font-weight: 600;
+          color: var(--foreground);
+          letter-spacing: -0.02em;
+          line-height: 1.3;
+          transition: letter-spacing 0.18s;
+        }
+        .project-row:hover .project-title {
+          letter-spacing: -0.01em;
+        }
+
+        /* Stack chips — desktop right column */
+        .project-stack-row {
+          display: flex;
+          gap: 0.35rem;
+          flex-wrap: wrap;
+          justify-content: flex-end;
+          align-items: center;
+        }
+        .project-stack-chip {
+          font-size: 0.72rem;
+          padding: 0.2rem 0.5rem;
+          border: 1px solid var(--border);
+          border-radius: 3px;
+          color: var(--muted);
+          white-space: nowrap;
+        }
+
+        /* Description expand */
+        .project-desc {
+          max-height: 0;
+          overflow: hidden;
+          transition: max-height 0.35s cubic-bezier(0.4, 0, 0.2, 1);
+          padding-left: calc(3rem + 1.5rem);
+        }
+        .project-row:hover .project-desc {
+          max-height: 260px;
+        }
+        .project-desc-text {
+          font-size: 0.95rem;
+          color: var(--muted);
+          line-height: 1.75;
+          padding-bottom: 0.75rem;
+          max-width: 640px;
+        }
+        .project-links {
+          display: flex;
+          gap: 1.5rem;
+          padding-bottom: 0.6rem;
+          align-items: center;
+        }
+        .project-link {
+          font-size: 0.88rem;
+          font-weight: 500;
+          text-decoration: none;
+          transition: opacity 0.15s;
+        }
+        .project-link:hover { opacity: 0.7; }
+        .project-stack-expanded {
+          display: flex;
+          flex-wrap: wrap;
+          gap: 0.35rem;
+          padding-bottom: 1.25rem;
+        }
+
+        /* Mobile — always show description, hide right stack column */
+        @media (max-width: 700px) {
+          .project-stack-row { display: none; }
+          .project-row-header { grid-template-columns: 2.5rem 1fr; }
+          .project-desc { max-height: none !important; padding-bottom: 1rem; }
+          .project-desc-text { padding-top: 0.3rem; }
+          .project-stack-expanded { display: flex; }
+        }
+
+        /* Touch devices — also always show */
+        @media (hover: none) {
+          .project-desc { max-height: none !important; padding-bottom: 1rem; }
+          .project-stack-expanded { display: flex; }
+        }
+      `}</style>
     </section>
   );
 }
-
-const linkStyle: React.CSSProperties = {
-  fontSize: "0.78rem",
-  color: "var(--muted)",
-  textDecoration: "none",
-  paddingTop: "0.6rem",
-  borderBottom: "1px solid var(--border)",
-  transition: "color 0.15s, border-color 0.15s, opacity 0.15s",
-  display: "inline-block",
-};

@@ -45,7 +45,7 @@ export default function FeaturedCaseStudy() {
                 <p className="label" style={{ marginBottom: "0.6rem", color: "var(--accent)" }}>
                   Problem
                 </p>
-                <p style={{ color: "var(--muted)", lineHeight: 1.75, fontSize: "0.95rem" }}>
+                <p style={{ color: "var(--muted)", lineHeight: 1.8, fontSize: "1rem" }}>
                   {cs.problem}
                 </p>
               </div>
@@ -74,7 +74,7 @@ export default function FeaturedCaseStudy() {
                         gridTemplateColumns: "120px 1fr",
                         gap: "1.25rem",
                         alignItems: "start",
-                        padding: "0.9rem 1.25rem",
+                        padding: "1rem 1.5rem",
                         borderBottom:
                           i < cs.approach.length - 1 ? "1px solid var(--border)" : "none",
                         background:
@@ -83,7 +83,7 @@ export default function FeaturedCaseStudy() {
                     >
                       <span
                         style={{
-                          fontSize: "0.75rem",
+                          fontSize: "0.82rem",
                           fontWeight: 700,
                           color: "var(--foreground)",
                           paddingTop: "0.1rem",
@@ -92,7 +92,7 @@ export default function FeaturedCaseStudy() {
                       >
                         {step.label}
                       </span>
-                      <span style={{ color: "var(--muted)", lineHeight: 1.68, fontSize: "0.88rem" }}>
+                      <span style={{ color: "var(--muted)", lineHeight: 1.75, fontSize: "0.95rem" }}>
                         {step.text}
                       </span>
                     </div>
@@ -122,8 +122,8 @@ export default function FeaturedCaseStudy() {
                         gap: "0.65rem",
                         alignItems: "flex-start",
                         color: "var(--muted)",
-                        fontSize: "0.9rem",
-                        lineHeight: 1.65,
+                        fontSize: "0.95rem",
+                        lineHeight: 1.72,
                       }}
                     >
                       <span style={{ color: "var(--accent)", marginTop: "0.28rem", flexShrink: 0, fontWeight: 700 }}>

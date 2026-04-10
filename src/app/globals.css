@@ -14,8 +14,9 @@
   --shadow-lg: 0 16px 48px rgba(0, 0, 0, 0.45);
 }
 
+/* Light theme — system preference when no explicit choice */
 @media (prefers-color-scheme: light) {
-  :root {
+  :root:not([data-theme="dark"]) {
     --background: #f8f9fc;
     --foreground: #0f1117;
     --muted: #5a6070;
@@ -30,6 +31,36 @@
   }
 }
 
+/* Light theme — explicit user choice */
+:root[data-theme="light"] {
+  --background: #f8f9fc;
+  --foreground: #0f1117;
+  --muted: #5a6070;
+  --border: #e2e5ed;
+  --card: #ffffff;
+  --accent: #2563eb;
+  --accent-muted: #1d4ed8;
+  --building-bg: #eff6ff;
+  --shadow-sm: 0 2px 8px rgba(0, 0, 0, 0.06);
+  --shadow-md: 0 8px 24px rgba(0, 0, 0, 0.09);
+  --shadow-lg: 0 16px 48px rgba(0, 0, 0, 0.12);
+}
+
+/* Dark theme — explicit user choice (overrides system light preference) */
+:root[data-theme="dark"] {
+  --background: #0f1117;
+  --foreground: #e8eaf0;
+  --muted: #8b92a5;
+  --border: #1e2130;
+  --card: #141720;
+  --accent: #3b82f6;
+  --accent-muted: #1d4ed8;
+  --building-bg: #0d1526;
+  --shadow-sm: 0 2px 8px rgba(0, 0, 0, 0.3);
+  --shadow-md: 0 8px 24px rgba(0, 0, 0, 0.35);
+  --shadow-lg: 0 16px 48px rgba(0, 0, 0, 0.45);
+}
+
 * {
   box-sizing: border-box;
   padding: 0;
@@ -38,6 +69,7 @@
 
 html {
   scroll-behavior: smooth;
+  font-size: 16px; /* explicit baseline */
 }
 
 body {
@@ -45,6 +77,8 @@ body {
   color: var(--foreground);
   font-family: "Geist", "Inter", ui-sans-serif, system-ui, sans-serif;
   -webkit-font-smoothing: antialiased;
+  font-size: 1rem;
+  line-height: 1.6;
 }
 
 ::selection {
@@ -52,27 +86,33 @@ body {
   color: #fff;
 }
 
+/* ─── Scroll offset for sticky nav ──────────────── */
+
+section[id] {
+  scroll-margin-top: 4rem;
+}
+
 /* ─── Layout ─────────────────────────────────────── */
 
 .section {
-  padding: 5rem 0;
+  padding: 6rem 0;
 }
 
 .section-sm {
-  padding: 3.5rem 0;
+  padding: 4rem 0;
 }
 
 .container {
-  max-width: 1100px;
+  max-width: 1200px;
   margin: 0 auto;
-  padding: 0 1.5rem;
+  padding: 0 2rem;
 }
 
 /* ─── Typography ─────────────────────────────────── */
 
 .label {
   display: block;
-  font-size: 0.7rem;
+  font-size: 0.72rem;
   font-weight: 600;
   letter-spacing: 0.1em;
   text-transform: uppercase;
@@ -109,20 +149,21 @@ body {
   50%       { opacity: 0.3; }
 }
 
-/* Hero staggered load */
+/* Hero staggered load — 5 lines */
 .hero-line {
   opacity: 0;
   animation: fadeUp 0.55s ease forwards;
 }
 .hero-line:nth-child(1) { animation-delay: 0.05s; }
 .hero-line:nth-child(2) { animation-delay: 0.15s; }
-.hero-line:nth-child(3) { animation-delay: 0.25s; }
+.hero-line:nth-child(3) { animation-delay: 0.26s; }
 .hero-line:nth-child(4) { animation-delay: 0.38s; }
+.hero-line:nth-child(5) { animation-delay: 0.50s; }
 
 /* Scroll-triggered fade-up */
 .fade-up {
   opacity: 0;
-  transform: translateY(20px);
+  transform: translateY(16px);
   transition: opacity 0.5s ease, transform 0.5s ease;
 }
 .fade-up.in-view {
@@ -166,6 +207,38 @@ body {
 }
 .nav-link.active {
   color: var(--foreground) !important;
+}
+
+/* ─── Logo hover ─────────────────────────────────── */
+
+.logo-link {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.4rem;
+}
+.logo-text {
+  font-weight: 700;
+  font-size: 1rem;
+  color: var(--foreground);
+  letter-spacing: -0.02em;
+  transition: color 0.2s, letter-spacing 0.2s;
+}
+.logo-dot {
+  display: inline-block;
+  width: 5px;
+  height: 5px;
+  border-radius: 50%;
+  background: var(--accent);
+  margin-bottom: 1px;
+  transition: transform 0.25s cubic-bezier(0.34, 1.56, 0.64, 1);
+  flex-shrink: 0;
+}
+.logo-link:hover .logo-text {
+  color: var(--accent);
+  letter-spacing: 0.01em;
+}
+.logo-link:hover .logo-dot {
+  transform: scale(2.2);
 }
 
 /* ─── CTA button arrow bounce ─────────────────────── */
@@ -214,7 +287,7 @@ body {
 
 .section-heading {
   position: relative;
-  padding-left: 0.85rem;
+  padding-left: 0.9rem;
 }
 .section-heading::before {
   content: "";
@@ -235,6 +308,8 @@ body {
 @media (max-width: 640px) {
   .desktop-nav { display: none; }
   .mobile-menu-btn { display: block; }
+  .container { padding: 0 1.25rem; }
+  .section { padding: 4rem 0; }
 }
 
 @media (max-width: 600px) {

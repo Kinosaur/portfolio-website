@@ -42,11 +42,11 @@ export default function CurrentlyBuilding() {
           </h2>
           <p
             style={{
-              fontSize: "0.88rem",
+              fontSize: "0.95rem",
               color: "var(--muted)",
               marginBottom: "2.5rem",
-              maxWidth: "520px",
-              lineHeight: 1.65,
+              maxWidth: "560px",
+              lineHeight: 1.75,
             }}
           >
             Work in progress and what&rsquo;s planned next. Updated regularly — if it&rsquo;s stale, something shipped.
@@ -98,7 +98,7 @@ export default function CurrentlyBuilding() {
                       <span
                         style={{
                           fontWeight: 600,
-                          fontSize: "0.92rem",
+                          fontSize: "1rem",
                           color: "var(--foreground)",
                         }}
                       >
@@ -108,7 +108,7 @@ export default function CurrentlyBuilding() {
                       {/* Status pill */}
                       <span
                         style={{
-                          fontSize: "0.62rem",
+                          fontSize: "0.68rem",
                           fontWeight: 700,
                           letterSpacing: "0.07em",
                           textTransform: "uppercase",
@@ -127,9 +127,9 @@ export default function CurrentlyBuilding() {
 
                     <p
                       style={{
-                        fontSize: "0.85rem",
+                        fontSize: "0.95rem",
                         color: "var(--muted)",
-                        lineHeight: 1.68,
+                        lineHeight: 1.75,
                       }}
                     >
                       {item.description}

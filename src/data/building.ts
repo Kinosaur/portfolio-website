@@ -10,6 +10,22 @@ export interface BuildingItem {
 
 export const buildingItems: BuildingItem[] = [
   {
+    id: "retail-insights",
+    title: "Retail Insights",
+    description:
+      "Ongoing project focused on data engineering: pipeline and analytics for small clothing shops to surface top revenue products, dead stock, and stock-aware reorder timing from operational data.",
+    status: "in_progress",
+    repoUrl: "https://github.com/Kinosaur/retail-insights",
+  },
+  {
+    id: "unimatch-educompare",
+    title: "UniMatch (EduCompare)",
+    description:
+      "Ongoing project where I contribute on data engineering and light frontend support for a FastAPI + React + PostgreSQL (Neon) platform that compares universities/programs in parts of Thailand, Taiwan, and Singapore using verifiable data.",
+    status: "in_progress",
+    repoUrl: "https://github.com/PyaeSone-Hein/eduHelper",
+  },
+  {
     id: "datacamp-de",
     title: "DataCamp Data Engineering Career Track",
     description:

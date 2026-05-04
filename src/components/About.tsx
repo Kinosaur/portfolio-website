@@ -41,7 +41,7 @@ export default function About() {
                 }}
               >
                 <Image
-                  src="/images/profile.jpg"
+                  src="/images/profile_no_bg.png"
                   alt="Kaung Khant Lin"
                   width={768}
                   height={1024}

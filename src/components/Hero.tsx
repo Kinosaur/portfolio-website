@@ -122,7 +122,7 @@ export default function Hero() {
               <figure className="hero-photo-card">
                 <div className="hero-photo-frame">
                   <Image
-                    src="/images/profile.jpg"
+                    src="/images/profile_no_bg.png"
                     alt="Kaung Khant Lin"
                     fill
                     sizes="(max-width: 640px) 205px, (max-width: 860px) 260px, 360px"

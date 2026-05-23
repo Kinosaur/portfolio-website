@@ -43,6 +43,10 @@ export default function ProjectsGrid() {
     <section id="projects" className="section">
       <div className="container">
         <InView>
+          <div className="section-eyebrow">
+            <span className="section-num">02</span>
+            <span className="section-rule-line" />
+          </div>
           <div style={{
             display: "flex",
             alignItems: "baseline",
@@ -81,7 +85,7 @@ export default function ProjectsGrid() {
             const isOpen = openProjectId === project.id;
 
             return (
-              <InView key={project.id} delay={i * 50}>
+              <InView key={project.id} delay={i * 55} animation="slide-left">
                 <div
                   className={`project-row${isOpen ? " is-open" : ""}`}
                   ref={(el) => { rowRefs.current[project.id] = el; }}

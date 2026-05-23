@@ -1,8 +1,64 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect, useRef } from "react";
 import { siteContent } from "@/data/content";
 import InView from "./InView";
+
+/* ── Count-up hook ── */
+function useCountUp(rawValue: string, duration = 1100) {
+  const [display, setDisplay] = useState(rawValue);
+  const ref = useRef<HTMLSpanElement>(null);
+  const hasRun = useRef(false);
+
+  useEffect(() => {
+    const el = ref.current;
+    if (!el) return;
+    const match = rawValue.match(/^(~?)([\d.]+)(M\+|K\+|%|\+)?$/);
+    if (!match) return; // non-numeric — display as-is
+
+    const prefix = match[1] || "";
+    const numStr = match[2];
+    const suffix = match[3] || "";
+    const target = parseFloat(numStr);
+    const decimals = (numStr.split(".")[1] || "").length;
+
+    const observer = new IntersectionObserver(
+      ([entry]) => {
+        if (entry.isIntersecting && !hasRun.current) {
+          hasRun.current = true;
+          const start = performance.now();
+          function tick(now: number) {
+            const progress = Math.min((now - start) / duration, 1);
+            const eased = 1 - Math.pow(1 - progress, 3); // ease-out cubic
+            const current = target * eased;
+            setDisplay(`${prefix}${current.toFixed(decimals)}${suffix}`);
+            if (progress < 1) requestAnimationFrame(tick);
+          }
+          setDisplay(`${prefix}0${suffix}`);
+          requestAnimationFrame(tick);
+          observer.unobserve(el);
+        }
+      },
+      { threshold: 0.6 }
+    );
+    observer.observe(el);
+    return () => observer.disconnect();
+  }, [rawValue, duration]);
+
+  return { display, ref };
+}
+
+function StatTile({ value, label }: { value: string; label: string }) {
+  const { display, ref } = useCountUp(value);
+  return (
+    <div className="stat-tile">
+      <div className="stat-value">
+        <span ref={ref}>{display}</span>
+      </div>
+      <div className="stat-label">{label}</div>
+    </div>
+  );
+}
 
 export default function FeaturedCaseStudy() {
   const { featuredCaseStudy: cs } = siteContent;
@@ -15,6 +71,10 @@ export default function FeaturedCaseStudy() {
 
         {/* ── Header ── */}
         <InView>
+          <div className="section-eyebrow">
+            <span className="section-num">01</span>
+            <span className="section-rule-line" />
+          </div>
           <p className="label" style={{ marginBottom: "0.6rem" }}>{cs.label}</p>
           <h2
             className="section-heading heading-reveal"
@@ -40,8 +100,15 @@ export default function FeaturedCaseStudy() {
           </p>
         </InView>
 
+        {/* ── Pull quote (Playfair Display italic) ── */}
+        <InView delay={60}>
+          <blockquote className="featured-pull-quote">
+            &ldquo;Bangkok has 1.1M+ civic tickets — and almost no way for residents to see what&rsquo;s happening with any of them.&rdquo;
+          </blockquote>
+        </InView>
+
         {/* ── Content card ── */}
-        <InView delay={80}>
+        <InView delay={120}>
           <div className="featured-card">
             <div className="featured-grid">
 
@@ -133,15 +200,12 @@ export default function FeaturedCaseStudy() {
                 </div>
               </div>
 
-              {/* ── Right: stats sidebar ── */}
+              {/* ── Right: stats sidebar (count-up) ── */}
               <aside className="featured-sidebar">
                 <p className="label" style={{ marginBottom: "1.1rem" }}>At a Glance</p>
                 <div style={{ display: "flex", flexDirection: "column", gap: "0.7rem" }}>
                   {cs.stats.map((stat) => (
-                    <div key={stat.label} className="stat-tile">
-                      <div className="stat-value">{stat.value}</div>
-                      <div className="stat-label">{stat.label}</div>
-                    </div>
+                    <StatTile key={stat.label} value={stat.value} label={stat.label} />
                   ))}
                 </div>
               </aside>
@@ -152,6 +216,21 @@ export default function FeaturedCaseStudy() {
       </div>
 
       <style>{`
+        /* ── Pull quote — Playfair Display italic ── */
+        .featured-pull-quote {
+          font-family: var(--font-display), Georgia, serif;
+          font-style: italic;
+          font-weight: 700;
+          font-size: clamp(1.05rem, 2.2vw, 1.3rem);
+          letter-spacing: -0.02em;
+          line-height: 1.5;
+          color: var(--foreground);
+          border-left: 2px solid var(--accent);
+          padding-left: 1.3rem;
+          margin-bottom: 2.25rem;
+          max-width: 620px;
+        }
+
         /* ── Card wrapper ── */
         .featured-card {
           border: 1px solid var(--border);
@@ -230,13 +309,14 @@ export default function FeaturedCaseStudy() {
         }
         .stat-tile:hover .stat-value { color: var(--accent); }
         .stat-value {
-          font-family: var(--font-display), Georgia, serif;
+          font-family: var(--font-sans), system-ui, sans-serif;
           font-size: 1.55rem;
-          font-weight: 700;
+          font-weight: 800;
           color: var(--foreground);
           letter-spacing: -0.04em;
           line-height: 1;
           transition: color 0.18s;
+          font-variant-numeric: tabular-nums;
         }
         .stat-label {
           font-family: var(--font-mono), monospace;
@@ -277,6 +357,7 @@ export default function FeaturedCaseStudy() {
             -webkit-line-clamp: unset;
           }
           .approach-row-mobile-hidden { display: none !important; }
+          .featured-pull-quote { font-size: 1rem; }
         }
       `}</style>
     </section>

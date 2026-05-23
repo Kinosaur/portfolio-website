@@ -146,10 +146,33 @@ section[id] {
   color: var(--muted);
 }
 
-/* Section headings — Playfair Display + editorial left rule */
+/* Section eyebrow — editorial number + rule line */
+.section-eyebrow {
+  display: flex;
+  align-items: center;
+  gap: 0.7rem;
+  margin-bottom: 0.55rem;
+}
+.section-num {
+  font-family: var(--font-mono), monospace;
+  font-size: 0.58rem;
+  font-weight: 500;
+  letter-spacing: 0.18em;
+  color: var(--muted);
+  opacity: 0.55;
+  flex-shrink: 0;
+}
+.section-rule-line {
+  height: 1px;
+  width: 3rem;
+  background: var(--border);
+  flex-shrink: 0;
+}
+
+/* Section headings — Inter (Swiss poster) + editorial left rule */
 .section-heading {
   position: relative;
-  font-family: var(--font-display), Georgia, serif;
+  font-family: var(--font-sans), system-ui, sans-serif;
   font-weight: 700;
   padding-left: 0.85rem;
 }
@@ -167,7 +190,7 @@ section[id] {
 /* Heading clip-path reveal */
 .heading-reveal {
   clip-path: inset(0 101% 0 0);
-  transition: clip-path 0.72s cubic-bezier(0.16, 1, 0.3, 1) 0.12s;
+  transition: clip-path 0.8s cubic-bezier(0.16, 1, 0.3, 1) 0.1s;
   will-change: clip-path;
 }
 .in-view .heading-reveal {
@@ -183,6 +206,45 @@ section[id] {
   to   { opacity: 1; transform: translateY(0); }
 }
 
+/* Clip-path left→right wipe — used for hero name */
+@keyframes clipReveal {
+  from { clip-path: inset(0 101% 0 0); }
+  to   { clip-path: inset(0 0% 0 0);   }
+}
+
+/* ScaleX from left — used for hero divider */
+@keyframes dividerReveal {
+  from { transform: scaleX(0); }
+  to   { transform: scaleX(1); }
+}
+
+/* Spring pop-in — used for skill tags */
+@keyframes springIn {
+  0%   { opacity: 0; transform: scale(0.72); }
+  55%  { opacity: 1; transform: scale(1.07); }
+  78%  { transform: scale(0.97); }
+  100% { opacity: 1; transform: scale(1); }
+}
+
+/* Slide from left — used for project rows, building cards */
+@keyframes slideInLeft {
+  from { opacity: 0; transform: translateX(-22px); }
+  to   { opacity: 1; transform: translateX(0); }
+}
+
+/* Curtain down — used for about photo */
+@keyframes curtainDown {
+  from { clip-path: inset(0 0 101% 0); }
+  to   { clip-path: inset(0 0 0% 0);   }
+}
+
+/* Scroll indicator line */
+@keyframes scrollLine {
+  0%   { top: -100%; }
+  45%  { top: 0%; }
+  100% { top: 110%; }
+}
+
 @keyframes pulse-dot {
   0%, 100% { opacity: 1; }
   50%       { opacity: 0.22; }
@@ -191,31 +253,79 @@ section[id] {
 /* Hero staggered entrance — 7 children */
 .hero-line {
   opacity: 0;
-  animation: fadeUp 0.62s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+  animation: fadeUp 0.58s cubic-bezier(0.16, 1, 0.3, 1) forwards;
 }
 .hero-line:nth-child(1) { animation-delay: 0.04s; }
-.hero-line:nth-child(2) { animation-delay: 0.16s; }
-.hero-line:nth-child(3) { animation-delay: 0.26s; }
-.hero-line:nth-child(4) { animation-delay: 0.36s; }
-.hero-line:nth-child(5) { animation-delay: 0.46s; }
-.hero-line:nth-child(6) { animation-delay: 0.55s; }
-.hero-line:nth-child(7) { animation-delay: 0.64s; }
+.hero-line:nth-child(2) { animation-delay: 0.14s; }
+.hero-line:nth-child(3) { animation-delay: 0.24s; }
+.hero-line:nth-child(4) { animation-delay: 0.34s; }
+.hero-line:nth-child(5) { animation-delay: 0.44s; }
+.hero-line:nth-child(6) { animation-delay: 0.52s; }
+.hero-line:nth-child(7) { animation-delay: 0.60s; }
 
-/* Photo card has its own separate animation */
-.hero-photo-animate {
-  opacity: 0;
-  animation: fadeUp 0.62s cubic-bezier(0.16, 1, 0.3, 1) 0.72s forwards;
+/* Hero name — clip-path reveal overrides fadeUp */
+.hero-name {
+  opacity: 1 !important;
+  transform: none !important;
+  clip-path: inset(0 101% 0 0);
+  animation: clipReveal 0.9s cubic-bezier(0.16, 1, 0.3, 1) 0.08s forwards !important;
 }
 
-/* Scroll-triggered fade-up */
+/* Hero divider — scaleX reveal from left */
+.hero-divider {
+  opacity: 1 !important;
+  transform: scaleX(0) !important;
+  animation: dividerReveal 0.55s ease 0.22s forwards !important;
+}
+
+/* Photo card has its own separate curtain animation */
+.hero-photo-animate {
+  opacity: 1;
+  clip-path: inset(0 0 101% 0);
+  animation: curtainDown 0.85s cubic-bezier(0.16, 1, 0.3, 1) 0.45s forwards;
+}
+
+/* Scroll-triggered — generic fade-up (default InView) */
 .fade-up {
   opacity: 0;
   transform: translateY(14px);
-  transition: opacity 0.55s ease, transform 0.55s ease;
+  transition: opacity 0.52s ease, transform 0.52s ease;
 }
 .fade-up.in-view {
   opacity: 1;
   transform: translateY(0);
+}
+
+/* Scroll-triggered — slide from left */
+.slide-left {
+  opacity: 0;
+  transform: translateX(-22px);
+  transition: opacity 0.5s ease, transform 0.5s cubic-bezier(0.16, 1, 0.3, 1);
+}
+.slide-left.in-view {
+  opacity: 1;
+  transform: translateX(0);
+}
+
+/* Scroll-triggered — spring pop-in */
+.spring-in {
+  opacity: 0;
+  transform: scale(0.78);
+  transition: opacity 0.38s ease, transform 0.42s cubic-bezier(0.34, 1.56, 0.64, 1);
+}
+.spring-in.in-view {
+  opacity: 1;
+  transform: scale(1);
+}
+
+/* Scroll-triggered — clip-path curtain down (photo reveal) */
+.curtain-reveal {
+  clip-path: inset(0 0 101% 0);
+  transition: clip-path 0.85s cubic-bezier(0.16, 1, 0.3, 1) 0.1s;
+  will-change: clip-path;
+}
+.curtain-reveal.in-view {
+  clip-path: inset(0 0 0% 0);
 }
 
 /* ─────────────────────────────────────────────────────────────
@@ -434,18 +544,26 @@ html.has-custom-cursor * { cursor: none !important; }
   html { scroll-behavior: auto; }
 
   .hero-line,
+  .hero-name,
+  .hero-divider,
   .hero-photo-animate,
-  .fade-up {
+  .fade-up,
+  .slide-left,
+  .spring-in,
+  .curtain-reveal,
+  .heading-reveal {
     opacity: 1 !important;
     transform: none !important;
+    clip-path: none !important;
     animation: none !important;
     transition: none !important;
   }
 
-  .pulse-dot   { animation: none; }
+  .pulse-dot      { animation: none; }
   .card-lift,
   .nav-link::after,
   .logo-dot,
   .building-arrow,
-  .cursor      { transition: none !important; }
+  .cursor,
+  .hero-scroll-line::after { transition: none !important; animation: none !important; }
 }

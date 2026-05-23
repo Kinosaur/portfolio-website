@@ -10,6 +10,10 @@ export default function About() {
     <section id="about" className="section">
       <div className="container">
         <InView>
+          <div className="section-eyebrow">
+            <span className="section-num">05</span>
+            <span className="section-rule-line" />
+          </div>
           <p className="label" style={{ marginBottom: "0.6rem" }}>About</p>
           <h2
             className="section-heading heading-reveal"
@@ -26,7 +30,7 @@ export default function About() {
 
         <div className="about-grid">
           {/* Photo — raw, no card wrapper, just hairline border */}
-          <InView delay={80}>
+          <InView delay={80} animation="curtain-reveal">
             <TiltCard className="about-photo-wrap" style={{ borderRadius: "var(--r-photo)" }}>
               <figure className="about-photo-figure">
                 <Image

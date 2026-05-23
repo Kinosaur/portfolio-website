@@ -1,10 +1,17 @@
 import type { Metadata } from "next";
-import { Playfair_Display, Source_Serif_4, JetBrains_Mono, Caveat } from "next/font/google";
+import { Inter, Playfair_Display, Source_Serif_4, JetBrains_Mono } from "next/font/google";
 import "./globals.css";
 import Navbar from "@/components/Navbar";
 import Cursor from "@/components/Cursor";
 
-// Display / masthead — hero name, section titles
+// Swiss UI layer — hero name, section headings, nav
+const sansFont = Inter({
+  subsets: ["latin"],
+  variable: "--font-sans",
+  weight: ["400", "500", "600", "700", "800"],
+});
+
+// Editorial accent layer — logo, pull quotes, "Kinosaur" nickname, italic moments
 const displayFont = Playfair_Display({
   subsets: ["latin"],
   variable: "--font-display",
@@ -12,7 +19,7 @@ const displayFont = Playfair_Display({
   style: ["normal", "italic"],
 });
 
-// Body serif — all prose, descriptions, about text
+// Body prose — descriptions, about text, all long-form
 const bodyFont = Source_Serif_4({
   subsets: ["latin"],
   variable: "--font-body",
@@ -20,18 +27,11 @@ const bodyFont = Source_Serif_4({
   style: ["normal", "italic"],
 });
 
-// Mono — labels, tags, stats, nav links, captions
+// Technical layer — labels, tags, stats, captions, nav links
 const monoFont = JetBrains_Mono({
   subsets: ["latin"],
   variable: "--font-mono",
   weight: ["400", "500"],
-});
-
-// Script — "Kinosaur" nickname only
-const scriptFont = Caveat({
-  subsets: ["latin"],
-  variable: "--font-script",
-  weight: ["600", "700"],
 });
 
 export const metadata: Metadata = {
@@ -71,7 +71,7 @@ export default function RootLayout({
     <html
       lang="en"
       suppressHydrationWarning
-      className={`${displayFont.variable} ${bodyFont.variable} ${monoFont.variable} ${scriptFont.variable}`}
+      className={`${sansFont.variable} ${displayFont.variable} ${bodyFont.variable} ${monoFont.variable}`}
     >
       <head>
         {/* eslint-disable-next-line @next/next/no-before-interactive-script-outside-document */}

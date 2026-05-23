@@ -12,6 +12,10 @@ export default function SkillsMatrix() {
     <section id="skills" className="section">
       <div className="container">
         <InView>
+          <div className="section-eyebrow">
+            <span className="section-num">03</span>
+            <span className="section-rule-line" />
+          </div>
           <p className="label" style={{ marginBottom: "0.6rem" }}>Skills</p>
           <h2
             className="section-heading heading-reveal"
@@ -30,7 +34,7 @@ export default function SkillsMatrix() {
           {skills.map((tier, i) => {
             const accent = tierAccent[tier.tier];
             return (
-              <InView key={tier.tier} delay={i * 80}>
+              <InView key={tier.tier} delay={i * 90} animation="slide-left">
                 <div className="skills-tier-card">
                   {/* Tier header */}
                   <div className="skills-tier-header">
@@ -50,19 +54,26 @@ export default function SkillsMatrix() {
                           {group.category}
                         </span>
                         <div style={{ display: "flex", flexWrap: "wrap", gap: "0.35rem" }}>
-                          {group.items.map((item) => (
-                            <span
+                          {group.items.map((item, tagIdx) => (
+                            <InView
                               key={item}
-                              className="skill-tag"
-                              style={{
-                                padding: "0.22rem 0.6rem",
-                                borderRadius: "var(--r-tag)",
-                                border: "1px solid var(--border)",
-                                color: "var(--muted)",
-                              }}
+                              animation="spring-in"
+                              delay={i * 90 + tagIdx * 40}
+                              style={{ display: "inline-flex" }}
                             >
-                              {item}
-                            </span>
+                              <span
+                                className="skill-tag"
+                                style={{
+                                  padding: "0.22rem 0.6rem",
+                                  borderRadius: "var(--r-tag)",
+                                  border: "1px solid var(--border)",
+                                  color: "var(--muted)",
+                                  display: "inline-block",
+                                }}
+                              >
+                                {item}
+                              </span>
+                            </InView>
                           ))}
                         </div>
                       </div>

@@ -1,12 +1,12 @@
 "use client";
 
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef } from "react";
 
 const navLinks = [
   { href: "#featured", label: "Featured", id: "featured" },
   { href: "#projects", label: "Projects", id: "projects" },
-  { href: "#building", label: "Building", id: "building" },
   { href: "#skills",   label: "Skills",   id: "skills"   },
+  { href: "#building", label: "Building", id: "building" },
   { href: "#about",    label: "About",    id: "about"    },
   { href: "#contact",  label: "Contact",  id: "contact"  },
 ];
@@ -33,6 +33,7 @@ export default function Navbar() {
   const [menuOpen,  setMenuOpen]  = useState(false);
   const [activeId,  setActiveId]  = useState("");
   const [theme,     setTheme]     = useState<"dark" | "light">("light"); // light-first
+  const progressRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
     const current = document.documentElement.getAttribute("data-theme");
@@ -40,7 +41,15 @@ export default function Navbar() {
   }, []);
 
   useEffect(() => {
-    const onScroll = () => setScrolled(window.scrollY > 20);
+    function onScroll() {
+      setScrolled(window.scrollY > 20);
+      // Scroll progress
+      const bar = progressRef.current;
+      if (bar) {
+        const total = document.documentElement.scrollHeight - window.innerHeight;
+        bar.style.transform = `scaleX(${total > 0 ? window.scrollY / total : 0})`;
+      }
+    }
     window.addEventListener("scroll", onScroll, { passive: true });
     return () => window.removeEventListener("scroll", onScroll);
   }, []);
@@ -87,6 +96,8 @@ export default function Navbar() {
 
   return (
     <header className={`nav-header${scrolled ? " nav-header--scrolled" : ""}`}>
+      {/* Scroll progress bar */}
+      <div ref={progressRef} className="nav-progress" aria-hidden="true" />
       <div
         className="container"
         style={{
@@ -188,6 +199,18 @@ export default function Navbar() {
           border-bottom-color: var(--border);
           backdrop-filter: blur(12px);
           -webkit-backdrop-filter: blur(12px);
+        }
+        /* Scroll progress */
+        .nav-progress {
+          position: absolute;
+          bottom: -1px;
+          left: 0;
+          width: 100%;
+          height: 2px;
+          background: var(--accent);
+          transform: scaleX(0);
+          transform-origin: left;
+          will-change: transform;
         }
         .theme-toggle {
           background: none;

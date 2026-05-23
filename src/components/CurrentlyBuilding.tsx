@@ -11,6 +11,10 @@ export default function CurrentlyBuilding() {
     <section id="building" className="section" style={{ background: "var(--building-bg)" }}>
       <div className="container">
         <InView>
+          <div className="section-eyebrow">
+            <span className="section-num">04</span>
+            <span className="section-rule-line" />
+          </div>
           <p className="label" style={{ marginBottom: "0.6rem" }}>Currently Building</p>
           <h2
             className="section-heading heading-reveal"
@@ -38,7 +42,7 @@ export default function CurrentlyBuilding() {
           {buildingItems.map((item, i) => {
             const status = statusConfig[item.status];
             return (
-              <InView key={item.id} delay={i * 75}>
+              <InView key={item.id} delay={i * 80} animation="slide-left">
                 <div className="building-item card-lift building-card">
                   {/* Arrow */}
                   <span className="building-arrow" aria-hidden="true"

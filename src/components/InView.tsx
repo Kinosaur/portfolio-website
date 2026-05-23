@@ -2,14 +2,23 @@
 
 import { useEffect, useRef } from "react";
 
+type AnimationVariant = "fade-up" | "slide-left" | "spring-in" | "curtain-reveal";
+
 interface InViewProps {
   children: React.ReactNode;
   delay?: number; // ms
   className?: string;
   style?: React.CSSProperties;
+  animation?: AnimationVariant;
 }
 
-export default function InView({ children, delay = 0, className = "", style }: InViewProps) {
+export default function InView({
+  children,
+  delay = 0,
+  className = "",
+  style,
+  animation = "fade-up",
+}: InViewProps) {
   const ref = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
@@ -27,7 +36,7 @@ export default function InView({ children, delay = 0, className = "", style }: I
           observer.unobserve(el);
         }
       },
-      { threshold: 0.12 }
+      { threshold: 0.1 }
     );
 
     observer.observe(el);
@@ -35,7 +44,7 @@ export default function InView({ children, delay = 0, className = "", style }: I
   }, [delay]);
 
   return (
-    <div ref={ref} className={`fade-up ${className}`} style={style}>
+    <div ref={ref} className={`${animation} ${className}`} style={style}>
       {children}
     </div>
   );

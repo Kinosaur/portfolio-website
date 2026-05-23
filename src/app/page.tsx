@@ -170,18 +170,28 @@ export default function Home() {
 
   /* ── Active section ──────────────────────────────── */
   useEffect(() => {
-    const obs: IntersectionObserver[] = [];
-    NAV.forEach(({ id }) => {
-      const el = document.getElementById(id);
-      if (!el) return;
-      const o = new IntersectionObserver(
-        ([entry]) => { if (entry.isIntersecting) setActiveId(id); },
-        { rootMargin: "-30% 0px -50% 0px", threshold: 0 },
-      );
-      o.observe(el);
-      obs.push(o);
-    });
-    return () => obs.forEach(o => o.disconnect());
+    const onScroll = () => {
+      const scrollY  = window.scrollY;
+      const viewportH = window.innerHeight;
+      const pageH    = document.documentElement.scrollHeight;
+
+      if (scrollY + viewportH >= pageH - 50) {
+        setActiveId(NAV[NAV.length - 1].id);
+        return;
+      }
+
+      const trigger = scrollY + viewportH * 0.35;
+      let current = NAV[0].id;
+      for (const { id } of NAV) {
+        const el = document.getElementById(id);
+        if (el && el.offsetTop <= trigger) current = id;
+      }
+      setActiveId(current);
+    };
+
+    window.addEventListener("scroll", onScroll, { passive: true });
+    onScroll();
+    return () => window.removeEventListener("scroll", onScroll);
   }, []);
 
   const scrollTo = (id: string) =>
@@ -271,7 +281,7 @@ export default function Home() {
             color: "var(--fg-muted)",
           }}
         >
-          {isDark ? "○" : "●"}
+          {isDark ? "○ LIGHT" : "● DARK"}
         </button>
       </div>
 
@@ -363,9 +373,10 @@ export default function Home() {
         </aside>
 
         {/* ── Main ─────────────────────────────── */}
+        <div className="page-offset" style={{ flex: 1, display: "flex", justifyContent: "center", minWidth: 0 }}>
         <main
           className="main-content content-cap"
-          style={{ marginLeft: "var(--sidebar-w)", flex: 1, minWidth: 0 }}
+          style={{ width: "100%", minWidth: 0 }}
         >
 
           {/* ── Masthead ─────────────────────── */}
@@ -661,6 +672,7 @@ export default function Home() {
           </section>
 
         </main>
+        </div>
       </div>
     </>
   );

@@ -15,7 +15,7 @@
   --bg-sidebar:   #EDE9E3;
   --fg:           #111111;
   --fg-body:      #2C2A27;
-  --fg-secondary: #66605A;
+  --fg-secondary: #504B46;
   --fg-muted:     #9B9590;
   --fg-faint:     #C5C0BA;
   --border:       #C8C3BB;
@@ -37,7 +37,7 @@
   --bg-sidebar:   #1C1A18;
   --fg:           #F2EFE9;
   --fg-body:      #C8C3BC;
-  --fg-secondary: #807B74;
+  --fg-secondary: #928D86;
   --fg-muted:     #575250;
   --fg-faint:     #383532;
   --border:       #2E2B27;
@@ -110,6 +110,11 @@ a:hover {
 .sidebar-mobile  { display: none; }
 .sidebar-desktop { display: flex; }
 
+/* ─── Page offset — sidebar spacing + centering ─────── */
+.page-offset {
+  margin-left: var(--sidebar-w);
+}
+
 /* ─── 375–480px: small phones ────────────────────────── */
 @media (max-width: 480px) {
   .section-pad  { padding: 40px 20px !important; }
@@ -141,6 +146,7 @@ a:hover {
     scroll-margin-top: 56px;
   }
 
+  .page-offset   { margin-left: 0 !important; }
   .main-content  { margin-left: 0 !important; }
   .masthead-role { display: none !important; }
 

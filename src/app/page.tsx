@@ -14,30 +14,27 @@ const NAV = [
   { id: "contact", label: "CONTACT", num: "04" },
 ];
 
-/* ─── Shared style fragments ─────────────────────────── */
-const BEBAS: React.CSSProperties = {
-  fontFamily: "var(--font-bebas), sans-serif",
-};
-const MONO: React.CSSProperties = {
-  fontFamily: "var(--font-mono), monospace",
-};
+/* ─── Shared font fragments ──────────────────────────── */
+const BEBAS: React.CSSProperties = { fontFamily: "var(--font-bebas), sans-serif" };
+const MONO:  React.CSSProperties = { fontFamily: "var(--font-mono), monospace" };
+
 const LINK: React.CSSProperties = {
   ...MONO,
   fontSize: 10,
   letterSpacing: "0.1em",
   textTransform: "uppercase",
-  color: "#2563eb",
+  color: "var(--blue)",
   textDecoration: "none",
 };
 
 /* ─── Page ───────────────────────────────────────────── */
 export default function Home() {
+  /* Cursor refs — direct DOM, zero re-renders */
   const dotRef   = useRef<HTMLDivElement>(null);
   const ringRef  = useRef<HTMLDivElement>(null);
   const labelRef = useRef<HTMLSpanElement>(null);
   const rafRef   = useRef<number>(0);
 
-  /* live refs — no re-renders */
   const mouse       = useRef({ x: -100, y: -100 });
   const ring        = useRef({ x: -100, y: -100 });
   const interactive = useRef(false);
@@ -46,18 +43,60 @@ export default function Home() {
   const [visible,     setVisible]     = useState(false);
   const [activeId,    setActiveId]    = useState("profile");
   const [emailCopied, setEmailCopied] = useState(false);
+  const [isDark,      setIsDark]      = useState(false);
+
+  /* ── Theme init ──────────────────────────────────── */
+  useEffect(() => {
+    const saved    = localStorage.getItem("kkl-theme");
+    const sysDark  = window.matchMedia("(prefers-color-scheme: dark)").matches;
+    const dark     = saved ? saved === "dark" : sysDark;
+    if (dark) {
+      document.documentElement.setAttribute("data-theme", "dark");
+      setIsDark(true);
+    }
+  }, []);
+
+  /* ── Theme toggle ────────────────────────────────── */
+  const toggleTheme = () => {
+    const next = !isDark;
+    setIsDark(next);
+    if (next) {
+      document.documentElement.setAttribute("data-theme", "dark");
+      localStorage.setItem("kkl-theme", "dark");
+    } else {
+      document.documentElement.removeAttribute("data-theme");
+      localStorage.setItem("kkl-theme", "light");
+    }
+  };
+
+  /* ── Update cursor colors on theme change ────────── */
+  useEffect(() => {
+    const dark = isDark;
+    if (dotRef.current) {
+      dotRef.current.style.background = dark ? "#F2EFE9" : "#111111";
+    }
+    if (ringRef.current) {
+      ringRef.current.style.borderColor = dark ? "#F2EFE9" : "#111111";
+      if (interactive.current) {
+        ringRef.current.style.background = dark
+          ? "rgba(242,239,233,0.90)"
+          : "rgba(17,17,17,0.90)";
+      }
+    }
+    if (labelRef.current && interactive.current) {
+      labelRef.current.style.color = dark ? "#141311" : "#F5F3EF";
+    }
+  }, [isDark]);
 
   /* ── Cursor RAF loop ─────────────────────────────── */
   useEffect(() => {
     reducedMotion.current =
       window.matchMedia("(prefers-reduced-motion: reduce)").matches;
-
     const LERP = reducedMotion.current ? 1 : 0.14;
 
     const tick = () => {
       ring.current.x += (mouse.current.x - ring.current.x) * LERP;
       ring.current.y += (mouse.current.y - ring.current.y) * LERP;
-
       if (dotRef.current) {
         dotRef.current.style.left = mouse.current.x + "px";
         dotRef.current.style.top  = mouse.current.y + "px";
@@ -80,28 +119,33 @@ export default function Home() {
 
       const el  = (e.target as HTMLElement).closest("[data-cursor]") as HTMLElement | null;
       const typ = el?.dataset.cursor ?? "";
-      const wasInteractive = interactive.current;
+      const was = interactive.current;
       interactive.current = !!typ;
 
-      if (wasInteractive !== !!typ) {
-        /* dot: hide when interactive */
+      if (was !== !!typ) {
+        const dark = document.documentElement.dataset.theme === "dark";
+        const dotC  = dark ? "#F2EFE9" : "#111111";
+        const ringB = dark ? "#F2EFE9" : "#111111";
+        const fill  = dark ? "rgba(242,239,233,0.90)" : "rgba(17,17,17,0.90)";
+        const lblC  = dark ? "#141311" : "#F5F3EF";
+
         if (dotRef.current) {
-          dotRef.current.style.width  = typ ? "0px"  : "6px";
-          dotRef.current.style.height = typ ? "0px"  : "6px";
-          dotRef.current.style.opacity = typ ? "0"   : "1";
+          dotRef.current.style.width   = typ ? "0px"  : "6px";
+          dotRef.current.style.height  = typ ? "0px"  : "6px";
+          dotRef.current.style.opacity = typ ? "0"    : "1";
+          dotRef.current.style.background = dotC;
         }
-        /* ring: expand + fill when interactive */
         if (ringRef.current) {
-          ringRef.current.style.width      = typ ? "50px"              : "38px";
-          ringRef.current.style.height     = typ ? "50px"              : "38px";
-          ringRef.current.style.background = typ ? "rgba(0,0,0,0.88)" : "transparent";
+          ringRef.current.style.width      = typ ? "50px" : "38px";
+          ringRef.current.style.height     = typ ? "50px" : "38px";
+          ringRef.current.style.borderColor = ringB;
+          ringRef.current.style.background = typ ? fill : "transparent";
         }
-        /* label: show/hide */
         if (labelRef.current) {
           labelRef.current.style.display = typ ? "block" : "none";
+          labelRef.current.style.color   = lblC;
         }
       }
-      /* always update label text */
       if (labelRef.current && typ) {
         labelRef.current.textContent = typ.toUpperCase();
       }
@@ -120,7 +164,7 @@ export default function Home() {
     };
   }, []);
 
-  /* Active section */
+  /* ── Active section ──────────────────────────────── */
   useEffect(() => {
     const obs: IntersectionObserver[] = [];
     NAV.forEach(({ id }) => {
@@ -145,10 +189,10 @@ export default function Home() {
     setTimeout(() => setEmailCopied(false), 2000);
   };
 
-  /* ── Render ─────────────────────────────────────────── */
+  /* ── Render ──────────────────────────────────────── */
   return (
     <>
-      {/* ── Cursor: inner dot ────────────────────────── */}
+      {/* ── Cursor dot ───────────────────────────── */}
       <div
         ref={dotRef}
         style={{
@@ -156,7 +200,7 @@ export default function Home() {
           width: 6,
           height: 6,
           borderRadius: "50%",
-          background: "#000",
+          background: "var(--cursor-dot)",
           transform: "translate(-50%, -50%)",
           pointerEvents: "none",
           zIndex: 10000,
@@ -165,7 +209,7 @@ export default function Home() {
         }}
       />
 
-      {/* ── Cursor: outer ring ───────────────────────── */}
+      {/* ── Cursor ring ──────────────────────────── */}
       <div
         ref={ringRef}
         style={{
@@ -173,7 +217,7 @@ export default function Home() {
           width: 38,
           height: 38,
           borderRadius: "50%",
-          border: "1px solid #000",
+          border: "1px solid var(--cursor-border)",
           background: "transparent",
           display: "flex",
           alignItems: "center",
@@ -193,48 +237,63 @@ export default function Home() {
             fontSize: 7,
             fontWeight: 500,
             letterSpacing: "0.05em",
-            color: "#fff",
+            color: "var(--cursor-label)",
             userSelect: "none",
             lineHeight: 1,
           }}
         />
       </div>
 
-      {/* ── Mobile top strip ─────────────────────────── */}
+      {/* ── Mobile top strip ─────────────────────── */}
       <div className="sidebar-mobile">
-        <span style={{ ...BEBAS, fontSize: 14, letterSpacing: "0.08em" }}>KKL</span>
-        <span style={{ ...MONO, fontSize: 10, letterSpacing: "0.12em", color: "#999" }}>
-          {NAV.find(n => n.id === activeId)?.num} {NAV.find(n => n.id === activeId)?.label}
+        <span style={{ ...BEBAS, fontSize: 14, letterSpacing: "0.08em", color: "var(--fg)" }}>KKL</span>
+        <span style={{ ...MONO, fontSize: 10, letterSpacing: "0.12em", color: "var(--fg-muted)" }}>
+          {NAV.find(n => n.id === activeId)?.num}&nbsp;{NAV.find(n => n.id === activeId)?.label}
         </span>
+        <button
+          onClick={toggleTheme}
+          aria-label="Toggle theme"
+          style={{
+            ...MONO,
+            background: "none",
+            border: "none",
+            padding: 0,
+            fontSize: 9,
+            letterSpacing: "0.1em",
+            color: "var(--fg-muted)",
+          }}
+        >
+          {isDark ? "○" : "●"}
+        </button>
       </div>
 
-      {/* ── Layout ───────────────────────────────────── */}
+      {/* ── Layout ───────────────────────────────── */}
       <div style={{ display: "flex", minHeight: "100vh" }}>
 
-        {/* ── Desktop Sidebar ──────────────────────── */}
+        {/* ── Desktop sidebar ──────────────────── */}
         <aside
           className="sidebar-desktop"
           style={{
             position: "fixed",
             left: 0, top: 0, bottom: 0,
             width: "var(--sidebar-w)",
-            borderRight: "1px solid #000",
+            borderRight: "1px solid var(--border)",
             flexDirection: "column",
             padding: "32px 24px",
             zIndex: 100,
-            background: "#fff",
+            background: "var(--bg-sidebar)",
           }}
         >
           {/* Logo */}
-          <div style={{ ...BEBAS, fontSize: 32, letterSpacing: "0.08em", lineHeight: 1, marginBottom: 28 }}>
+          <div style={{ ...BEBAS, fontSize: 32, letterSpacing: "0.08em", lineHeight: 1, marginBottom: 28, color: "var(--fg)" }}>
             KKL
           </div>
 
-          <div style={{ borderTop: "1px solid #000", marginBottom: 28 }} />
+          <div style={{ borderTop: "1px solid var(--border)", marginBottom: 28 }} />
 
           {/* Nav */}
           <nav style={{ display: "flex", flexDirection: "column", gap: 14 }}>
-            {NAV.map(({ id, label: lbl, num }) => (
+            {NAV.map(({ id, label, num }) => (
               <button
                 key={id}
                 onClick={() => scrollTo(id)}
@@ -247,7 +306,7 @@ export default function Home() {
                   textAlign: "left",
                   fontSize: 11,
                   letterSpacing: "0.1em",
-                  color: activeId === id ? "#000" : "#aaa",
+                  color: activeId === id ? "var(--fg)" : "var(--fg-muted)",
                   fontWeight: activeId === id ? 500 : 400,
                   display: "flex",
                   gap: 8,
@@ -255,33 +314,56 @@ export default function Home() {
                   lineHeight: 1,
                 }}
               >
-                <span style={{ ...MONO, fontSize: 9, color: "#ddd", letterSpacing: "0.04em" }}>
+                <span style={{ ...MONO, fontSize: 9, color: "var(--fg-faint)", letterSpacing: "0.04em" }}>
                   {num}
                 </span>
-                {lbl}
+                {label}
               </button>
             ))}
           </nav>
 
           {/* Bottom */}
           <div style={{ marginTop: "auto" }}>
-            <div style={{ borderTop: "1px solid #000", marginBottom: 14 }} />
-            <span style={{ ...MONO, fontSize: 10, color: "#aaa", letterSpacing: "0.05em" }}>
-              2026
-            </span>
+            <div style={{ borderTop: "1px solid var(--border)", marginBottom: 14 }} />
+            <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center" }}>
+              <span style={{ ...MONO, fontSize: 10, color: "var(--fg-faint)", letterSpacing: "0.05em" }}>
+                2026
+              </span>
+              <button
+                onClick={toggleTheme}
+                data-cursor="read"
+                aria-label={isDark ? "Switch to light mode" : "Switch to dark mode"}
+                style={{
+                  ...MONO,
+                  background: "none",
+                  border: "none",
+                  padding: 0,
+                  fontSize: 9,
+                  letterSpacing: "0.1em",
+                  color: "var(--fg-muted)",
+                  textTransform: "uppercase",
+                  display: "flex",
+                  alignItems: "center",
+                  gap: 5,
+                }}
+              >
+                <span style={{ fontSize: 8 }}>{isDark ? "○" : "●"}</span>
+                {isDark ? "LIGHT" : "DARK"}
+              </button>
+            </div>
           </div>
         </aside>
 
-        {/* ── Main ─────────────────────────────────── */}
+        {/* ── Main ─────────────────────────────── */}
         <main
           className="main-content"
           style={{ marginLeft: "var(--sidebar-w)", flex: 1, minWidth: 0 }}
         >
 
-          {/* ── Masthead ─────────────────────────── */}
+          {/* ── Masthead ─────────────────────── */}
           <section
             className="masthead-pad"
-            style={{ padding: "48px 48px 0", borderBottom: "1px solid #000" }}
+            style={{ padding: "48px 48px 0", borderBottom: "1px solid var(--border)" }}
           >
             <div style={{
               display: "flex",
@@ -291,41 +373,35 @@ export default function Home() {
             }}>
               <h1
                 className="masthead-name"
-                style={{ ...BEBAS, fontSize: "clamp(44px, 7vw, 88px)", lineHeight: 1, letterSpacing: "0.02em" }}
+                style={{ ...BEBAS, fontSize: "clamp(44px, 7vw, 88px)", lineHeight: 1, letterSpacing: "0.02em", color: "var(--fg)" }}
               >
                 KAUNG KHANT LIN
               </h1>
               <span
                 className="masthead-role"
-                style={{ ...BEBAS, fontSize: "clamp(14px, 2vw, 24px)", letterSpacing: "0.06em", paddingBottom: 6 }}
+                style={{ ...BEBAS, fontSize: "clamp(14px, 2vw, 24px)", letterSpacing: "0.06em", paddingBottom: 6, color: "var(--fg)" }}
               >
                 DATA ENGINEERING
               </span>
             </div>
 
-            <div style={{ borderTop: "1px solid #000", marginBottom: 18 }} />
+            <div style={{ borderTop: "1px solid var(--fg)", marginBottom: 18 }} />
 
-            <div style={{ ...MONO, fontSize: 11, letterSpacing: "0.14em", color: "#888", marginBottom: 22 }}>
+            <div style={{ ...MONO, fontSize: 11, letterSpacing: "0.14em", color: "var(--fg-secondary)", marginBottom: 22 }}>
               BANGKOK · MYANMAR
             </div>
 
-            <div style={{
-              ...MONO,
-              fontSize: "clamp(12px, 1.4vw, 15px)",
-              lineHeight: 1.65,
-              marginBottom: 48,
-              color: "#000",
-            }}>
+            <div style={{ ...MONO, fontSize: "clamp(12px, 1.4vw, 15px)", lineHeight: 1.65, marginBottom: 48, color: "var(--fg-body)" }}>
               LEARNING DATA ENGINEERING.<br />
               BUILDING REAL PIPELINES IN BANGKOK.
             </div>
           </section>
 
-          {/* ── 01 PROFILE ───────────────────────── */}
+          {/* ── 01 PROFILE ───────────────────── */}
           <section
             id="profile"
             className="section-pad"
-            style={{ padding: "64px 48px", borderBottom: "1px solid #000" }}
+            style={{ padding: "64px 48px", borderBottom: "1px solid var(--border)" }}
           >
             <SectionLabel number="01" label="PROFILE" />
 
@@ -338,9 +414,9 @@ export default function Home() {
                   style={{
                     ...MONO,
                     fontSize: 13,
-                    lineHeight: 1.85,
-                    color: "#333",
-                    marginBottom: i < siteContent.about.paragraphs.length - 1 ? 18 : 0,
+                    lineHeight: 1.9,
+                    color: "var(--fg-body)",
+                    marginBottom: i < siteContent.about.paragraphs.length - 1 ? 20 : 0,
                   }}
                 >
                   {p}
@@ -353,12 +429,12 @@ export default function Home() {
               {skills.map((tier) => (
                 <div key={tier.tier}>
                   <div style={{ display: "flex", alignItems: "center", gap: 14, marginBottom: 18 }}>
-                    <span style={{ ...BEBAS, fontSize: 15, letterSpacing: "0.1em" }}>
+                    <span style={{ ...BEBAS, fontSize: 15, letterSpacing: "0.1em", color: "var(--fg)" }}>
                       {tier.label.toUpperCase()}
                     </span>
-                    <div style={{ flex: 1, borderTop: "1px solid #e5e5e5" }} />
+                    <div style={{ flex: 1, borderTop: "1px solid var(--border-light)" }} />
                   </div>
-                  <div style={{ display: "flex", flexDirection: "column", gap: 8 }}>
+                  <div style={{ display: "flex", flexDirection: "column", gap: 9 }}>
                     {tier.groups.map((group) => (
                       <div
                         key={group.category}
@@ -367,11 +443,11 @@ export default function Home() {
                       >
                         <span
                           className="skill-category"
-                          style={{ ...MONO, fontSize: 10, letterSpacing: "0.1em", color: "#aaa", minWidth: 140, textTransform: "uppercase" }}
+                          style={{ ...MONO, fontSize: 10, letterSpacing: "0.1em", color: "var(--fg-muted)", minWidth: 140, textTransform: "uppercase" }}
                         >
                           {group.category}
                         </span>
-                        <span style={{ ...MONO, fontSize: 12, color: "#444", lineHeight: 1.6 }}>
+                        <span style={{ ...MONO, fontSize: 12, color: "var(--fg-secondary)", lineHeight: 1.7 }}>
                           {group.items.join(", ")}
                         </span>
                       </div>
@@ -382,11 +458,11 @@ export default function Home() {
             </div>
           </section>
 
-          {/* ── 02 WORK ──────────────────────────── */}
+          {/* ── 02 WORK ──────────────────────── */}
           <section
             id="work"
             className="section-pad"
-            style={{ padding: "64px 48px", borderBottom: "1px solid #000" }}
+            style={{ padding: "64px 48px", borderBottom: "1px solid var(--border)" }}
           >
             <SectionLabel number="02" label="WORK" />
 
@@ -403,22 +479,20 @@ export default function Home() {
                       alignItems: "start",
                     }}
                   >
-                    {/* Row number */}
-                    <span style={{ ...MONO, fontSize: 10, color: "#ccc", paddingTop: 4, letterSpacing: "0.04em" }}>
+                    <span style={{ ...MONO, fontSize: 10, color: "var(--fg-faint)", paddingTop: 4, letterSpacing: "0.04em" }}>
                       {String(i + 1).padStart(2, "0")}
                     </span>
 
-                    {/* Content */}
                     <div>
-                      <span style={{ ...MONO, fontSize: 9, letterSpacing: "0.15em", color: "#999", textTransform: "uppercase", display: "block", marginBottom: 6 }}>
+                      <span style={{ ...MONO, fontSize: 9, letterSpacing: "0.15em", color: "var(--fg-muted)", textTransform: "uppercase", display: "block", marginBottom: 6 }}>
                         {project.tag}
                       </span>
-                      <h3 style={{ ...BEBAS, fontSize: 22, letterSpacing: "0.05em", lineHeight: 1, marginBottom: 8 }}>
+                      <h3 style={{ ...BEBAS, fontSize: 22, letterSpacing: "0.05em", lineHeight: 1, marginBottom: 8, color: "var(--fg)" }}>
                         {project.title.toUpperCase()}
                       </h3>
                       <p
                         data-cursor="read"
-                        style={{ ...MONO, fontSize: 12, color: "#666", lineHeight: 1.75, marginBottom: 12, maxWidth: 500 }}
+                        style={{ ...MONO, fontSize: 12, color: "var(--fg-secondary)", lineHeight: 1.8, marginBottom: 12, maxWidth: 500 }}
                       >
                         {project.subtitle}
                       </p>
@@ -433,9 +507,9 @@ export default function Home() {
                               fontSize: 9,
                               letterSpacing: "0.1em",
                               textTransform: "uppercase",
-                              border: "1px solid #e0e0e0",
+                              border: "1px solid var(--tag-border)",
                               padding: "2px 6px",
-                              color: "#888",
+                              color: "var(--tag-text)",
                             }}
                           >
                             {s}
@@ -445,23 +519,11 @@ export default function Home() {
 
                       {/* Links */}
                       <div style={{ display: "flex", gap: 20, flexWrap: "wrap" }}>
-                        <a
-                          href={project.githubUrl}
-                          target="_blank"
-                          rel="noopener noreferrer"
-                          data-cursor="open"
-                          style={LINK}
-                        >
+                        <a href={project.githubUrl} target="_blank" rel="noopener noreferrer" data-cursor="open" style={LINK}>
                           GitHub ↗
                         </a>
                         {project.liveUrl && (
-                          <a
-                            href={project.liveUrl}
-                            target="_blank"
-                            rel="noopener noreferrer"
-                            data-cursor="open"
-                            style={LINK}
-                          >
+                          <a href={project.liveUrl} target="_blank" rel="noopener noreferrer" data-cursor="open" style={LINK}>
                             {project.liveLabel} ↗
                           </a>
                         )}
@@ -470,22 +532,22 @@ export default function Home() {
                   </div>
 
                   {i < projects.length - 1 && (
-                    <div style={{ borderTop: "1px solid #f0f0f0" }} />
+                    <div style={{ borderTop: "1px solid var(--border-light)" }} />
                   )}
                 </div>
               ))}
             </div>
           </section>
 
-          {/* ── 03 NOTES ─────────────────────────── */}
+          {/* ── 03 NOTES ─────────────────────── */}
           <section
             id="notes"
             className="section-pad"
-            style={{ padding: "64px 48px", borderBottom: "1px solid #000" }}
+            style={{ padding: "64px 48px", borderBottom: "1px solid var(--border)" }}
           >
             <SectionLabel number="03" label="NOTES" />
 
-            <p style={{ ...MONO, fontSize: 11, color: "#aaa", letterSpacing: "0.06em", marginBottom: 40, textTransform: "uppercase" }}>
+            <p style={{ ...MONO, fontSize: 11, color: "var(--fg-muted)", letterSpacing: "0.06em", marginBottom: 40, textTransform: "uppercase" }}>
               A log of things I am building and figuring out.
             </p>
 
@@ -500,22 +562,19 @@ export default function Home() {
                         letterSpacing: "0.14em",
                         textTransform: "uppercase",
                         border: "1px solid",
-                        borderColor: item.status === "in_progress" ? "#000" : "#ccc",
-                        color: item.status === "in_progress" ? "#000" : "#aaa",
+                        borderColor: item.status === "in_progress" ? "var(--fg)" : "var(--border)",
+                        color: item.status === "in_progress" ? "var(--fg)" : "var(--fg-muted)",
                         padding: "2px 6px",
                       }}>
                         {item.status === "in_progress" ? "In Progress" : "Planned"}
                       </span>
                     </div>
 
-                    <h4 style={{ ...BEBAS, fontSize: 18, letterSpacing: "0.06em", lineHeight: 1, marginBottom: 8 }}>
+                    <h4 style={{ ...BEBAS, fontSize: 18, letterSpacing: "0.06em", lineHeight: 1, marginBottom: 8, color: "var(--fg)" }}>
                       {item.title.toUpperCase()}
                     </h4>
 
-                    <p
-                      data-cursor="read"
-                      style={{ ...MONO, fontSize: 12, lineHeight: 1.85, color: "#555" }}
-                    >
+                    <p data-cursor="read" style={{ ...MONO, fontSize: 12, lineHeight: 1.9, color: "var(--fg-secondary)" }}>
                       {item.description}
                     </p>
 
@@ -533,14 +592,14 @@ export default function Home() {
                   </div>
 
                   {i < buildingItems.length - 1 && (
-                    <div style={{ borderTop: "1px solid #f0f0f0", marginBottom: 36 }} />
+                    <div style={{ borderTop: "1px solid var(--border-light)", marginBottom: 36 }} />
                   )}
                 </div>
               ))}
             </div>
           </section>
 
-          {/* ── 04 CONTACT ───────────────────────── */}
+          {/* ── 04 CONTACT ───────────────────── */}
           <section
             id="contact"
             className="section-pad"
@@ -552,8 +611,8 @@ export default function Home() {
               {/* Email */}
               <div style={{ marginBottom: 48 }}>
                 <div style={{ display: "flex", alignItems: "center", gap: 14, marginBottom: 16 }}>
-                  <span style={{ ...BEBAS, fontSize: 13, letterSpacing: "0.12em" }}>EMAIL</span>
-                  <div style={{ flex: 1, borderTop: "1px solid #000" }} />
+                  <span style={{ ...BEBAS, fontSize: 13, letterSpacing: "0.12em", color: "var(--fg)" }}>EMAIL</span>
+                  <div style={{ flex: 1, borderTop: "1px solid var(--fg)" }} />
                 </div>
                 <button
                   onClick={copyEmail}
@@ -565,7 +624,7 @@ export default function Home() {
                     padding: 0,
                     fontSize: 13,
                     letterSpacing: "0.02em",
-                    color: emailCopied ? "#aaa" : "#000",
+                    color: emailCopied ? "var(--fg-muted)" : "var(--fg-body)",
                     transition: "color 0.2s",
                   }}
                 >
@@ -576,26 +635,16 @@ export default function Home() {
               {/* Elsewhere */}
               <div>
                 <div style={{ display: "flex", alignItems: "center", gap: 14, marginBottom: 16 }}>
-                  <span style={{ ...BEBAS, fontSize: 13, letterSpacing: "0.12em" }}>ELSEWHERE</span>
-                  <div style={{ flex: 1, borderTop: "1px solid #000" }} />
+                  <span style={{ ...BEBAS, fontSize: 13, letterSpacing: "0.12em", color: "var(--fg)" }}>ELSEWHERE</span>
+                  <div style={{ flex: 1, borderTop: "1px solid var(--fg)" }} />
                 </div>
                 <div style={{ display: "flex", gap: 32 }}>
-                  <a
-                    href={siteContent.contact.linkedin}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    data-cursor="open"
-                    style={{ ...MONO, fontSize: 13, color: "#2563eb", textDecoration: "none", letterSpacing: "0.04em" }}
-                  >
+                  <a href={siteContent.contact.linkedin} target="_blank" rel="noopener noreferrer" data-cursor="open"
+                    style={{ ...MONO, fontSize: 13, color: "var(--blue)", textDecoration: "none", letterSpacing: "0.04em" }}>
                     LinkedIn ↗
                   </a>
-                  <a
-                    href={siteContent.contact.github}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    data-cursor="open"
-                    style={{ ...MONO, fontSize: 13, color: "#2563eb", textDecoration: "none", letterSpacing: "0.04em" }}
-                  >
+                  <a href={siteContent.contact.github} target="_blank" rel="noopener noreferrer" data-cursor="open"
+                    style={{ ...MONO, fontSize: 13, color: "var(--blue)", textDecoration: "none", letterSpacing: "0.04em" }}>
                     GitHub ↗
                   </a>
                 </div>
@@ -613,13 +662,13 @@ export default function Home() {
 function SectionLabel({ number, label }: { number: string; label: string }) {
   return (
     <div style={{ display: "flex", alignItems: "center", gap: 14, marginBottom: 40 }}>
-      <span style={{ fontFamily: "var(--font-mono), monospace", fontSize: 10, color: "#ccc", letterSpacing: "0.05em" }}>
+      <span style={{ ...MONO, fontSize: 10, color: "var(--fg-faint)", letterSpacing: "0.05em" }}>
         {number}
       </span>
-      <span style={{ fontFamily: "var(--font-bebas), sans-serif", fontSize: 26, letterSpacing: "0.1em" }}>
+      <span style={{ ...BEBAS, fontSize: 26, letterSpacing: "0.1em", color: "var(--fg)" }}>
         {label}
       </span>
-      <div style={{ flex: 1, borderTop: "1px solid #000" }} />
+      <div style={{ flex: 1, borderTop: "1px solid var(--fg)" }} />
     </div>
   );
 }

@@ -1,24 +1,82 @@
 @import "tailwindcss";
 
-/* ─── Reset ─────────────────────────────────────────── */
+/* ─── Reset ──────────────────────────────────────────── */
 *, *::before, *::after {
   box-sizing: border-box;
   margin: 0;
   padding: 0;
 }
 
-/* ─── Tokens ─────────────────────────────────────────── */
+/* ─── Light mode tokens ───────────────────────────────── */
 :root {
-  --black: #000000;
-  --white: #ffffff;
-  --gray-light: #f0f0f0;
-  --gray-mid: #999999;
-  --gray-border: #e5e5e5;
-  --blue: #2563eb;
+  color-scheme: light;
+
+  /* Backgrounds */
+  --bg:           #F5F3EF;
+  --bg-sidebar:   #EDE9E3;
+
+  /* Foregrounds */
+  --fg:           #111111;
+  --fg-body:      #2C2A27;
+  --fg-secondary: #66605A;
+  --fg-muted:     #9B9590;
+  --fg-faint:     #C5C0BA;
+
+  /* Borders */
+  --border:       #C8C3BB;
+  --border-light: #DDD9D1;
+
+  /* Accent */
+  --blue:         #2563EB;
+
+  /* Tags */
+  --tag-border:   #D4D0CA;
+  --tag-text:     #7A7570;
+
+  /* Cursor */
+  --cursor-dot:    #111111;
+  --cursor-border: #111111;
+  --cursor-fill:   rgba(17, 17, 17, 0.90);
+  --cursor-label:  #F5F3EF;
+
+  /* Layout */
   --sidebar-w: 160px;
 }
 
-/* ─── Base ───────────────────────────────────────────── */
+/* ─── Dark mode tokens ────────────────────────────────── */
+[data-theme="dark"] {
+  color-scheme: dark;
+
+  /* Backgrounds */
+  --bg:           #141311;
+  --bg-sidebar:   #1C1A18;
+
+  /* Foregrounds */
+  --fg:           #F2EFE9;
+  --fg-body:      #C8C3BC;
+  --fg-secondary: #807B74;
+  --fg-muted:     #575250;
+  --fg-faint:     #383532;
+
+  /* Borders */
+  --border:       #2E2B27;
+  --border-light: #242220;
+
+  /* Accent — lighter blue passes 4.5:1 on dark bg */
+  --blue:         #5B9CF6;
+
+  /* Tags */
+  --tag-border:   #333230;
+  --tag-text:     #6A6560;
+
+  /* Cursor */
+  --cursor-dot:    #F2EFE9;
+  --cursor-border: #F2EFE9;
+  --cursor-fill:   rgba(242, 239, 233, 0.90);
+  --cursor-label:  #141311;
+}
+
+/* ─── Base ────────────────────────────────────────────── */
 html {
   scroll-behavior: smooth;
   cursor: none;
@@ -26,18 +84,19 @@ html {
 
 body {
   font-family: var(--font-mono), "IBM Plex Mono", monospace;
-  background: var(--white);
-  color: var(--black);
+  background-color: var(--bg);
+  color: var(--fg-body);
   cursor: none;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
+  transition: background-color 0.25s ease, color 0.25s ease;
 }
 
 * {
   cursor: none !important;
 }
 
-/* ─── Links ──────────────────────────────────────────── */
+/* ─── Links ─────────────────────────────────────────────── */
 a {
   color: var(--blue);
   text-decoration: none;
@@ -52,17 +111,14 @@ a:hover {
   box-shadow: inset 3px 0 0 transparent;
 }
 .project-row:hover {
-  box-shadow: inset 3px 0 0 var(--black);
+  box-shadow: inset 3px 0 0 var(--fg);
 }
 
 /* ─── Mobile sidebar ─────────────────────────────────── */
-
-/* Mobile top strip — hidden by default */
 .sidebar-mobile {
   display: none;
 }
 
-/* Desktop sidebar — shown by default */
 .sidebar-desktop {
   display: flex;
 }
@@ -79,8 +135,8 @@ a:hover {
     left: 0;
     right: 0;
     height: 40px;
-    border-bottom: 1px solid var(--black);
-    background: var(--white);
+    border-bottom: 1px solid var(--border);
+    background: var(--bg-sidebar);
     align-items: center;
     padding: 0 20px;
     z-index: 100;
@@ -114,5 +170,10 @@ a:hover {
 
   .skill-category {
     min-width: unset !important;
+  }
+
+  /* Slightly larger body text on mobile for readability */
+  body {
+    font-size: 14px;
   }
 }

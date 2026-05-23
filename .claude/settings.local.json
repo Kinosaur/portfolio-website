@@ -1,7 +1,10 @@
 {
   "permissions": {
     "allow": [
-      "Bash(npm run *)"
+      "Bash(npm run *)",
+      "Read(//Users/kaungkhantlin/.claude/plugins/cache/ui-ux-pro-max-skill/ui-ux-pro-max/2.5.0/**)",
+      "Bash(python3 src/ui-ux-pro-max/scripts/search.py \"responsive layout breakpoints mobile tablet desktop spacing\" --domain ux -n 8)",
+      "Bash(python3 src/ui-ux-pro-max/scripts/search.py \"touch target size mobile navigation fixed sidebar portfolio\" --domain ux -n 6)"
     ]
   }
 }

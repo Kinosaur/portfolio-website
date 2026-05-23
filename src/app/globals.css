@@ -11,89 +11,81 @@
 :root {
   color-scheme: light;
 
-  /* Backgrounds */
   --bg:           #F5F3EF;
   --bg-sidebar:   #EDE9E3;
-
-  /* Foregrounds */
   --fg:           #111111;
   --fg-body:      #2C2A27;
   --fg-secondary: #66605A;
   --fg-muted:     #9B9590;
   --fg-faint:     #C5C0BA;
-
-  /* Borders */
   --border:       #C8C3BB;
   --border-light: #DDD9D1;
-
-  /* Accent */
   --blue:         #2563EB;
-
-  /* Tags */
   --tag-border:   #D4D0CA;
   --tag-text:     #7A7570;
-
-  /* Cursor */
-  --cursor-dot:    #111111;
-  --cursor-border: #111111;
-  --cursor-fill:   rgba(17, 17, 17, 0.90);
-  --cursor-label:  #F5F3EF;
-
-  /* Layout */
-  --sidebar-w: 160px;
+  --cursor-dot:   #111111;
+  --cursor-fill:  rgba(17, 17, 17, 0.90);
+  --cursor-label: #F5F3EF;
+  --sidebar-w:    160px;
 }
 
 /* ─── Dark mode tokens ────────────────────────────────── */
 [data-theme="dark"] {
   color-scheme: dark;
 
-  /* Backgrounds */
   --bg:           #141311;
   --bg-sidebar:   #1C1A18;
-
-  /* Foregrounds */
   --fg:           #F2EFE9;
   --fg-body:      #C8C3BC;
   --fg-secondary: #807B74;
   --fg-muted:     #575250;
   --fg-faint:     #383532;
-
-  /* Borders */
   --border:       #2E2B27;
   --border-light: #242220;
-
-  /* Accent — lighter blue passes 4.5:1 on dark bg */
   --blue:         #5B9CF6;
-
-  /* Tags */
   --tag-border:   #333230;
   --tag-text:     #6A6560;
-
-  /* Cursor */
-  --cursor-dot:    #F2EFE9;
-  --cursor-border: #F2EFE9;
-  --cursor-fill:   rgba(242, 239, 233, 0.90);
-  --cursor-label:  #141311;
+  --cursor-dot:   #F2EFE9;
+  --cursor-fill:  rgba(242, 239, 233, 0.90);
+  --cursor-label: #141311;
 }
 
 /* ─── Base ────────────────────────────────────────────── */
 html {
   scroll-behavior: smooth;
-  cursor: none;
 }
 
 body {
   font-family: var(--font-mono), "IBM Plex Mono", monospace;
   background-color: var(--bg);
   color: var(--fg-body);
-  cursor: none;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
   transition: background-color 0.25s ease, color 0.25s ease;
+  min-height: 100dvh;
 }
 
-* {
+/* ─── Cursor: mouse devices only ──────────────────────── */
+/* .no-touch is added via JS when hover media = fine pointer */
+.no-touch,
+.no-touch body {
+  cursor: none;
+}
+.no-touch * {
   cursor: none !important;
+}
+
+/* ─── Touch targets ───────────────────────────────────── */
+button, a {
+  touch-action: manipulation;
+  -webkit-tap-highlight-color: transparent;
+}
+
+/* Ensure nav buttons have minimum touch target */
+button {
+  min-height: 44px;
+  display: inline-flex;
+  align-items: center;
 }
 
 /* ─── Links ─────────────────────────────────────────────── */
@@ -114,19 +106,20 @@ a:hover {
   box-shadow: inset 3px 0 0 var(--fg);
 }
 
-/* ─── Mobile sidebar ─────────────────────────────────── */
-.sidebar-mobile {
-  display: none;
+/* ─── Sidebar (desktop) ──────────────────────────────── */
+.sidebar-mobile  { display: none; }
+.sidebar-desktop { display: flex; }
+
+/* ─── 375–480px: small phones ────────────────────────── */
+@media (max-width: 480px) {
+  .section-pad  { padding: 40px 20px !important; }
+  .masthead-pad { padding: 24px 20px 0 !important; }
+  .masthead-name { font-size: 34px !important; }
 }
 
-.sidebar-desktop {
-  display: flex;
-}
-
+/* ─── ≤768px: all phones ─────────────────────────────── */
 @media (max-width: 768px) {
-  .sidebar-desktop {
-    display: none;
-  }
+  .sidebar-desktop { display: none; }
 
   .sidebar-mobile {
     display: flex;
@@ -134,7 +127,7 @@ a:hover {
     top: 0;
     left: 0;
     right: 0;
-    height: 40px;
+    height: 48px;          /* 48px = comfortable touch strip */
     border-bottom: 1px solid var(--border);
     background: var(--bg-sidebar);
     align-items: center;
@@ -143,37 +136,42 @@ a:hover {
     justify-content: space-between;
   }
 
-  .main-content {
-    margin-left: 0 !important;
+  /* Anchor scroll offset — prevents sticky strip hiding section headings */
+  section[id] {
+    scroll-margin-top: 56px;
   }
+
+  .main-content  { margin-left: 0 !important; }
+  .masthead-role { display: none !important; }
 
   .masthead-name {
     font-size: 40px !important;
   }
 
-  .masthead-role {
-    display: none !important;
-  }
+  .section-pad  { padding: 48px 24px !important; }
+  .masthead-pad { padding: 28px 24px 0 !important; }
 
-  .section-pad {
-    padding: 48px 24px !important;
-  }
+  .skill-row     { flex-direction: column !important; gap: 4px !important; }
+  .skill-category { min-width: unset !important; }
 
-  .masthead-pad {
-    padding: 32px 24px 0 !important;
-  }
+  body { font-size: 14px; line-height: 1.85; }
+}
 
-  .skill-row {
-    flex-direction: column !important;
-    gap: 4px !important;
-  }
+/* ─── 769–1023px: tablet ─────────────────────────────── */
+@media (min-width: 769px) and (max-width: 1023px) {
+  :root { --sidebar-w: 140px; }
 
-  .skill-category {
-    min-width: unset !important;
-  }
+  .section-pad  { padding: 56px 36px !important; }
+  .masthead-pad { padding: 40px 36px 0 !important; }
+}
 
-  /* Slightly larger body text on mobile for readability */
-  body {
-    font-size: 14px;
+/* ─── 1024–1439px: standard desktop ─────────────────── */
+/* default styles apply — no overrides needed */
+
+/* ─── 1440px+: large desktop ─────────────────────────── */
+@media (min-width: 1440px) {
+  /* Cap content width so lines don't get too long */
+  .content-cap {
+    max-width: 920px;
   }
 }

@@ -44,6 +44,7 @@ export default function Home() {
   const [activeId,    setActiveId]    = useState("profile");
   const [emailCopied, setEmailCopied] = useState(false);
   const [isDark,      setIsDark]      = useState(false);
+  const [isTouch,     setIsTouch]     = useState(true); // default true avoids cursor flash
 
   /* ── Theme init ──────────────────────────────────── */
   useEffect(() => {
@@ -53,6 +54,16 @@ export default function Home() {
     if (dark) {
       document.documentElement.setAttribute("data-theme", "dark");
       setIsDark(true);
+    }
+  }, []);
+
+  /* ── Touch detection ─────────────────────────────── */
+  useEffect(() => {
+    const touch = window.matchMedia("(hover: none)").matches;
+    setIsTouch(touch);
+    if (!touch) {
+      // Only hide system cursor on pointer devices
+      document.documentElement.classList.add("no-touch");
     }
   }, []);
 
@@ -69,30 +80,22 @@ export default function Home() {
     }
   };
 
-  /* ── Update cursor colors on theme change ────────── */
+  /* ── Update cursor fill on theme change ─────────── */
   useEffect(() => {
+    if (isTouch || !interactive.current) return;
     const dark = isDark;
-    if (dotRef.current) {
-      dotRef.current.style.background = dark ? "#F2EFE9" : "#111111";
-    }
-    if (ringRef.current) {
-      ringRef.current.style.borderColor = dark ? "#F2EFE9" : "#111111";
-      if (interactive.current) {
-        ringRef.current.style.background = dark
-          ? "rgba(242,239,233,0.90)"
-          : "rgba(17,17,17,0.90)";
-      }
-    }
-    if (labelRef.current && interactive.current) {
-      labelRef.current.style.color = dark ? "#141311" : "#F5F3EF";
-    }
-  }, [isDark]);
+    const fill = dark ? "rgba(242,239,233,0.90)" : "rgba(17,17,17,0.90)";
+    const lblC = dark ? "#141311" : "#F5F3EF";
+    if (ringRef.current)  ringRef.current.style.background = fill;
+    if (labelRef.current) labelRef.current.style.color = lblC;
+  }, [isDark, isTouch]);
 
-  /* ── Cursor RAF loop ─────────────────────────────── */
+  /* ── Cursor RAF loop (mouse devices only) ────────── */
   useEffect(() => {
+    if (isTouch) return;
     reducedMotion.current =
       window.matchMedia("(prefers-reduced-motion: reduce)").matches;
-    const LERP = reducedMotion.current ? 1 : 0.14;
+    const LERP = reducedMotion.current ? 1 : 0.13;
 
     const tick = () => {
       ring.current.x += (mouse.current.x - ring.current.x) * LERP;
@@ -109,10 +112,12 @@ export default function Home() {
     };
     rafRef.current = requestAnimationFrame(tick);
     return () => cancelAnimationFrame(rafRef.current);
-  }, []);
+  }, [isTouch]);
 
-  /* ── Cursor mouse events ─────────────────────────── */
+  /* ── Cursor mouse events (mouse devices only) ────── */
   useEffect(() => {
+    if (isTouch) return;
+
     const onMove = (e: MouseEvent) => {
       mouse.current = { x: e.clientX, y: e.clientY };
       setVisible(true);
@@ -124,21 +129,20 @@ export default function Home() {
 
       if (was !== !!typ) {
         const dark = document.documentElement.dataset.theme === "dark";
-        const dotC  = dark ? "#F2EFE9" : "#111111";
-        const ringB = dark ? "#F2EFE9" : "#111111";
-        const fill  = dark ? "rgba(242,239,233,0.90)" : "rgba(17,17,17,0.90)";
-        const lblC  = dark ? "#141311" : "#F5F3EF";
+        const fill = dark ? "rgba(242,239,233,0.90)" : "rgba(17,17,17,0.90)";
+        const lblC = dark ? "#141311" : "#F5F3EF";
 
+        /* dot: scale in/out */
         if (dotRef.current) {
-          dotRef.current.style.width   = typ ? "0px"  : "6px";
-          dotRef.current.style.height  = typ ? "0px"  : "6px";
-          dotRef.current.style.opacity = typ ? "0"    : "1";
-          dotRef.current.style.background = dotC;
+          dotRef.current.style.transform = typ
+            ? "translate(-50%, -50%) scale(0)"
+            : "translate(-50%, -50%) scale(1)";
         }
+        /* ring: scale in/out + fill */
         if (ringRef.current) {
-          ringRef.current.style.width      = typ ? "50px" : "38px";
-          ringRef.current.style.height     = typ ? "50px" : "38px";
-          ringRef.current.style.borderColor = ringB;
+          ringRef.current.style.transform = typ
+            ? "translate(-50%, -50%) scale(1)"
+            : "translate(-50%, -50%) scale(0)";
           ringRef.current.style.background = typ ? fill : "transparent";
         }
         if (labelRef.current) {
@@ -162,7 +166,7 @@ export default function Home() {
       document.documentElement.removeEventListener("mouseleave", onLeave);
       document.documentElement.removeEventListener("mouseenter", onEnter);
     };
-  }, []);
+  }, [isTouch]);
 
   /* ── Active section ──────────────────────────────── */
   useEffect(() => {
@@ -192,57 +196,61 @@ export default function Home() {
   /* ── Render ──────────────────────────────────────── */
   return (
     <>
-      {/* ── Cursor dot ───────────────────────────── */}
-      <div
-        ref={dotRef}
-        style={{
-          position: "fixed",
-          width: 6,
-          height: 6,
-          borderRadius: "50%",
-          background: "var(--cursor-dot)",
-          transform: "translate(-50%, -50%)",
-          pointerEvents: "none",
-          zIndex: 10000,
-          opacity: visible ? 1 : 0,
-          transition: "opacity 0.15s, width 0.12s ease-out, height 0.12s ease-out",
-        }}
-      />
+      {/* ── Cursor (mouse devices only) ──────────── */}
+      {!isTouch && (
+        <>
+          {/* dot — always visible, disappears on hover */}
+          <div
+            ref={dotRef}
+            style={{
+              position: "fixed",
+              width: 6,
+              height: 6,
+              borderRadius: "50%",
+              background: "var(--cursor-dot)",
+              transform: "translate(-50%, -50%) scale(1)",
+              pointerEvents: "none",
+              zIndex: 10000,
+              opacity: visible ? 1 : 0,
+              transition: "opacity 0.15s, transform 0.1s ease-in",
+            }}
+          />
 
-      {/* ── Cursor ring ──────────────────────────── */}
-      <div
-        ref={ringRef}
-        style={{
-          position: "fixed",
-          width: 38,
-          height: 38,
-          borderRadius: "50%",
-          border: "1px solid var(--cursor-border)",
-          background: "transparent",
-          display: "flex",
-          alignItems: "center",
-          justifyContent: "center",
-          transform: "translate(-50%, -50%)",
-          pointerEvents: "none",
-          zIndex: 9999,
-          opacity: visible ? 1 : 0,
-          transition: "opacity 0.15s, width 0.12s ease-out, height 0.12s ease-out, background 0.12s ease-out",
-        }}
-      >
-        <span
-          ref={labelRef}
-          style={{
-            ...MONO,
-            display: "none",
-            fontSize: 7,
-            fontWeight: 500,
-            letterSpacing: "0.05em",
-            color: "var(--cursor-label)",
-            userSelect: "none",
-            lineHeight: 1,
-          }}
-        />
-      </div>
+          {/* ring — hidden at rest, scales in on hover */}
+          <div
+            ref={ringRef}
+            style={{
+              position: "fixed",
+              width: 44,
+              height: 44,
+              borderRadius: "50%",
+              background: "transparent",
+              display: "flex",
+              alignItems: "center",
+              justifyContent: "center",
+              transform: "translate(-50%, -50%) scale(0)",
+              pointerEvents: "none",
+              zIndex: 9999,
+              opacity: visible ? 1 : 0,
+              transition: "opacity 0.15s, transform 0.15s ease-out, background 0.1s",
+            }}
+          >
+            <span
+              ref={labelRef}
+              style={{
+                ...MONO,
+                display: "none",
+                fontSize: 7,
+                fontWeight: 500,
+                letterSpacing: "0.05em",
+                color: "var(--cursor-label)",
+                userSelect: "none",
+                lineHeight: 1,
+              }}
+            />
+          </div>
+        </>
+      )}
 
       {/* ── Mobile top strip ─────────────────────── */}
       <div className="sidebar-mobile">
@@ -356,7 +364,7 @@ export default function Home() {
 
         {/* ── Main ─────────────────────────────── */}
         <main
-          className="main-content"
+          className="main-content content-cap"
           style={{ marginLeft: "var(--sidebar-w)", flex: 1, minWidth: 0 }}
         >
 

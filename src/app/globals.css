@@ -1,1 +1,118 @@
-*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+@import "tailwindcss";
+
+/* ─── Reset ─────────────────────────────────────────── */
+*, *::before, *::after {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+/* ─── Tokens ─────────────────────────────────────────── */
+:root {
+  --black: #000000;
+  --white: #ffffff;
+  --gray-light: #f0f0f0;
+  --gray-mid: #999999;
+  --gray-border: #e5e5e5;
+  --blue: #2563eb;
+  --sidebar-w: 160px;
+}
+
+/* ─── Base ───────────────────────────────────────────── */
+html {
+  scroll-behavior: smooth;
+  cursor: none;
+}
+
+body {
+  font-family: var(--font-mono), "IBM Plex Mono", monospace;
+  background: var(--white);
+  color: var(--black);
+  cursor: none;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+* {
+  cursor: none !important;
+}
+
+/* ─── Links ──────────────────────────────────────────── */
+a {
+  color: var(--blue);
+  text-decoration: none;
+}
+a:hover {
+  text-decoration: underline;
+  text-underline-offset: 3px;
+}
+
+/* ─── Project row hover ──────────────────────────────── */
+.project-row {
+  box-shadow: inset 3px 0 0 transparent;
+}
+.project-row:hover {
+  box-shadow: inset 3px 0 0 var(--black);
+}
+
+/* ─── Mobile sidebar ─────────────────────────────────── */
+
+/* Mobile top strip — hidden by default */
+.sidebar-mobile {
+  display: none;
+}
+
+/* Desktop sidebar — shown by default */
+.sidebar-desktop {
+  display: flex;
+}
+
+@media (max-width: 768px) {
+  .sidebar-desktop {
+    display: none;
+  }
+
+  .sidebar-mobile {
+    display: flex;
+    position: sticky;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 40px;
+    border-bottom: 1px solid var(--black);
+    background: var(--white);
+    align-items: center;
+    padding: 0 20px;
+    z-index: 100;
+    justify-content: space-between;
+  }
+
+  .main-content {
+    margin-left: 0 !important;
+  }
+
+  .masthead-name {
+    font-size: 40px !important;
+  }
+
+  .masthead-role {
+    display: none !important;
+  }
+
+  .section-pad {
+    padding: 48px 24px !important;
+  }
+
+  .masthead-pad {
+    padding: 32px 24px 0 !important;
+  }
+
+  .skill-row {
+    flex-direction: column !important;
+    gap: 4px !important;
+  }
+
+  .skill-category {
+    min-width: unset !important;
+  }
+}

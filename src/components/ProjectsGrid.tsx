@@ -4,6 +4,7 @@ import { useEffect, useRef, useState } from "react";
 import { projects } from "@/data/projects";
 import InView from "./InView";
 
+// Tag colors — display concern, lives here
 const tagColors: Record<string, string> = {
   "CIVIC TECH":        "#10b981",
   "DATA VIZ":          "#8b5cf6",
@@ -42,51 +43,50 @@ export default function ProjectsGrid() {
     <section id="projects" className="section">
       <div className="container">
         <InView>
-          <div
-            style={{
-              display: "flex",
-              alignItems: "baseline",
-              justifyContent: "space-between",
-              marginBottom: "2.5rem",
-              flexWrap: "wrap",
-              gap: "0.5rem",
-            }}
-          >
+          <div style={{
+            display: "flex",
+            alignItems: "baseline",
+            justifyContent: "space-between",
+            marginBottom: "2.5rem",
+            flexWrap: "wrap",
+            gap: "0.5rem",
+          }}>
             <h2
               className="section-heading heading-reveal"
               style={{
-                fontSize: "clamp(1.4rem, 3vw, 1.8rem)",
-                fontWeight: 700,
+                fontSize: "clamp(1.5rem, 3vw, 2rem)",
                 letterSpacing: "-0.02em",
                 color: "var(--foreground)",
               }}
             >
               Selected Work
             </h2>
-            <span
-              style={{ fontSize: "0.84rem", color: "var(--muted)", letterSpacing: "0.04em" }}
-            >
-              {projects.length} projects — hover or tap to read
+            <span style={{
+              fontFamily: "var(--font-mono)",
+              fontSize: "0.68rem",
+              letterSpacing: "0.1em",
+              textTransform: "uppercase",
+              color: "var(--muted)",
+            }}>
+              {projects.length} projects
             </span>
           </div>
         </InView>
 
-        {/* List */}
+        {/* Project list */}
         <div style={{ borderTop: "1px solid var(--border)" }}>
           {projects.map((project, i) => {
             const color = tagColors[project.tag] ?? "var(--accent)";
-            const num = String(i + 1).padStart(2, "0");
+            const num   = String(i + 1).padStart(2, "0");
             const isOpen = openProjectId === project.id;
 
             return (
-              <InView key={project.id} delay={i * 55}>
+              <InView key={project.id} delay={i * 50}>
                 <div
                   className={`project-row${isOpen ? " is-open" : ""}`}
-                  ref={(el) => {
-                    rowRefs.current[project.id] = el;
-                  }}
+                  ref={(el) => { rowRefs.current[project.id] = el; }}
                 >
-                  {/* ── visible row ── */}
+                  {/* ── Row header (clickable) ── */}
                   <button
                     type="button"
                     className="project-row-header project-row-toggle"
@@ -94,35 +94,43 @@ export default function ProjectsGrid() {
                     aria-controls={`project-desc-${project.id}`}
                     onClick={() => toggleProject(project.id)}
                   >
-                    {/* Number */}
+                    {/* Number (JetBrains Mono) */}
                     <span className="project-num">{num}</span>
 
                     {/* Title block */}
                     <div className="project-title-block">
-                      <span className="project-tag-badge" style={{ color, borderColor: `color-mix(in srgb, ${color} 30%, transparent)` }}>
+                      <span
+                        className="project-tag-badge"
+                        style={{
+                          color,
+                          borderColor: `color-mix(in srgb, ${color} 28%, var(--border))`,
+                        }}
+                      >
                         {project.tag}
                       </span>
                       <div className="project-title-row">
                         <h3 className="project-title">{project.title}</h3>
-                        <span className="project-title-arrow">↗</span>
+                        <span className="project-title-arrow" aria-hidden="true">↗</span>
                         <span className="project-mobile-toggle-indicator" aria-hidden="true">
                           {isOpen ? "−" : "+"}
                         </span>
                       </div>
                     </div>
 
-                    {/* Stack — right side, desktop only */}
+                    {/* Stack chips — desktop only */}
                     <div className="project-stack-row">
                       {project.stack.slice(0, 3).map((tech) => (
-                        <span key={tech} className="project-stack-chip">{tech}</span>
+                        <span key={tech} className="project-stack-chip skill-tag">{tech}</span>
                       ))}
                       {project.stack.length > 3 && (
-                        <span className="project-stack-chip">+{project.stack.length - 3}</span>
+                        <span className="project-stack-chip skill-tag">
+                          +{project.stack.length - 3}
+                        </span>
                       )}
                     </div>
                   </button>
 
-                  {/* ── expanded description (hover reveals) ── */}
+                  {/* ── Expanded description ── */}
                   <div id={`project-desc-${project.id}`} className="project-desc">
                     <p className="project-desc-text">{project.description}</p>
                     <div className="project-links">
@@ -153,10 +161,12 @@ export default function ProjectsGrid() {
                         </span>
                       ) : null}
                     </div>
-                    {/* All stack chips visible in expanded state */}
                     <div className="project-stack-expanded">
                       {project.stack.map((tech) => (
-                        <span key={tech} className="skill-tag project-stack-chip">{tech}</span>
+                        <span key={tech} className="skill-tag project-stack-chip"
+                          style={{ padding: "0.22rem 0.55rem", border: "1px solid var(--border)", borderRadius: "var(--r-tag)", color: "var(--muted)" }}>
+                          {tech}
+                        </span>
                       ))}
                     </div>
                     <button
@@ -164,7 +174,7 @@ export default function ProjectsGrid() {
                       className="project-mobile-close"
                       onClick={() => setOpenProjectId(null)}
                     >
-                      Close details
+                      Close
                     </button>
                   </div>
                 </div>
@@ -175,7 +185,7 @@ export default function ProjectsGrid() {
       </div>
 
       <style>{`
-        /* ── Row layout ── */
+        /* ── Row layout: grid-template-rows for smooth expand ── */
         .project-row {
           border-bottom: 1px solid var(--border);
           cursor: default;
@@ -184,18 +194,14 @@ export default function ProjectsGrid() {
           grid-template-rows: auto 0fr;
           transition: background 0.2s ease, grid-template-rows 0.34s cubic-bezier(0.22, 1, 0.36, 1);
         }
-        .project-row:hover {
-          background: color-mix(in srgb, var(--card) 60%, var(--background) 40%);
-          grid-template-rows: auto 1fr;
-        }
-        .project-row:focus-within {
-          background: color-mix(in srgb, var(--card) 60%, var(--background) 40%);
-          grid-template-rows: auto 1fr;
-        }
+        .project-row:hover,
+        .project-row:focus-within,
         .project-row.is-open {
           background: color-mix(in srgb, var(--card) 60%, var(--background) 40%);
           grid-template-rows: auto 1fr;
         }
+
+        /* ── Toggle button ── */
         .project-row-toggle {
           appearance: none;
           border: 0;
@@ -204,39 +210,36 @@ export default function ProjectsGrid() {
           cursor: pointer;
           font: inherit;
           margin: 0;
-          padding: 1.4rem 0.5rem 1.4rem 0;
+          padding: 1.35rem 0.5rem 1.35rem 0;
           text-align: left;
           width: 100%;
         }
         .project-row-header {
           display: grid;
-          grid-template-columns: 3rem 1fr 210px;
+          grid-template-columns: 2.75rem 1fr 200px;
           align-items: center;
           gap: 1.5rem;
         }
 
-        /* Number */
+        /* ── Number (JetBrains Mono) ── */
         .project-num {
+          font-family: var(--font-mono), monospace;
           font-size: 0.8rem;
-          font-weight: 700;
+          font-weight: 500;
           color: var(--border);
-          letter-spacing: 0.04em;
+          letter-spacing: 0.05em;
           font-variant-numeric: tabular-nums;
           transition: color 0.18s;
           flex-shrink: 0;
         }
-        .project-row:hover .project-num {
-          color: var(--muted);
-        }
-        .project-row:focus-within .project-num {
-          color: var(--muted);
-        }
+        .project-row:hover .project-num,
+        .project-row:focus-within .project-num { color: var(--muted); }
 
-        /* Title block */
+        /* ── Title block ── */
         .project-title-block {
           display: flex;
           flex-direction: column;
-          gap: 0.3rem;
+          gap: 0.28rem;
           min-width: 0;
         }
         .project-title-row {
@@ -245,29 +248,35 @@ export default function ProjectsGrid() {
           gap: 0.45rem;
           min-width: 0;
         }
+
+        /* ── Tag badge (JetBrains Mono) ── */
         .project-tag-badge {
-          font-size: 0.67rem;
-          font-weight: 700;
-          letter-spacing: 0.09em;
+          font-family: var(--font-mono), monospace;
+          font-size: 0.62rem;
+          font-weight: 500;
+          letter-spacing: 0.1em;
           text-transform: uppercase;
           border: 1px solid;
-          border-radius: 3px;
-          padding: 0.1rem 0.45rem;
+          border-radius: var(--r-tag);
+          padding: 0.08rem 0.4rem;
           display: inline-block;
           width: fit-content;
         }
+
+        /* ── Title (Source Serif 4) ── */
         .project-title {
-          font-size: 1.15rem;
+          font-family: var(--font-body), Georgia, serif;
+          font-size: 1.1rem;
           font-weight: 600;
           color: var(--foreground);
-          letter-spacing: -0.02em;
+          letter-spacing: -0.01em;
           line-height: 1.3;
           flex: 1;
         }
         .project-title-arrow {
           color: var(--muted);
-          font-size: 0.95rem;
-          transition: transform 0.18s ease, color 0.18s ease;
+          font-size: 0.9rem;
+          transition: transform 0.18s ease, color 0.18s;
           flex-shrink: 0;
         }
         .project-mobile-toggle-indicator {
@@ -275,76 +284,54 @@ export default function ProjectsGrid() {
           width: 1.4rem;
           text-align: center;
           color: var(--muted);
-          font-size: 1.05rem;
-          line-height: 1;
+          font-family: var(--font-mono), monospace;
+          font-size: 1rem;
           flex-shrink: 0;
-          transform: translateY(-1px);
         }
         .project-row:hover .project-title-arrow,
-        .project-row:focus-within .project-title-arrow {
-          transform: translate(2px, -2px);
-          color: var(--foreground);
-        }
+        .project-row:focus-within .project-title-arrow,
         .project-row.is-open .project-title-arrow {
           transform: translate(2px, -2px);
           color: var(--foreground);
         }
-        .project-row:hover .project-tag-badge,
-        .project-row:focus-within .project-tag-badge {
-          background: color-mix(in srgb, var(--card) 84%, var(--background) 16%);
-        }
-        .project-row.is-open .project-tag-badge {
-          background: color-mix(in srgb, var(--card) 84%, var(--background) 16%);
-        }
 
-        /* Stack chips — desktop right column */
+        /* ── Stack chips — desktop right column ── */
         .project-stack-row {
           display: flex;
-          gap: 0.35rem;
+          gap: 0.3rem;
           flex-wrap: wrap;
           justify-content: flex-end;
           align-items: center;
         }
         .project-stack-chip {
-          font-size: 0.72rem;
-          padding: 0.2rem 0.5rem;
+          font-size: 0.66rem;
+          padding: 0.18rem 0.45rem;
           border: 1px solid var(--border);
-          border-radius: 3px;
+          border-radius: var(--r-tag);
           color: var(--muted);
           white-space: nowrap;
         }
 
-        /* Description expand */
+        /* ── Expanded description ── */
         .project-desc {
           min-height: 0;
           overflow: hidden;
           opacity: 0;
           transform: translateY(-6px);
           will-change: opacity, transform;
-          transition: opacity 0.24s ease, transform 0.24s ease, padding 0.24s ease;
-          padding-left: calc(3rem + 1.5rem);
+          transition: opacity 0.24s ease, transform 0.24s ease;
+          padding-left: calc(2.75rem + 1.5rem);
         }
-        .project-row:hover .project-desc {
-          opacity: 1;
-          transform: translateY(0);
-          transition-delay: 45ms;
-        }
-        .project-row:focus-within .project-desc {
-          opacity: 1;
-          transform: translateY(0);
-          transition-delay: 0s;
-        }
-        .project-row.is-open .project-desc {
-          opacity: 1;
-          transform: translateY(0);
-          transition-delay: 0s;
-        }
+        .project-row:hover .project-desc,
+        .project-row:focus-within .project-desc { opacity: 1; transform: translateY(0); transition-delay: 45ms; }
+        .project-row.is-open .project-desc { opacity: 1; transform: translateY(0); }
+
         .project-desc-text {
-          font-size: 1.02rem;
-          color: color-mix(in srgb, var(--foreground) 72%, var(--muted));
+          font-weight: 300;
+          color: var(--muted);
           line-height: 1.82;
           padding-bottom: 0.75rem;
-          max-width: 640px;
+          max-width: 620px;
         }
         .project-links {
           display: flex;
@@ -356,82 +343,62 @@ export default function ProjectsGrid() {
           display: inline-flex;
           align-items: center;
           gap: 0.25rem;
-          font-size: 0.88rem;
+          font-family: var(--font-mono), monospace;
+          font-size: 0.72rem;
           font-weight: 500;
+          letter-spacing: 0.06em;
+          text-transform: uppercase;
           text-decoration: none;
-          transition: color 0.18s, opacity 0.18s;
+          transition: opacity 0.18s;
         }
         .project-link:hover,
-        .project-link:focus-visible {
-          opacity: 0.78;
-        }
+        .project-link:focus-visible { opacity: 0.72; }
         .project-link-arrow {
           display: inline-block;
           transition: transform 0.18s ease;
         }
-        .project-link:hover .project-link-arrow,
-        .project-link:focus-visible .project-link-arrow {
-          transform: translate(2px, -2px);
-        }
-        .project-stack-expanded {
-          display: flex;
-          flex-wrap: wrap;
-          gap: 0.35rem;
-          padding-bottom: 1.25rem;
-        }
-        .project-mobile-close {
-          display: none;
-        }
+        .project-link:hover .project-link-arrow { transform: translate(2px, -2px); }
+        .project-stack-expanded { display: flex; flex-wrap: wrap; gap: 0.3rem; padding-bottom: 1.25rem; }
+        .project-mobile-close { display: none; }
 
-        /* Mobile — tap to reveal description, hide right stack column */
+        /* ── Mobile ── */
         @media (max-width: 700px) {
           .project-stack-row { display: none; }
           .project-row-header { grid-template-columns: 2.5rem 1fr; }
           .project-row { scroll-margin-top: 5rem; }
-          .project-row-toggle {
-            padding: 1.1rem 0.4rem 1.1rem 0;
-            touch-action: manipulation;
-          }
+          .project-row-toggle { padding: 1.1rem 0.4rem 1.1rem 0; touch-action: manipulation; }
           .project-title-arrow { display: none; }
           .project-mobile-toggle-indicator { display: inline-block; }
           .project-row.is-open .project-mobile-toggle-indicator { color: var(--foreground); }
           .project-row { grid-template-rows: auto 0fr !important; }
-          .project-desc {
-            opacity: 0 !important;
-            transform: translateY(-8px) !important;
-            padding-bottom: 0;
-            padding-left: calc(2.5rem + 1.5rem);
-          }
+          .project-desc { opacity: 0 !important; transform: translateY(-8px) !important; padding-bottom: 0; padding-left: calc(2.5rem + 1.5rem); }
           .project-row.is-open { grid-template-rows: auto 1fr !important; }
-          .project-row.is-open .project-desc {
-            opacity: 1 !important;
-            transform: translateY(0) !important;
-            padding-bottom: 0.95rem;
-          }
+          .project-row.is-open .project-desc { opacity: 1 !important; transform: translateY(0) !important; padding-bottom: 0.95rem; }
           .project-mobile-close {
             display: inline-flex;
             align-items: center;
-            justify-content: center;
             border: 1px solid var(--border);
-            background: color-mix(in srgb, var(--card) 88%, transparent);
+            border-radius: var(--r-btn);
+            background: var(--card);
             color: var(--foreground);
-            border-radius: 8px;
-            padding: 0.45rem 0.75rem;
-            font-size: 0.8rem;
-            font-weight: 600;
+            padding: 0.4rem 0.7rem;
+            font-family: var(--font-mono), monospace;
+            font-size: 0.68rem;
+            font-weight: 500;
+            letter-spacing: 0.08em;
+            text-transform: uppercase;
             margin-top: 0.25rem;
+            cursor: pointer;
           }
           .project-desc-text { padding-top: 0.3rem; }
           .project-stack-expanded { display: flex; }
         }
 
-        /* Touch devices — tap to reveal */
         @media (hover: none) {
           .project-row { grid-template-rows: auto 0fr !important; }
           .project-desc { opacity: 0 !important; transform: translateY(-8px) !important; padding-bottom: 0; }
           .project-row.is-open { grid-template-rows: auto 1fr !important; }
           .project-row.is-open .project-desc { opacity: 1 !important; transform: translateY(0) !important; padding-bottom: 0.95rem; }
-          .project-stack-expanded { display: flex; }
         }
       `}</style>
     </section>

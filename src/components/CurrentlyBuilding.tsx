@@ -1,155 +1,85 @@
 import { buildingItems, type BuildStatus } from "@/data/building";
 import InView from "./InView";
 
-const statusConfig: Record<BuildStatus, { label: string; color: string; bg: string; pulse: boolean }> = {
-  in_progress: {
-    label: "in progress",
-    color: "#d97706",
-    bg: "rgba(217, 119, 6, 0.1)",
-    pulse: true,
-  },
-  planned: {
-    label: "planned",
-    color: "var(--muted)",
-    bg: "rgba(139, 146, 165, 0.1)",
-    pulse: false,
-  },
+const statusConfig: Record<BuildStatus, { label: string; dotColor: string; pulse: boolean }> = {
+  in_progress: { label: "in progress", dotColor: "#d97706", pulse: true  },
+  planned:     { label: "planned",     dotColor: "var(--muted)", pulse: false },
 };
 
 export default function CurrentlyBuilding() {
   return (
-    <section
-      id="building"
-      className="section"
-      style={{ background: "var(--building-bg)" }}
-    >
+    <section id="building" className="section" style={{ background: "var(--building-bg)" }}>
       <div className="container">
         <InView>
-          <p className="label" style={{ marginBottom: "0.5rem" }}>
-            Currently Building
-          </p>
+          <p className="label" style={{ marginBottom: "0.6rem" }}>Currently Building</p>
           <h2
             className="section-heading heading-reveal"
             style={{
-              fontSize: "clamp(1.4rem, 3vw, 1.8rem)",
-              fontWeight: 700,
-              letterSpacing: "-0.02em",
+              fontSize: "clamp(1.5rem, 3vw, 2rem)",
+              letterSpacing: "-0.022em",
               marginBottom: "0.75rem",
               color: "var(--foreground)",
             }}
           >
             What&rsquo;s in Motion
           </h2>
-          <p
-            style={{
-              fontSize: "0.95rem",
-              color: "var(--muted)",
-              marginBottom: "2.5rem",
-              maxWidth: "560px",
-              lineHeight: 1.75,
-            }}
-          >
+          <p style={{
+            fontWeight: 300,
+            color: "var(--muted)",
+            marginBottom: "2.5rem",
+            maxWidth: "520px",
+            lineHeight: 1.78,
+          }}>
             Work in progress and what&rsquo;s planned next. Updated regularly — if it&rsquo;s stale, something shipped.
           </p>
         </InView>
 
-        <div style={{ display: "flex", flexDirection: "column", gap: "0.85rem" }}>
+        <div style={{ display: "flex", flexDirection: "column", gap: "0.75rem" }}>
           {buildingItems.map((item, i) => {
             const status = statusConfig[item.status];
             return (
-              <InView key={item.id} delay={i * 80}>
-                <div
-                  className="card-lift building-item"
-                  style={{
-                    border: "1px solid var(--border)",
-                    borderRadius: "10px",
-                    padding: "1.25rem 1.5rem",
-                    background: "var(--card)",
-                    display: "flex",
-                    gap: "1rem",
-                    alignItems: "flex-start",
-                    cursor: "default",
-                  }}
-                >
+              <InView key={item.id} delay={i * 75}>
+                <div className="building-item card-lift building-card">
                   {/* Arrow */}
-                  <span
-                    className="building-arrow"
-                    style={{
-                      color: "var(--accent)",
-                      fontWeight: 700,
-                      fontSize: "1.05rem",
-                      marginTop: "0.05rem",
-                      flexShrink: 0,
-                    }}
-                  >
+                  <span className="building-arrow" aria-hidden="true"
+                    style={{ color: "var(--accent)", fontWeight: 700, fontSize: "1rem", flexShrink: 0 }}>
                     →
                   </span>
 
                   <div style={{ flex: 1, minWidth: 0 }}>
-                    <div
-                      style={{
-                        display: "flex",
-                        alignItems: "center",
-                        gap: "0.6rem",
-                        flexWrap: "wrap",
-                        marginBottom: "0.45rem",
-                      }}
-                    >
-                      <span
-                        style={{
-                          fontWeight: 600,
-                          fontSize: "1rem",
-                          color: "var(--foreground)",
-                        }}
-                      >
+                    {/* Title + inline status */}
+                    <div style={{ display: "flex", alignItems: "center", gap: "0.65rem", flexWrap: "wrap", marginBottom: "0.4rem" }}>
+                      <span style={{ fontWeight: 600, fontSize: "1rem", color: "var(--foreground)" }}>
                         {item.title}
                       </span>
-
-                      {/* Status pill */}
-                      <span
-                        style={{
-                          fontSize: "0.68rem",
-                          fontWeight: 700,
-                          letterSpacing: "0.07em",
-                          textTransform: "uppercase",
-                          padding: "0.15rem 0.55rem",
-                          borderRadius: "999px",
-                          color: status.color,
-                          background: status.bg,
-                          display: "inline-flex",
-                          alignItems: "center",
-                        }}
-                      >
-                        {status.pulse && <span className="pulse-dot" />}
-                        {status.label}
+                      <span className="building-status">
+                        {status.pulse && (
+                          <span
+                            className="pulse-dot"
+                            style={{ background: status.dotColor }}
+                            aria-hidden="true"
+                          />
+                        )}
+                        <span style={{ color: status.dotColor }}>
+                          {status.label}
+                        </span>
                       </span>
                     </div>
 
-                    <p
-                      style={{
-                        fontSize: "0.95rem",
-                        color: "var(--muted)",
-                        lineHeight: 1.75,
-                      }}
-                    >
+                    {/* Description (Source Serif 4) */}
+                    <p style={{ fontWeight: 300, color: "var(--muted)", lineHeight: 1.78 }}>
                       {item.description}
                     </p>
 
+                    {/* Repo link */}
                     {item.repoUrl && (
                       <a
                         href={item.repoUrl}
                         target="_blank"
                         rel="noopener noreferrer"
-                        className="project-link project-link--action building-repo-link"
-                        style={{
-                          marginTop: "0.5rem",
-                          fontSize: "0.78rem",
-                          color: "var(--accent)",
-                          textDecoration: "none",
-                        }}
+                        className="building-repo-link"
                       >
-                        View repo
-                        <span className="action-arrow" aria-hidden="true">→</span>
+                        View repo →
                       </a>
                     )}
                   </div>
@@ -159,6 +89,43 @@ export default function CurrentlyBuilding() {
           })}
         </div>
       </div>
+
+      <style>{`
+        .building-card {
+          border: 1px solid var(--border);
+          border-radius: var(--r-card);
+          padding: 1.25rem 1.5rem;
+          background: var(--card);
+          display: flex;
+          gap: 1rem;
+          align-items: flex-start;
+          cursor: default;
+        }
+        /* Status: mono text inline, no pill background */
+        .building-status {
+          display: inline-flex;
+          align-items: center;
+          font-family: var(--font-mono), monospace;
+          font-size: 0.65rem;
+          font-weight: 500;
+          letter-spacing: 0.08em;
+          text-transform: uppercase;
+        }
+        .building-repo-link {
+          display: inline-flex;
+          align-items: center;
+          margin-top: 0.55rem;
+          font-family: var(--font-mono), monospace;
+          font-size: 0.68rem;
+          font-weight: 500;
+          letter-spacing: 0.06em;
+          text-transform: uppercase;
+          color: var(--accent);
+          text-decoration: none;
+          transition: opacity 0.15s;
+        }
+        .building-repo-link:hover { opacity: 0.75; }
+      `}</style>
     </section>
   );
 }

@@ -1,24 +1,36 @@
 import type { Metadata } from "next";
-import { Playfair_Display, Plus_Jakarta_Sans, Caveat } from "next/font/google";
+import { Playfair_Display, Source_Serif_4, JetBrains_Mono, Caveat } from "next/font/google";
 import "./globals.css";
 import Navbar from "@/components/Navbar";
 import Cursor from "@/components/Cursor";
 
-const displaySerif = Playfair_Display({
+// Display / masthead — hero name, section titles
+const displayFont = Playfair_Display({
   subsets: ["latin"],
-  variable: "--font-display-serif",
-  weight: ["600", "700"],
+  variable: "--font-display",
+  weight: ["400", "700", "900"],
+  style: ["normal", "italic"],
 });
 
-const uiSans = Plus_Jakarta_Sans({
+// Body serif — all prose, descriptions, about text
+const bodyFont = Source_Serif_4({
   subsets: ["latin"],
-  variable: "--font-ui-sans",
-  weight: ["400", "500", "600", "700"],
+  variable: "--font-body",
+  weight: ["300", "400", "600"],
+  style: ["normal", "italic"],
 });
 
-const accentScript = Caveat({
+// Mono — labels, tags, stats, nav links, captions
+const monoFont = JetBrains_Mono({
   subsets: ["latin"],
-  variable: "--font-accent-script",
+  variable: "--font-mono",
+  weight: ["400", "500"],
+});
+
+// Script — "Kinosaur" nickname only
+const scriptFont = Caveat({
+  subsets: ["latin"],
+  variable: "--font-script",
   weight: ["600", "700"],
 });
 
@@ -37,15 +49,14 @@ export const metadata: Metadata = {
   },
 };
 
-// Runs before React hydrates — prevents flash of wrong theme
+// Runs before React hydrates — prevents flash of wrong theme.
+// Light is the default (:root in CSS). Dark is the explicit override.
 const themeScript = `
   try {
     var stored = localStorage.getItem('kino-theme');
     if (stored === 'light' || stored === 'dark') {
       document.documentElement.setAttribute('data-theme', stored);
-    } else if (window.matchMedia('(prefers-color-scheme: light)').matches) {
-      document.documentElement.setAttribute('data-theme', 'light');
-    } else {
+    } else if (window.matchMedia('(prefers-color-scheme: dark)').matches) {
       document.documentElement.setAttribute('data-theme', 'dark');
     }
   } catch(e) {}
@@ -60,7 +71,7 @@ export default function RootLayout({
     <html
       lang="en"
       suppressHydrationWarning
-      className={`${displaySerif.variable} ${uiSans.variable} ${accentScript.variable}`}
+      className={`${displayFont.variable} ${bodyFont.variable} ${monoFont.variable} ${scriptFont.variable}`}
     >
       <head>
         {/* eslint-disable-next-line @next/next/no-before-interactive-script-outside-document */}

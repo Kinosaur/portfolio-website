@@ -1,13 +1,15 @@
 export const siteContent = {
   name: "Kaung Khant Lin",
   hero: {
-    headline: "Kaung Khant Lin",
-    subheadline:
-      "Final-year CS student at Assumption University, Bangkok.\nMoving toward data engineering — currently strongest in Python data\nprocessing and visualization, learning warehousing and orchestration now.",
+    eyebrow: "Portfolio · Data Engineering",
     cta: "View Featured Work",
+    positioning:
+      "Moving toward data engineering — currently strongest in Python data processing and visualization, learning warehousing and orchestration now.",
+    positioningShort:
+      "Final-year CS student in Bangkok. Python pipelines, data visualization, learning the full DE stack.",
   },
   featuredCaseStudy: {
-    label: "FEATURED PROJECT",
+    label: "Featured Project",
     title: "Transparent City",
     tagline: "Civic Data Visualization Platform",
     problem:
@@ -30,11 +32,10 @@ export const siteContent = {
         text: "Interactive D3.js dashboard surfacing categories, geography, and temporal patterns, available in both Thai and English.",
       },
     ],
-    demonstrates: [
-      "Working with a real-world dataset at non-trivial scale (1.1M rows)",
-      "Diagnosing and handling messy input — not just happy-path data",
-      "Thinking about the boundary between processing and serving",
-      "Owning a project end-to-end, from raw export to deployed UI",
+    stats: [
+      { value: "1.1M+", label: "civic tickets ingested" },
+      { value: "~15%", label: "missing geo — handled" },
+      { value: "Weekly", label: "pipeline refresh" },
     ],
     githubUrl: "https://github.com/Kinosaur/transparent-city",
     liveUrl: "https://transparent-city.vercel.app/",

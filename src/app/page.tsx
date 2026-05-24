@@ -39,6 +39,7 @@ export default function Home() {
   const mouse       = useRef({ x: -100, y: -100 });
   const ring        = useRef({ x: -100, y: -100 });
   const interactive = useRef(false);
+  const cursorType  = useRef("");
   const reducedMotion = useRef(false);
 
   const [visible,     setVisible]     = useState(false);
@@ -83,11 +84,16 @@ export default function Home() {
 
   /* ── Update cursor fill on theme change ─────────── */
   useEffect(() => {
-    if (isTouch || !interactive.current) return;
+    if (isTouch || !cursorType.current) return;
     const dark = isDark;
-    const fill = dark ? "rgba(242,239,233,0.90)" : "rgba(17,17,17,0.90)";
-    const lblC = dark ? "#141311" : "#F5F3EF";
-    if (ringRef.current)  ringRef.current.style.background = fill;
+    const fill      = dark ? "rgba(242,239,233,0.88)" : "rgba(17,17,17,0.88)";
+    const ringColor = dark ? "rgba(242,239,233,0.28)" : "rgba(17,17,17,0.28)";
+    const lblC      = dark ? "#141311" : "#F5F3EF";
+    const isAction  = cursorType.current === "open" || cursorType.current === "copy";
+    if (ringRef.current) {
+      ringRef.current.style.background = isAction ? fill : "transparent";
+      ringRef.current.style.border     = isAction ? "none" : `1.5px solid ${ringColor}`;
+    }
     if (labelRef.current) labelRef.current.style.color = lblC;
   }, [isDark, isTouch]);
 
@@ -123,36 +129,49 @@ export default function Home() {
       mouse.current = { x: e.clientX, y: e.clientY };
       setVisible(true);
 
-      const el  = (e.target as HTMLElement).closest("[data-cursor]") as HTMLElement | null;
-      const typ = el?.dataset.cursor ?? "";
-      const was = interactive.current;
+      const el     = (e.target as HTMLElement).closest("[data-cursor]") as HTMLElement | null;
+      const typ    = el?.dataset.cursor ?? "";
+      const prevTyp = cursorType.current;
+      cursorType.current = typ;
       interactive.current = !!typ;
 
-      if (was !== !!typ) {
-        const dark = document.documentElement.dataset.theme === "dark";
-        const fill = dark ? "rgba(242,239,233,0.90)" : "rgba(17,17,17,0.90)";
-        const lblC = dark ? "#141311" : "#F5F3EF";
+      if (prevTyp === typ) return;
 
-        /* dot: scale in/out */
-        if (dotRef.current) {
-          dotRef.current.style.transform = typ
-            ? "translate(-50%, -50%) scale(0)"
-            : "translate(-50%, -50%) scale(1)";
-        }
-        /* ring: scale in/out + fill */
-        if (ringRef.current) {
-          ringRef.current.style.transform = typ
-            ? "translate(-50%, -50%) scale(1)"
-            : "translate(-50%, -50%) scale(0)";
-          ringRef.current.style.background = typ ? fill : "transparent";
-        }
-        if (labelRef.current) {
-          labelRef.current.style.display = typ ? "block" : "none";
-          labelRef.current.style.color   = lblC;
-        }
+      const dark      = document.documentElement.dataset.theme === "dark";
+      const fill      = dark ? "rgba(242,239,233,0.88)" : "rgba(17,17,17,0.88)";
+      const ringColor = dark ? "rgba(242,239,233,0.28)" : "rgba(17,17,17,0.28)";
+      const lblC      = dark ? "#141311" : "#F5F3EF";
+
+      /* "open" and "copy" are action cursors — fill ring + show label.
+         "read" is a subtle interactive hint — show outline ring only, no label. */
+      const isAction = typ === "open" || typ === "copy";
+      const exiting  = !typ;
+
+      /* dot: hide only for fill-mode actions */
+      if (dotRef.current) {
+        dotRef.current.style.transform = isAction
+          ? "translate(-50%, -50%) scale(0)"
+          : "translate(-50%, -50%) scale(1)";
       }
-      if (labelRef.current && typ) {
-        labelRef.current.textContent = typ.toUpperCase();
+
+      /* ring: spring enter, fast exit */
+      if (ringRef.current) {
+        ringRef.current.style.transition = exiting
+          ? "opacity 0.2s, transform 0.15s ease-in, background 0.1s, border 0.1s"
+          : "opacity 0.2s, transform 0.25s cubic-bezier(0.34,1.56,0.64,1), background 0.12s, border 0.12s";
+        ringRef.current.style.transform  = typ
+          ? "translate(-50%, -50%) scale(1)"
+          : "translate(-50%, -50%) scale(0)";
+        ringRef.current.style.background = isAction ? fill : "transparent";
+        ringRef.current.style.border     = isAction ? "none"
+          : typ ? `1.5px solid ${ringColor}` : "none";
+      }
+
+      /* label: opacity fade, only for action cursors */
+      if (labelRef.current) {
+        labelRef.current.style.opacity = isAction ? "1" : "0";
+        labelRef.current.style.color   = lblC;
+        if (isAction) labelRef.current.textContent = typ.toUpperCase();
       }
     };
 
@@ -227,7 +246,7 @@ export default function Home() {
             }}
           />
 
-          {/* ring — hidden at rest, scales in on hover */}
+          {/* ring — hidden at rest; outline on interactive, filled on action */}
           <div
             ref={ringRef}
             style={{
@@ -236,6 +255,7 @@ export default function Home() {
               height: 44,
               borderRadius: "50%",
               background: "transparent",
+              border: "none",
               display: "flex",
               alignItems: "center",
               justifyContent: "center",
@@ -243,20 +263,22 @@ export default function Home() {
               pointerEvents: "none",
               zIndex: 9999,
               opacity: visible ? 1 : 0,
-              transition: "opacity 0.15s, transform 0.15s ease-out, background 0.1s",
+              transition: "opacity 0.2s, transform 0.2s ease-out, background 0.12s, border 0.12s",
             }}
           >
             <span
               ref={labelRef}
               style={{
                 ...MONO,
-                display: "none",
+                display: "block",
                 fontSize: 7,
                 fontWeight: 500,
                 letterSpacing: "0.05em",
                 color: "var(--cursor-label)",
                 userSelect: "none",
                 lineHeight: 1,
+                opacity: 0,
+                transition: "opacity 0.12s",
               }}
             />
           </div>
@@ -317,6 +339,7 @@ export default function Home() {
                 key={id}
                 onClick={() => scrollTo(id)}
                 data-cursor="read"
+                className="nav-item"
                 style={{
                   ...MONO,
                   background: "none",
@@ -331,6 +354,7 @@ export default function Home() {
                   gap: 8,
                   alignItems: "center",
                   lineHeight: 1,
+                  transition: "color 0.15s",
                 }}
               >
                 <span style={{ ...MONO, fontSize: 10, color: "var(--fg-muted)", letterSpacing: "0.04em" }}>
@@ -385,52 +409,35 @@ export default function Home() {
             className="masthead-pad"
             style={{ padding: "48px 48px 0", borderBottom: "1px solid var(--border)" }}
           >
-            <div style={{ display: "flex", gap: 40, alignItems: "flex-end" }}>
+            <div style={{
+              display: "flex",
+              justifyContent: "space-between",
+              alignItems: "flex-end",
+              marginBottom: 12,
+            }}>
+              <h1
+                className="masthead-name"
+                style={{ ...BEBAS, fontSize: "clamp(44px, 7vw, 88px)", lineHeight: 1, letterSpacing: "0.02em", color: "var(--fg)" }}
+              >
+                KAUNG KHANT LIN
+              </h1>
+              <span
+                className="masthead-role"
+                style={{ ...BEBAS, fontSize: "clamp(14px, 2vw, 24px)", letterSpacing: "0.06em", paddingBottom: 6, color: "var(--fg)" }}
+              >
+                DATA ENGINEERING
+              </span>
+            </div>
 
-              {/* Left: all text */}
-              <div style={{ flex: 1, minWidth: 0 }}>
-                <div style={{
-                  display: "flex",
-                  justifyContent: "space-between",
-                  alignItems: "flex-end",
-                  marginBottom: 12,
-                }}>
-                  <h1
-                    className="masthead-name"
-                    style={{ ...BEBAS, fontSize: "clamp(44px, 7vw, 88px)", lineHeight: 1, letterSpacing: "0.02em", color: "var(--fg)" }}
-                  >
-                    KAUNG KHANT LIN
-                  </h1>
-                  <span
-                    className="masthead-role"
-                    style={{ ...BEBAS, fontSize: "clamp(14px, 2vw, 24px)", letterSpacing: "0.06em", paddingBottom: 6, color: "var(--fg)" }}
-                  >
-                    DATA ENGINEERING
-                  </span>
-                </div>
+            <div style={{ borderTop: "1px solid var(--fg)", marginBottom: 18 }} />
 
-                <div style={{ borderTop: "1px solid var(--fg)", marginBottom: 18 }} />
+            <div style={{ ...MONO, fontSize: 11, letterSpacing: "0.14em", color: "var(--fg-secondary)", marginBottom: 22 }}>
+              BANGKOK · MYANMAR
+            </div>
 
-                <div style={{ ...MONO, fontSize: 11, letterSpacing: "0.14em", color: "var(--fg-secondary)", marginBottom: 22 }}>
-                  BANGKOK · MYANMAR
-                </div>
-
-                <div style={{ ...MONO, fontSize: "clamp(12px, 1.4vw, 15px)", lineHeight: 1.65, marginBottom: 48, color: "var(--fg-body)" }}>
-                  LEARNING DATA ENGINEERING.<br />
-                  BUILDING REAL PIPELINES IN BANGKOK.
-                </div>
-              </div>
-
-              {/* Right: portrait photo — no-bg cutout, floats on page bg */}
-              <Image
-                src="/images/profile_no_bg.png"
-                alt="Kaung Khant Lin"
-                width={120}
-                height={180}
-                priority
-                className="masthead-photo"
-                style={{ width: "auto", height: 180, objectFit: "contain", objectPosition: "bottom", flexShrink: 0, display: "block" }}
-              />
+            <div style={{ ...MONO, fontSize: "clamp(12px, 1.4vw, 15px)", lineHeight: 1.65, marginBottom: 48, color: "var(--fg-body)" }}>
+              LEARNING DATA ENGINEERING.<br />
+              BUILDING REAL PIPELINES IN BANGKOK.
             </div>
           </section>
 
@@ -442,23 +449,39 @@ export default function Home() {
           >
             <SectionLabel number="01" label="PROFILE" />
 
-            {/* About */}
-            <div style={{ maxWidth: 560, marginBottom: 56 }}>
-              {siteContent.about.paragraphs.map((p, i) => (
-                <p
-                  key={i}
-                  data-cursor="read"
-                  style={{
-                    ...MONO,
-                    fontSize: 13,
-                    lineHeight: 1.9,
-                    color: "var(--fg-body)",
-                    marginBottom: i < siteContent.about.paragraphs.length - 1 ? 20 : 0,
-                  }}
-                >
-                  {p}
-                </p>
-              ))}
+            {/* About — magazine 2-column: photo left, bio right */}
+            <div className="profile-bio-row" style={{ display: "flex", gap: 40, marginBottom: 56, alignItems: "flex-start" }}>
+
+              {/* Photo column — dead space cropped: 370/2000 = 18.5% transparent top */}
+              <div className="profile-photo-col" style={{ width: 200, flexShrink: 0, overflow: "hidden" }}>
+                <Image
+                  src="/images/profile_no_bg.png"
+                  alt="Kaung Khant Lin"
+                  width={1333}
+                  height={2000}
+                  priority
+                  className="profile-photo"
+                  style={{ width: "100%", height: 245, objectFit: "cover", objectPosition: "center bottom", display: "block" }}
+                />
+              </div>
+
+              {/* Bio column */}
+              <div style={{ flex: 1, minWidth: 0 }}>
+                {siteContent.about.paragraphs.map((p, i) => (
+                  <p
+                    key={i}
+                    style={{
+                      ...MONO,
+                      fontSize: 13,
+                      lineHeight: 1.9,
+                      color: "var(--fg-body)",
+                      marginBottom: i < siteContent.about.paragraphs.length - 1 ? 20 : 0,
+                    }}
+                  >
+                    {p}
+                  </p>
+                ))}
+              </div>
             </div>
 
             {/* Skills */}
@@ -528,7 +551,6 @@ export default function Home() {
                         {project.title.toUpperCase()}
                       </h3>
                       <p
-                        data-cursor="read"
                         style={{ ...MONO, fontSize: 12, color: "var(--fg-secondary)", lineHeight: 1.8, marginBottom: 12, maxWidth: 500 }}
                       >
                         {project.subtitle}
@@ -611,7 +633,7 @@ export default function Home() {
                       {item.title.toUpperCase()}
                     </h4>
 
-                    <p data-cursor="read" style={{ ...MONO, fontSize: 12, lineHeight: 1.9, color: "var(--fg-secondary)" }}>
+                    <p style={{ ...MONO, fontSize: 12, lineHeight: 1.9, color: "var(--fg-secondary)" }}>
                       {item.description}
                     </p>
 

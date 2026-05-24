@@ -24,7 +24,8 @@
   --tag-border:   #D4D0CA;
   --tag-text:     #7A7570;
   --cursor-dot:   #111111;
-  --cursor-fill:  rgba(17, 17, 17, 0.90);
+  --cursor-fill:  rgba(17, 17, 17, 0.88);
+  --cursor-ring:  rgba(17, 17, 17, 0.28);
   --cursor-label: #F5F3EF;
   --sidebar-w:    160px;
 }
@@ -46,7 +47,8 @@
   --tag-border:   #333230;
   --tag-text:     #6A6560;
   --cursor-dot:   #F2EFE9;
-  --cursor-fill:  rgba(242, 239, 233, 0.90);
+  --cursor-fill:  rgba(242, 239, 233, 0.88);
+  --cursor-ring:  rgba(242, 239, 233, 0.28);
   --cursor-label: #141311;
 }
 
@@ -101,9 +103,22 @@ a:hover {
 /* ─── Project row hover ──────────────────────────────── */
 .project-row {
   box-shadow: inset 3px 0 0 transparent;
+  transition: box-shadow 0.15s ease;
 }
 .project-row:hover {
   box-shadow: inset 3px 0 0 var(--fg);
+}
+
+/* ─── Nav hover & focus ──────────────────────────────── */
+.no-touch .nav-item:hover {
+  color: var(--fg) !important;
+}
+
+button:focus-visible,
+a:focus-visible {
+  outline: 2px solid var(--blue);
+  outline-offset: 3px;
+  border-radius: 1px;
 }
 
 /* ─── Sidebar (desktop) ──────────────────────────────── */
@@ -115,9 +130,15 @@ a:hover {
   margin-left: var(--sidebar-w);
 }
 
-/* ─── Masthead photo ─────────────────────────────────── */
+/* ─── Profile photo ──────────────────────────────────── */
+[data-theme="dark"] .profile-photo {
+  opacity: 0.88; /* subtle dim so color photo doesn't blaze on dark bg */
+}
+
 @media (max-width: 768px) {
-  .masthead-photo { display: none !important; }
+  .profile-bio-row   { flex-direction: column !important; gap: 24px !important; }
+  .profile-photo-col { width: 160px !important; }
+  .profile-photo     { height: 196px !important; } /* 160 × 1.222 = same crop ratio */
 }
 
 /* ─── 375–480px: small phones ────────────────────────── */

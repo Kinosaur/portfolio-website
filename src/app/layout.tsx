@@ -25,10 +25,35 @@ export const viewport: Viewport = {
   ],
 };
 
+const BASE_URL = "https://kaungkhantlin-porfolio-website.vercel.app";
+const DESCRIPTION =
+  "Data engineering student in Bangkok. Building pipelines, dashboards, and small useful systems.";
+
 export const metadata: Metadata = {
+  metadataBase: new URL(BASE_URL),
   title: "Kaung Khant Lin",
-  description:
-    "Data engineering student in Bangkok. Building pipelines, dashboards, and small useful systems.",
+  description: DESCRIPTION,
+  openGraph: {
+    title: "Kaung Khant Lin",
+    description: DESCRIPTION,
+    url: BASE_URL,
+    siteName: "Kaung Khant Lin",
+    locale: "en_US",
+    type: "website",
+  },
+  twitter: {
+    card: "summary_large_image",
+    title: "Kaung Khant Lin",
+    description: DESCRIPTION,
+  },
+  icons: {
+    icon: "/favicon.svg",
+    shortcut: "/favicon.svg",
+  },
+  robots: {
+    index: true,
+    follow: true,
+  },
 };
 
 export default function RootLayout({

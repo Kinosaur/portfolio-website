@@ -1,6 +1,7 @@
 "use client";
 
 import { useEffect, useRef, useState } from "react";
+import Image from "next/image";
 import { projects } from "@/data/projects";
 import { skills } from "@/data/skills";
 import { siteContent } from "@/data/content";
@@ -332,7 +333,7 @@ export default function Home() {
                   lineHeight: 1,
                 }}
               >
-                <span style={{ ...MONO, fontSize: 9, color: "var(--fg-faint)", letterSpacing: "0.04em" }}>
+                <span style={{ ...MONO, fontSize: 10, color: "var(--fg-muted)", letterSpacing: "0.04em" }}>
                   {num}
                 </span>
                 {label}
@@ -344,7 +345,7 @@ export default function Home() {
           <div style={{ marginTop: "auto" }}>
             <div style={{ borderTop: "1px solid var(--border)", marginBottom: 14 }} />
             <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center" }}>
-              <span style={{ ...MONO, fontSize: 10, color: "var(--fg-faint)", letterSpacing: "0.05em" }}>
+              <span style={{ ...MONO, fontSize: 10, color: "var(--fg-secondary)", letterSpacing: "0.05em" }}>
                 2026
               </span>
               <button
@@ -384,35 +385,52 @@ export default function Home() {
             className="masthead-pad"
             style={{ padding: "48px 48px 0", borderBottom: "1px solid var(--border)" }}
           >
-            <div style={{
-              display: "flex",
-              justifyContent: "space-between",
-              alignItems: "flex-end",
-              marginBottom: 12,
-            }}>
-              <h1
-                className="masthead-name"
-                style={{ ...BEBAS, fontSize: "clamp(44px, 7vw, 88px)", lineHeight: 1, letterSpacing: "0.02em", color: "var(--fg)" }}
-              >
-                KAUNG KHANT LIN
-              </h1>
-              <span
-                className="masthead-role"
-                style={{ ...BEBAS, fontSize: "clamp(14px, 2vw, 24px)", letterSpacing: "0.06em", paddingBottom: 6, color: "var(--fg)" }}
-              >
-                DATA ENGINEERING
-              </span>
-            </div>
+            <div style={{ display: "flex", gap: 40, alignItems: "flex-end" }}>
 
-            <div style={{ borderTop: "1px solid var(--fg)", marginBottom: 18 }} />
+              {/* Left: all text */}
+              <div style={{ flex: 1, minWidth: 0 }}>
+                <div style={{
+                  display: "flex",
+                  justifyContent: "space-between",
+                  alignItems: "flex-end",
+                  marginBottom: 12,
+                }}>
+                  <h1
+                    className="masthead-name"
+                    style={{ ...BEBAS, fontSize: "clamp(44px, 7vw, 88px)", lineHeight: 1, letterSpacing: "0.02em", color: "var(--fg)" }}
+                  >
+                    KAUNG KHANT LIN
+                  </h1>
+                  <span
+                    className="masthead-role"
+                    style={{ ...BEBAS, fontSize: "clamp(14px, 2vw, 24px)", letterSpacing: "0.06em", paddingBottom: 6, color: "var(--fg)" }}
+                  >
+                    DATA ENGINEERING
+                  </span>
+                </div>
 
-            <div style={{ ...MONO, fontSize: 11, letterSpacing: "0.14em", color: "var(--fg-secondary)", marginBottom: 22 }}>
-              BANGKOK · MYANMAR
-            </div>
+                <div style={{ borderTop: "1px solid var(--fg)", marginBottom: 18 }} />
 
-            <div style={{ ...MONO, fontSize: "clamp(12px, 1.4vw, 15px)", lineHeight: 1.65, marginBottom: 48, color: "var(--fg-body)" }}>
-              LEARNING DATA ENGINEERING.<br />
-              BUILDING REAL PIPELINES IN BANGKOK.
+                <div style={{ ...MONO, fontSize: 11, letterSpacing: "0.14em", color: "var(--fg-secondary)", marginBottom: 22 }}>
+                  BANGKOK · MYANMAR
+                </div>
+
+                <div style={{ ...MONO, fontSize: "clamp(12px, 1.4vw, 15px)", lineHeight: 1.65, marginBottom: 48, color: "var(--fg-body)" }}>
+                  LEARNING DATA ENGINEERING.<br />
+                  BUILDING REAL PIPELINES IN BANGKOK.
+                </div>
+              </div>
+
+              {/* Right: portrait photo — no-bg cutout, floats on page bg */}
+              <Image
+                src="/images/profile_no_bg.png"
+                alt="Kaung Khant Lin"
+                width={120}
+                height={180}
+                priority
+                className="masthead-photo"
+                style={{ width: "auto", height: 180, objectFit: "contain", objectPosition: "bottom", flexShrink: 0, display: "block" }}
+              />
             </div>
           </section>
 
@@ -425,7 +443,7 @@ export default function Home() {
             <SectionLabel number="01" label="PROFILE" />
 
             {/* About */}
-            <div style={{ maxWidth: 620, marginBottom: 56 }}>
+            <div style={{ maxWidth: 560, marginBottom: 56 }}>
               {siteContent.about.paragraphs.map((p, i) => (
                 <p
                   key={i}
@@ -498,7 +516,7 @@ export default function Home() {
                       alignItems: "start",
                     }}
                   >
-                    <span style={{ ...MONO, fontSize: 10, color: "var(--fg-faint)", paddingTop: 4, letterSpacing: "0.04em" }}>
+                    <span style={{ ...MONO, fontSize: 10, color: "var(--fg-muted)", paddingTop: 4, letterSpacing: "0.04em" }}>
                       {String(i + 1).padStart(2, "0")}
                     </span>
 
@@ -570,7 +588,7 @@ export default function Home() {
               A log of things I am building and figuring out.
             </p>
 
-            <div style={{ maxWidth: 600 }}>
+            <div style={{ maxWidth: 540 }}>
               {buildingItems.map((item, i) => (
                 <div key={item.id}>
                   <div style={{ paddingBottom: 36 }}>
@@ -682,7 +700,7 @@ export default function Home() {
 function SectionLabel({ number, label }: { number: string; label: string }) {
   return (
     <div style={{ display: "flex", alignItems: "center", gap: 14, marginBottom: 40 }}>
-      <span style={{ ...MONO, fontSize: 10, color: "var(--fg-faint)", letterSpacing: "0.05em" }}>
+      <span style={{ ...MONO, fontSize: 10, color: "var(--fg-muted)", letterSpacing: "0.05em" }}>
         {number}
       </span>
       <span style={{ ...BEBAS, fontSize: 26, letterSpacing: "0.1em", color: "var(--fg)" }}>

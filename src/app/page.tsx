@@ -31,10 +31,11 @@ const LINK: React.CSSProperties = {
 /* ─── Page ───────────────────────────────────────────── */
 export default function Home() {
   /* Cursor refs — direct DOM, zero re-renders */
-  const dotRef   = useRef<HTMLDivElement>(null);
-  const ringRef  = useRef<HTMLDivElement>(null);
-  const labelRef = useRef<HTMLSpanElement>(null);
-  const rafRef   = useRef<number>(0);
+  const dotRef      = useRef<HTMLDivElement>(null);
+  const ringRef     = useRef<HTMLDivElement>(null);
+  const labelRef    = useRef<HTMLSpanElement>(null);
+  const rafRef      = useRef<number>(0);
+  const progressRef = useRef<HTMLDivElement>(null);
 
   const mouse       = useRef({ x: -100, y: -100 });
   const ring        = useRef({ x: -100, y: -100 });
@@ -188,12 +189,18 @@ export default function Home() {
     };
   }, [isTouch]);
 
-  /* ── Active section ──────────────────────────────── */
+  /* ── Active section + scroll progress ───────────── */
   useEffect(() => {
     const onScroll = () => {
-      const scrollY  = window.scrollY;
+      const scrollY   = window.scrollY;
       const viewportH = window.innerHeight;
-      const pageH    = document.documentElement.scrollHeight;
+      const pageH     = document.documentElement.scrollHeight;
+
+      /* progress bar — compositor-accelerated, no re-render */
+      if (progressRef.current) {
+        const maxScroll = pageH - viewportH;
+        progressRef.current.style.transform = `scaleX(${maxScroll > 0 ? Math.min(scrollY / maxScroll, 1) : 0})`;
+      }
 
       if (scrollY + viewportH >= pageH - 50) {
         setActiveId(NAV[NAV.length - 1].id);
@@ -226,6 +233,21 @@ export default function Home() {
   /* ── Render ──────────────────────────────────────── */
   return (
     <>
+      {/* ── Scroll progress bar ──────────────────── */}
+      <div
+        ref={progressRef}
+        style={{
+          position: "fixed",
+          top: 0, left: 0, right: 0,
+          height: 1,
+          background: "var(--fg)",
+          transformOrigin: "left",
+          transform: "scaleX(0)",
+          zIndex: 10001,
+          pointerEvents: "none",
+        }}
+      />
+
       {/* ── Cursor (mouse devices only) ──────────── */}
       {!isTouch && (
         <>
@@ -367,6 +389,11 @@ export default function Home() {
 
           {/* Bottom */}
           <div style={{ marginTop: "auto" }}>
+            {/* Availability signal */}
+            <div style={{ ...MONO, fontSize: 9, letterSpacing: "0.12em", marginBottom: 12, textTransform: "uppercase", display: "flex", alignItems: "center", gap: 4 }}>
+              <span style={{ color: "var(--blue)", fontSize: 8, lineHeight: 1 }}>○</span>
+              <span style={{ color: "var(--fg-secondary)" }}>{siteContent.availability.status}</span>
+            </div>
             <div style={{ borderTop: "1px solid var(--border)", marginBottom: 14 }} />
             <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center" }}>
               <span style={{ ...MONO, fontSize: 10, color: "var(--fg-secondary)", letterSpacing: "0.05em" }}>
@@ -667,6 +694,11 @@ export default function Home() {
             <SectionLabel number="04" label="CONTACT" />
 
             <div style={{ maxWidth: 440 }}>
+              {/* Availability note */}
+              <p style={{ ...MONO, fontSize: 12, color: "var(--fg-muted)", marginBottom: 36, lineHeight: 1.7 }}>
+                {siteContent.availability.note}
+              </p>
+
               {/* Email */}
               <div style={{ marginBottom: 48 }}>
                 <div style={{ display: "flex", alignItems: "center", gap: 14, marginBottom: 16 }}>

@@ -51,4 +51,8 @@ export const siteContent = {
     github: "https://github.com/Kinosaur",
     linkedin: "https://www.linkedin.com/in/kaungkhantlin-kinosaur/",
   },
+  availability: {
+    status: "OPEN TO ROLES",
+    note: "Seeking data engineering roles. Graduating 2026.",
+  },
 };

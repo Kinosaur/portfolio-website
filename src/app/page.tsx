@@ -21,8 +21,8 @@ const MONO:  React.CSSProperties = { fontFamily: "var(--font-mono), monospace" }
 
 const LINK: React.CSSProperties = {
   ...MONO,
-  fontSize: 10,
-  letterSpacing: "0.1em",
+  fontSize: 11,
+  letterSpacing: "0.08em",
   textTransform: "uppercase",
   color: "var(--blue)",
   textDecoration: "none",
@@ -390,11 +390,6 @@ export default function Home() {
 
           {/* Bottom */}
           <div style={{ marginTop: "auto" }}>
-            {/* Availability signal */}
-            <div style={{ ...MONO, fontSize: 9, letterSpacing: "0.12em", marginBottom: 12, textTransform: "uppercase", display: "flex", alignItems: "center", gap: 4 }}>
-              <span style={{ color: "var(--blue)", fontSize: 8, lineHeight: 1 }}>○</span>
-              <span style={{ color: "var(--fg-secondary)" }}>{siteContent.availability.status}</span>
-            </div>
             <div style={{ borderTop: "1px solid var(--border)", marginBottom: 14 }} />
             <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center" }}>
               <span style={{ ...MONO, fontSize: 10, color: "var(--fg-secondary)", letterSpacing: "0.05em" }}>
@@ -488,24 +483,11 @@ export default function Home() {
           >
             <SectionLabel number="01" label="PROFILE" />
 
-            {/* About — magazine 2-column: photo left, bio right */}
-            <div className="profile-bio-row" style={{ display: "flex", gap: 40, marginBottom: 56, alignItems: "flex-start" }}>
+            {/* About — bio left, photo right */}
+            <div className="profile-bio-row" style={{ display: "flex", gap: 48, marginBottom: 56, alignItems: "flex-start" }}>
 
-              {/* Photo column — dead space cropped: 370/2000 = 18.5% transparent top */}
-              <div className="profile-photo-col" style={{ width: 200, flexShrink: 0, overflow: "hidden" }}>
-                <Image
-                  src="/images/profile_no_bg.png"
-                  alt="Kaung Khant Lin"
-                  width={1333}
-                  height={2000}
-                  priority
-                  className="profile-photo"
-                  style={{ width: "100%", height: 245, objectFit: "cover", objectPosition: "center bottom", display: "block" }}
-                />
-              </div>
-
-              {/* Bio column */}
-              <div style={{ flex: 1, minWidth: 0 }}>
+              {/* Bio column — starts at left edge, aligned with masthead */}
+              <div style={{ flex: 1, minWidth: 0, maxWidth: 560 }}>
                 {siteContent.about.paragraphs.map((p, i) => (
                   <p
                     key={i}
@@ -520,6 +502,19 @@ export default function Home() {
                     {p}
                   </p>
                 ))}
+              </div>
+
+              {/* Photo column — right side */}
+              <div className="profile-photo-col" style={{ width: 180, flexShrink: 0, overflow: "hidden" }}>
+                <Image
+                  src="/images/profile_no_bg.png"
+                  alt="Kaung Khant Lin"
+                  width={1333}
+                  height={2000}
+                  priority
+                  className="profile-photo"
+                  style={{ width: "100%", height: 220, objectFit: "cover", objectPosition: "center bottom", display: "block" }}
+                />
               </div>
             </div>
 
@@ -542,11 +537,11 @@ export default function Home() {
                       >
                         <span
                           className="skill-category"
-                          style={{ ...MONO, fontSize: 10, letterSpacing: "0.1em", color: "var(--fg-muted)", minWidth: 140, textTransform: "uppercase" }}
+                          style={{ ...MONO, fontSize: 11, letterSpacing: "0.08em", color: "var(--fg-secondary)", minWidth: 160, textTransform: "uppercase" }}
                         >
                           {group.category}
                         </span>
-                        <span style={{ ...MONO, fontSize: 13, color: "var(--fg-secondary)", lineHeight: 1.7 }}>
+                        <span style={{ ...MONO, fontSize: 14, color: "var(--fg-body)", lineHeight: 1.7 }}>
                           {group.items.join(", ")}
                         </span>
                       </div>
@@ -583,16 +578,16 @@ export default function Home() {
                     </span>
 
                     <div>
-                      <span style={{ ...MONO, fontSize: 9, letterSpacing: "0.15em", color: "var(--fg-muted)", textTransform: "uppercase", display: "block", marginBottom: 6 }}>
+                      <span style={{ ...MONO, fontSize: 10, letterSpacing: "0.12em", color: "var(--fg-secondary)", textTransform: "uppercase", display: "block", marginBottom: 6 }}>
                         {project.tag}
                       </span>
                       <h3 className="project-title" style={{ ...BEBAS, fontSize: 22, letterSpacing: "0.05em", lineHeight: 1, marginBottom: 8, color: "var(--fg)" }}>
                         {project.title.toUpperCase()}
                       </h3>
-                      <p style={{ ...MONO, fontSize: 14, color: "var(--fg-secondary)", lineHeight: 1.75, marginBottom: 10, maxWidth: 500 }}>
+                      <p style={{ ...MONO, fontSize: 14, color: "var(--fg-body)", lineHeight: 1.75, marginBottom: 10, maxWidth: 520 }}>
                         {project.subtitle}
                       </p>
-                      <p style={{ ...MONO, fontSize: 13, color: "var(--fg-muted)", lineHeight: 1.85, marginBottom: 14, maxWidth: 500 }}>
+                      <p style={{ ...MONO, fontSize: 14, color: "var(--fg-secondary)", lineHeight: 1.85, marginBottom: 14, maxWidth: 520 }}>
                         {project.description}
                       </p>
 
@@ -603,12 +598,12 @@ export default function Home() {
                             key={s}
                             style={{
                               ...MONO,
-                              fontSize: 9,
-                              letterSpacing: "0.1em",
+                              fontSize: 10,
+                              letterSpacing: "0.08em",
                               textTransform: "uppercase",
-                              border: "1px solid var(--tag-border)",
-                              padding: "2px 6px",
-                              color: "var(--tag-text)",
+                              border: "1px solid var(--border)",
+                              padding: "3px 7px",
+                              color: "var(--fg-secondary)",
                             }}
                           >
                             {s}
@@ -646,24 +641,24 @@ export default function Home() {
           >
             <SectionLabel number="03" label="NOTES" />
 
-            <p style={{ ...MONO, fontSize: 11, color: "var(--fg-muted)", letterSpacing: "0.06em", marginBottom: 40, textTransform: "uppercase" }}>
+            <p style={{ ...MONO, fontSize: 12, color: "var(--fg-secondary)", letterSpacing: "0.04em", marginBottom: 40 }}>
               A log of things I am building and figuring out.
             </p>
 
-            <div style={{ maxWidth: 540 }}>
+            <div style={{ maxWidth: 560 }}>
               {buildingItems.map((item, i) => (
                 <div key={item.id}>
                   <div style={{ paddingBottom: 36 }}>
                     <div style={{ display: "flex", alignItems: "center", gap: 10, marginBottom: 10 }}>
                       <span style={{
                         ...MONO,
-                        fontSize: 9,
-                        letterSpacing: "0.14em",
+                        fontSize: 10,
+                        letterSpacing: "0.1em",
                         textTransform: "uppercase",
                         border: "1px solid",
                         borderColor: item.status === "in_progress" ? "var(--fg)" : "var(--border)",
-                        color: item.status === "in_progress" ? "var(--fg)" : "var(--fg-muted)",
-                        padding: "2px 6px",
+                        color: item.status === "in_progress" ? "var(--fg)" : "var(--fg-secondary)",
+                        padding: "2px 7px",
                       }}>
                         {item.status === "in_progress" ? "In Progress" : "Planned"}
                       </span>
@@ -673,7 +668,7 @@ export default function Home() {
                       {item.title.toUpperCase()}
                     </h4>
 
-                    <p style={{ ...MONO, fontSize: 14, lineHeight: 1.9, color: "var(--fg-secondary)" }}>
+                    <p style={{ ...MONO, fontSize: 14, lineHeight: 1.9, color: "var(--fg-body)" }}>
                       {item.description}
                     </p>
 

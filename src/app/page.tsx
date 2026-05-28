@@ -143,9 +143,10 @@ export default function Home() {
       const ringColor = dark ? "rgba(242,239,233,0.28)" : "rgba(17,17,17,0.28)";
       const lblC      = dark ? "#141311" : "#F5F3EF";
 
-      /* "open" and "copy" are action cursors — fill ring + show label.
-         "read" is a subtle interactive hint — show outline ring only, no label. */
-      const isAction = typ === "open" || typ === "copy";
+      /* action cursors — fill ring + show label.
+         "code" → CODE, "run" → RUN, "copy" → COPY, "open" → OPEN (fallback)
+         "read" is a subtle hint — outline ring only, no label. */
+      const isAction = typ === "open" || typ === "copy" || typ === "code" || typ === "run";
       const exiting  = !typ;
 
       /* dot: hide only for fill-mode actions */
@@ -448,18 +449,39 @@ export default function Home() {
               >
                 KAUNG KHANT LIN
               </h1>
-              <span
-                className="masthead-role"
-                style={{ ...BEBAS, fontSize: "clamp(14px, 2vw, 24px)", letterSpacing: "0.06em", paddingBottom: 6, color: "var(--fg)" }}
-              >
-                DATA ENGINEERING
-              </span>
+
+              {/* Right column: role + live availability signal */}
+              <div className="masthead-role" style={{ display: "flex", flexDirection: "column", alignItems: "flex-end", gap: 6, paddingBottom: 6 }}>
+                <span style={{ ...BEBAS, fontSize: "clamp(14px, 2vw, 24px)", letterSpacing: "0.06em", color: "var(--fg)" }}>
+                  DATA ENGINEERING
+                </span>
+                <div style={{ ...MONO, fontSize: 10, letterSpacing: "0.12em", textTransform: "uppercase", display: "flex", alignItems: "center", gap: 5 }}>
+                  <span style={{
+                    color: "var(--blue)",
+                    fontSize: 8,
+                    lineHeight: 1,
+                    animation: "availability-pulse 2s ease-in-out infinite",
+                  }}>●</span>
+                  <span style={{ color: "var(--fg-secondary)" }}>{siteContent.availability.status}</span>
+                </div>
+              </div>
             </div>
 
             <div style={{ borderTop: "1px solid var(--fg)", marginBottom: 18 }} />
 
-            <div style={{ ...MONO, fontSize: 11, letterSpacing: "0.14em", color: "var(--fg-secondary)", marginBottom: 22 }}>
-              BANGKOK · MYANMAR
+            {/* Byline + data stats row */}
+            <div style={{ display: "flex", justifyContent: "space-between", alignItems: "baseline", marginBottom: 22, flexWrap: "wrap", gap: 8 }}>
+              <div style={{ ...MONO, fontSize: 11, letterSpacing: "0.14em", color: "var(--fg-secondary)" }}>
+                BANGKOK · MYANMAR
+              </div>
+              <div style={{ display: "flex", gap: 20, flexWrap: "wrap" }}>
+                {siteContent.featuredCaseStudy.stats.map((s) => (
+                  <span key={s.label} style={{ ...MONO, fontSize: 10, letterSpacing: "0.1em", color: "var(--fg-muted)", textTransform: "uppercase" }}>
+                    <span style={{ color: "var(--fg-secondary)", fontWeight: 500 }}>{s.value}</span>
+                    {" "}{s.label}
+                  </span>
+                ))}
+              </div>
             </div>
 
             <div style={{ ...MONO, fontSize: "clamp(12px, 1.4vw, 15px)", lineHeight: 1.65, marginBottom: 48, color: "var(--fg-body)" }}>
@@ -606,11 +628,11 @@ export default function Home() {
 
                       {/* Links */}
                       <div style={{ display: "flex", gap: 20, flexWrap: "wrap" }}>
-                        <a href={project.githubUrl} target="_blank" rel="noopener noreferrer" data-cursor="open" style={LINK}>
+                        <a href={project.githubUrl} target="_blank" rel="noopener noreferrer" data-cursor="code" style={LINK}>
                           GitHub ↗
                         </a>
                         {project.liveUrl && (
-                          <a href={project.liveUrl} target="_blank" rel="noopener noreferrer" data-cursor="open" style={LINK}>
+                          <a href={project.liveUrl} target="_blank" rel="noopener noreferrer" data-cursor="run" style={LINK}>
                             {project.liveLabel} ↗
                           </a>
                         )}
@@ -670,7 +692,7 @@ export default function Home() {
                         href={item.repoUrl}
                         target="_blank"
                         rel="noopener noreferrer"
-                        data-cursor="open"
+                        data-cursor="code"
                         style={{ ...LINK, display: "inline-block", marginTop: 10 }}
                       >
                         GitHub ↗
@@ -735,7 +757,7 @@ export default function Home() {
                     style={{ ...MONO, fontSize: 13, color: "var(--blue)", textDecoration: "none", letterSpacing: "0.04em" }}>
                     LinkedIn ↗
                   </a>
-                  <a href={siteContent.contact.github} target="_blank" rel="noopener noreferrer" data-cursor="open"
+                  <a href={siteContent.contact.github} target="_blank" rel="noopener noreferrer" data-cursor="code"
                     style={{ ...MONO, fontSize: 13, color: "var(--blue)", textDecoration: "none", letterSpacing: "0.04em" }}>
                     GitHub ↗
                   </a>

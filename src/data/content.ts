@@ -42,8 +42,8 @@ export const siteContent = {
   },
   about: {
     paragraphs: [
-      "I'm a final-year Computer Science student at Assumption University in Bangkok, originally from Myanmar. I'm focused on becoming a data engineer — currently strongest in Python-side data processing and visualization, and actively learning the warehousing, modeling, and orchestration tools that make up the rest of the stack.",
-      "What pulls me toward this kind of work is civic transparency in Southeast Asia. Most of the data that should be public here either isn't, or exists in a form nobody can use. Projects like Transparent City and Breath Before You Go are my way of practicing the craft on problems I actually care about.",
+      "CS student in Bangkok, from Myanmar. Building toward data engineering — Python pipelines and visualization now, full DE stack in progress.",
+      "Drawn to civic data in Southeast Asia. Most useful public data here is either missing or locked away. Transparent City and Breath Before You Go are the practice ground.",
     ],
   },
   contact: {

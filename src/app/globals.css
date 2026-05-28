@@ -1,5 +1,11 @@
 @import "tailwindcss";
 
+/* ─── Keyframes ───────────────────────────────────────── */
+@keyframes availability-pulse {
+  0%, 100% { opacity: 1; }
+  50%       { opacity: 0.3; }
+}
+
 /* ─── Reset ──────────────────────────────────────────── */
 *, *::before, *::after {
   box-sizing: border-box;

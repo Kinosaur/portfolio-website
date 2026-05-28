@@ -90,7 +90,7 @@ export default function Home() {
     const fill      = dark ? "rgba(242,239,233,0.88)" : "rgba(17,17,17,0.88)";
     const ringColor = dark ? "rgba(242,239,233,0.28)" : "rgba(17,17,17,0.28)";
     const lblC      = dark ? "#141311" : "#F5F3EF";
-    const isAction  = cursorType.current === "open" || cursorType.current === "copy";
+    const isAction  = cursorType.current === "open" || cursorType.current === "copy" || cursorType.current === "code" || cursorType.current === "run";
     if (ringRef.current) {
       ringRef.current.style.background = isAction ? fill : "transparent";
       ringRef.current.style.border     = isAction ? "none" : `1.5px solid ${ringColor}`;
@@ -469,19 +469,9 @@ export default function Home() {
 
             <div style={{ borderTop: "1px solid var(--fg)", marginBottom: 18 }} />
 
-            {/* Byline + data stats row */}
-            <div style={{ display: "flex", justifyContent: "space-between", alignItems: "baseline", marginBottom: 22, flexWrap: "wrap", gap: 8 }}>
-              <div style={{ ...MONO, fontSize: 11, letterSpacing: "0.14em", color: "var(--fg-secondary)" }}>
-                BANGKOK · MYANMAR
-              </div>
-              <div style={{ display: "flex", gap: 20, flexWrap: "wrap" }}>
-                {siteContent.featuredCaseStudy.stats.map((s) => (
-                  <span key={s.label} style={{ ...MONO, fontSize: 10, letterSpacing: "0.1em", color: "var(--fg-muted)", textTransform: "uppercase" }}>
-                    <span style={{ color: "var(--fg-secondary)", fontWeight: 500 }}>{s.value}</span>
-                    {" "}{s.label}
-                  </span>
-                ))}
-              </div>
+            {/* Byline */}
+            <div style={{ ...MONO, fontSize: 11, letterSpacing: "0.14em", color: "var(--fg-secondary)", marginBottom: 20 }}>
+              BANGKOK · MYANMAR
             </div>
 
             <div style={{ ...MONO, fontSize: "clamp(12px, 1.4vw, 15px)", lineHeight: 1.65, marginBottom: 48, color: "var(--fg-body)" }}>

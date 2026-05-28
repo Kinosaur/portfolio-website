@@ -103,10 +103,33 @@ a:hover {
 /* ─── Project row hover ──────────────────────────────── */
 .project-row {
   box-shadow: inset 3px 0 0 transparent;
-  transition: box-shadow 0.15s ease;
+  transition: box-shadow 0.18s ease, background 0.18s ease;
 }
-.project-row:hover {
+.project-title {
+  transition: transform 0.18s ease;
+  display: inline-block;
+}
+.project-num {
+  transition: color 0.18s ease;
+}
+
+/* Mouse-only — never fires on touch */
+.no-touch .project-row:hover {
   box-shadow: inset 3px 0 0 var(--fg);
+  background: var(--bg-sidebar);
+}
+.no-touch .project-row:hover .project-title {
+  transform: translateX(3px);
+}
+.no-touch .project-row:hover .project-num {
+  color: var(--blue) !important;
+}
+
+/* Respect reduced-motion */
+@media (prefers-reduced-motion: reduce) {
+  .project-title,
+  .project-num,
+  .project-row { transition: none !important; }
 }
 
 /* ─── Nav hover & focus ──────────────────────────────── */

@@ -499,7 +499,7 @@ export default function Home() {
                     key={i}
                     style={{
                       ...MONO,
-                      fontSize: 13,
+                      fontSize: 15,
                       lineHeight: 1.9,
                       color: "var(--fg-body)",
                       marginBottom: i < siteContent.about.paragraphs.length - 1 ? 20 : 0,
@@ -534,7 +534,7 @@ export default function Home() {
                         >
                           {group.category}
                         </span>
-                        <span style={{ ...MONO, fontSize: 12, color: "var(--fg-secondary)", lineHeight: 1.7 }}>
+                        <span style={{ ...MONO, fontSize: 13, color: "var(--fg-secondary)", lineHeight: 1.7 }}>
                           {group.items.join(", ")}
                         </span>
                       </div>
@@ -566,7 +566,7 @@ export default function Home() {
                       alignItems: "start",
                     }}
                   >
-                    <span style={{ ...MONO, fontSize: 10, color: "var(--fg-muted)", paddingTop: 4, letterSpacing: "0.04em" }}>
+                    <span className="project-num" style={{ ...MONO, fontSize: 10, color: "var(--fg-muted)", paddingTop: 4, letterSpacing: "0.04em" }}>
                       {String(i + 1).padStart(2, "0")}
                     </span>
 
@@ -574,13 +574,14 @@ export default function Home() {
                       <span style={{ ...MONO, fontSize: 9, letterSpacing: "0.15em", color: "var(--fg-muted)", textTransform: "uppercase", display: "block", marginBottom: 6 }}>
                         {project.tag}
                       </span>
-                      <h3 style={{ ...BEBAS, fontSize: 22, letterSpacing: "0.05em", lineHeight: 1, marginBottom: 8, color: "var(--fg)" }}>
+                      <h3 className="project-title" style={{ ...BEBAS, fontSize: 22, letterSpacing: "0.05em", lineHeight: 1, marginBottom: 8, color: "var(--fg)" }}>
                         {project.title.toUpperCase()}
                       </h3>
-                      <p
-                        style={{ ...MONO, fontSize: 12, color: "var(--fg-secondary)", lineHeight: 1.8, marginBottom: 12, maxWidth: 500 }}
-                      >
+                      <p style={{ ...MONO, fontSize: 14, color: "var(--fg-secondary)", lineHeight: 1.75, marginBottom: 10, maxWidth: 500 }}>
                         {project.subtitle}
+                      </p>
+                      <p style={{ ...MONO, fontSize: 13, color: "var(--fg-muted)", lineHeight: 1.85, marginBottom: 14, maxWidth: 500 }}>
+                        {project.description}
                       </p>
 
                       {/* Stack tags */}
@@ -660,7 +661,7 @@ export default function Home() {
                       {item.title.toUpperCase()}
                     </h4>
 
-                    <p style={{ ...MONO, fontSize: 12, lineHeight: 1.9, color: "var(--fg-secondary)" }}>
+                    <p style={{ ...MONO, fontSize: 14, lineHeight: 1.9, color: "var(--fg-secondary)" }}>
                       {item.description}
                     </p>
 
@@ -695,7 +696,7 @@ export default function Home() {
 
             <div style={{ maxWidth: 440 }}>
               {/* Availability note */}
-              <p style={{ ...MONO, fontSize: 12, color: "var(--fg-muted)", marginBottom: 36, lineHeight: 1.7 }}>
+              <p style={{ ...MONO, fontSize: 13, color: "var(--fg-muted)", marginBottom: 36, lineHeight: 1.7 }}>
                 {siteContent.availability.note}
               </p>
 

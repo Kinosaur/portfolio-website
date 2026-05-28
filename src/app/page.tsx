@@ -450,14 +450,24 @@ export default function Home() {
                 <span style={{ ...BEBAS, fontSize: "clamp(14px, 2vw, 24px)", letterSpacing: "0.06em", color: "var(--fg)" }}>
                   DATA ENGINEERING
                 </span>
-                <div style={{ ...MONO, fontSize: 10, letterSpacing: "0.12em", textTransform: "uppercase", display: "flex", alignItems: "center", gap: 5 }}>
+                <div style={{
+                  ...MONO,
+                  fontSize: 11,
+                  letterSpacing: "0.1em",
+                  textTransform: "uppercase",
+                  display: "inline-flex",
+                  alignItems: "center",
+                  gap: 6,
+                  border: "1px solid var(--border)",
+                  padding: "4px 10px",
+                }}>
                   <span style={{
                     color: "var(--blue)",
                     fontSize: 8,
                     lineHeight: 1,
                     animation: "availability-pulse 2s ease-in-out infinite",
                   }}>●</span>
-                  <span style={{ color: "var(--fg-secondary)" }}>{siteContent.availability.status}</span>
+                  <span style={{ color: "var(--fg)" }}>{siteContent.availability.status}</span>
                 </div>
               </div>
             </div>
@@ -519,34 +529,57 @@ export default function Home() {
             </div>
 
             {/* Skills */}
-            <div style={{ display: "flex", flexDirection: "column", gap: 36 }}>
+            <div style={{ display: "flex", flexDirection: "column", gap: 28 }}>
               {skills.map((tier) => (
                 <div key={tier.tier}>
-                  <div style={{ display: "flex", alignItems: "center", gap: 14, marginBottom: 18 }}>
+                  <div style={{ display: "flex", alignItems: "center", gap: 14, marginBottom: tier.tier === "proficient" ? 16 : 12 }}>
                     <span style={{ ...BEBAS, fontSize: 15, letterSpacing: "0.1em", color: "var(--fg)" }}>
                       {tier.label.toUpperCase()}
                     </span>
                     <div style={{ flex: 1, borderTop: "1px solid var(--border-light)" }} />
                   </div>
-                  <div style={{ display: "flex", flexDirection: "column", gap: 9 }}>
-                    {tier.groups.map((group) => (
-                      <div
-                        key={group.category}
-                        className="skill-row"
-                        style={{ display: "flex", gap: 20, alignItems: "baseline" }}
-                      >
-                        <span
-                          className="skill-category"
-                          style={{ ...MONO, fontSize: 11, letterSpacing: "0.08em", color: "var(--fg-secondary)", minWidth: 160, textTransform: "uppercase" }}
+
+                  {tier.tier === "proficient" ? (
+                    /* Full table for proven skills */
+                    <div style={{ display: "flex", flexDirection: "column", gap: 9 }}>
+                      {tier.groups.map((group) => (
+                        <div
+                          key={group.category}
+                          className="skill-row"
+                          style={{ display: "flex", gap: 20, alignItems: "baseline" }}
                         >
-                          {group.category}
+                          <span
+                            className="skill-category"
+                            style={{ ...MONO, fontSize: 11, letterSpacing: "0.08em", color: "var(--fg-secondary)", minWidth: 160, textTransform: "uppercase" }}
+                          >
+                            {group.category}
+                          </span>
+                          <span style={{ ...MONO, fontSize: 14, color: "var(--fg-body)", lineHeight: 1.7 }}>
+                            {group.items.join(", ")}
+                          </span>
+                        </div>
+                      ))}
+                    </div>
+                  ) : (
+                    /* Compact chips for learning/exploring — saves ~280px vertical */
+                    <div style={{ display: "flex", flexWrap: "wrap", gap: 6 }}>
+                      {tier.groups.flatMap((g) => g.items).map((item) => (
+                        <span
+                          key={item}
+                          style={{
+                            ...MONO,
+                            fontSize: 11,
+                            letterSpacing: "0.05em",
+                            border: "1px solid var(--border-light)",
+                            padding: "3px 9px",
+                            color: "var(--fg-secondary)",
+                          }}
+                        >
+                          {item}
                         </span>
-                        <span style={{ ...MONO, fontSize: 14, color: "var(--fg-body)", lineHeight: 1.7 }}>
-                          {group.items.join(", ")}
-                        </span>
-                      </div>
-                    ))}
-                  </div>
+                      ))}
+                    </div>
+                  )}
                 </div>
               ))}
             </div>

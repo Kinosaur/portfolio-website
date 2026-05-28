@@ -38,28 +38,6 @@ export const projects: Project[] = [
     liveLabel: "Live Demo",
   },
   {
-    id: "weightlifting",
-    tag: "CS FUNDAMENTALS",
-    title: "Weightlifting (Google Code Jam)",
-    subtitle: "Interval DP solution, O(E³) complexity",
-    description:
-      "Solved using interval dynamic programming and memoization. Included because data engineering work eventually requires reasoning about algorithmic cost — not just calling library functions.",
-    stack: ["Python", "dynamic programming"],
-    githubUrl: "https://github.com/Kinosaur/algorithm-design-term-project",
-    liveLabel: "Writeup",
-  },
-  {
-    id: "data-analytics",
-    tag: "DATA QUALITY",
-    title: "Data Analytics & Cleaning Portfolio",
-    subtitle: "End-to-end EDA on real-world datasets",
-    description:
-      "Cleaning, validation, and exploratory analysis on messy public datasets. Practice ground for the boring but essential half of data work.",
-    stack: ["Python", "pandas", "NumPy", "Jupyter", "Matplotlib"],
-    githubUrl: "https://github.com/Kinosaur/data-cleaning-eda-portfolio",
-    liveLabel: "Notebook",
-  },
-  {
     id: "seeit-cv",
     tag: "UNSTRUCTURED DATA",
     title: "SEEiT — Computer Vision Capstone",

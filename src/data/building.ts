@@ -10,14 +10,6 @@ export interface BuildingItem {
 
 export const buildingItems: BuildingItem[] = [
   {
-    id: "retail-insights",
-    title: "Retail Insights",
-    description:
-      "Ongoing project focused on data engineering: pipeline and analytics for small clothing shops to surface top revenue products, dead stock, and stock-aware reorder timing from operational data.",
-    status: "in_progress",
-    repoUrl: "https://github.com/Kinosaur/retail-insights",
-  },
-  {
     id: "unimatch-educompare",
     title: "UniMatch (EduCompare)",
     description:

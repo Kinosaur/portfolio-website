@@ -38,6 +38,16 @@ export const projects: Project[] = [
     liveLabel: "Live Demo",
   },
   {
+    id: "retail-insights",
+    tag: "DATA PIPELINE",
+    title: "Retail Insights Engine",
+    subtitle: "Python backend turning messy retail CSVs into structured business intelligence",
+    description:
+      "FastAPI + PostgreSQL pipeline that ingests dirty sales and inventory data, runs five analytics queries (top products, dead stock, reorder timing), then routes aggregated results through an LLM for plain-English summaries. Built against 155K synthetic transactions and 801 SKUs. 34-test pytest suite.",
+    stack: ["Python", "FastAPI", "pandas", "PostgreSQL", "SQLAlchemy", "Groq AI", "pytest"],
+    githubUrl: "https://github.com/Kinosaur/retail-insights",
+  },
+  {
     id: "seeit-cv",
     tag: "UNSTRUCTURED DATA",
     title: "SEEiT — Computer Vision Capstone",

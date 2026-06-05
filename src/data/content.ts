@@ -42,8 +42,7 @@ export const siteContent = {
   },
   about: {
     paragraphs: [
-      "CS student in Bangkok, from Myanmar. Building toward data engineering — Python pipelines and visualization now, full DE stack in progress.",
-      "Drawn to civic data in Southeast Asia. Most useful public data here is either missing or locked away. Transparent City and Breath Before You Go are the practice ground.",
+      "CS student in Bangkok, from Myanmar. Python pipelines, data visualization, and civic data in Southeast Asia.",
     ],
   },
   contact: {

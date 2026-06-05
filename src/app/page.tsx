@@ -504,11 +504,11 @@ export default function Home() {
           >
             <SectionLabel number="01" label="PROFILE" id="heading-profile" />
 
-            {/* About — bio left, photo right — flex-end so bio bottom aligns with photo bottom */}
-            <div className="profile-bio-row" style={{ display: "flex", gap: 48, marginBottom: 56, alignItems: "flex-end" }}>
+            {/* About — bio left, photo right — center aligns short bio with portrait */}
+            <div className="profile-bio-row" style={{ display: "flex", gap: 48, marginBottom: 56, alignItems: "center" }}>
 
-              {/* Bio column — starts at left edge, aligned with masthead */}
-              <div style={{ flex: 1, minWidth: 0, maxWidth: 560 }}>
+              {/* Bio column */}
+              <div style={{ flex: 1, minWidth: 0, maxWidth: 480 }}>
                 {siteContent.about.paragraphs.map((p, i) => (
                   <p
                     key={i}
@@ -525,8 +525,8 @@ export default function Home() {
                 ))}
               </div>
 
-              {/* Photo column — right side */}
-              <div className="profile-photo-col" style={{ width: 180, flexShrink: 0, overflow: "hidden" }}>
+              {/* Photo column — right side, bigger */}
+              <div className="profile-photo-col" style={{ width: 220, flexShrink: 0, overflow: "hidden" }}>
                 <Image
                   src="/images/profile_no_bg.png"
                   alt="Kaung Khant Lin"
@@ -535,7 +535,7 @@ export default function Home() {
                   priority
                   data-cursor="read"
                   className="profile-photo"
-                  style={{ width: "100%", height: 220, objectFit: "cover", objectPosition: "center bottom", display: "block" }}
+                  style={{ width: "100%", height: 270, objectFit: "cover", objectPosition: "center bottom", display: "block" }}
                 />
               </div>
             </div>

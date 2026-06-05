@@ -169,8 +169,8 @@ a:focus-visible {
 
 @media (max-width: 768px) {
   .profile-bio-row   { flex-direction: column !important; gap: 24px !important; }
-  .profile-photo-col { width: 160px !important; }
-  .profile-photo     { height: 196px !important; } /* 160 × 1.222 = same crop ratio */
+  .profile-photo-col { width: 180px !important; }
+  .profile-photo     { height: 220px !important; } /* 180 × 1.222 = same crop ratio */
 }
 
 /* ─── 375–480px: small phones ────────────────────────── */

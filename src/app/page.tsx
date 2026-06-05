@@ -311,12 +311,12 @@ export default function Home() {
       {/* ── Mobile top strip ─────────────────────── */}
       <div className="sidebar-mobile">
         <span style={{ ...BEBAS, fontSize: 14, letterSpacing: "0.08em", color: "var(--fg)" }}>KKL</span>
-        <span style={{ ...MONO, fontSize: 10, letterSpacing: "0.12em", color: "var(--fg-muted)" }}>
+        <span style={{ ...MONO, fontSize: 10, letterSpacing: "0.12em", color: "var(--fg-secondary)" }}>
           {NAV.find(n => n.id === activeId)?.num}&nbsp;{NAV.find(n => n.id === activeId)?.label}
         </span>
         <button
           onClick={toggleTheme}
-          aria-label="Toggle theme"
+          aria-label={isDark ? "Switch to light mode" : "Switch to dark mode"}
           style={{
             ...MONO,
             background: "none",
@@ -324,7 +324,7 @@ export default function Home() {
             padding: 0,
             fontSize: 9,
             letterSpacing: "0.1em",
-            color: "var(--fg-muted)",
+            color: "var(--fg-secondary)",
           }}
         >
           {isDark ? "○ LIGHT" : "● DARK"}
@@ -356,13 +356,14 @@ export default function Home() {
           <div style={{ borderTop: "1px solid var(--border)", marginBottom: 28 }} />
 
           {/* Nav */}
-          <nav style={{ display: "flex", flexDirection: "column", gap: 14 }}>
+          <nav aria-label="Page sections" style={{ display: "flex", flexDirection: "column", gap: 14 }}>
             {NAV.map(({ id, label, num }) => (
               <button
                 key={id}
                 onClick={() => scrollTo(id)}
                 data-cursor="read"
                 className="nav-item"
+                aria-current={activeId === id ? "true" : undefined}
                 style={{
                   ...MONO,
                   background: "none",
@@ -371,7 +372,7 @@ export default function Home() {
                   textAlign: "left",
                   fontSize: 11,
                   letterSpacing: "0.1em",
-                  color: activeId === id ? "var(--fg)" : "var(--fg-muted)",
+                  color: activeId === id ? "var(--fg)" : "var(--fg-secondary)",
                   fontWeight: activeId === id ? 500 : 400,
                   display: "flex",
                   gap: 8,
@@ -380,7 +381,7 @@ export default function Home() {
                   transition: "color 0.15s",
                 }}
               >
-                <span style={{ ...MONO, fontSize: 10, color: "var(--fg-muted)", letterSpacing: "0.04em" }}>
+                <span style={{ ...MONO, fontSize: 10, color: "var(--fg-secondary)", letterSpacing: "0.04em" }}>
                   {num}
                 </span>
                 {label}
@@ -406,7 +407,7 @@ export default function Home() {
                   padding: 0,
                   fontSize: 9,
                   letterSpacing: "0.1em",
-                  color: "var(--fg-muted)",
+                  color: "var(--fg-secondary)",
                   textTransform: "uppercase",
                   display: "flex",
                   alignItems: "center",
@@ -450,17 +451,26 @@ export default function Home() {
                 <span style={{ ...BEBAS, fontSize: "clamp(14px, 2vw, 24px)", letterSpacing: "0.06em", color: "var(--fg)" }}>
                   DATA ENGINEERING
                 </span>
-                <div style={{
-                  ...MONO,
-                  fontSize: 11,
-                  letterSpacing: "0.1em",
-                  textTransform: "uppercase",
-                  display: "inline-flex",
-                  alignItems: "center",
-                  gap: 6,
-                  border: "1px solid var(--border)",
-                  padding: "4px 10px",
-                }}>
+                {/* Clicking badge jumps to contact — functional affordance, cursor signals it */}
+                <button
+                  onClick={() => scrollTo("contact")}
+                  data-cursor="open"
+                  aria-label="Open to roles — jump to contact"
+                  style={{
+                    ...MONO,
+                    background: "none",
+                    border: "1px solid var(--border)",
+                    padding: "4px 10px",
+                    fontSize: 11,
+                    letterSpacing: "0.1em",
+                    textTransform: "uppercase",
+                    display: "inline-flex",
+                    alignItems: "center",
+                    gap: 6,
+                    cursor: "inherit",
+                    minHeight: "unset",
+                  }}
+                >
                   <span style={{
                     color: "var(--blue)",
                     fontSize: 8,
@@ -468,7 +478,7 @@ export default function Home() {
                     animation: "availability-pulse 2s ease-in-out infinite",
                   }}>●</span>
                   <span style={{ color: "var(--fg)" }}>{siteContent.availability.status}</span>
-                </div>
+                </button>
               </div>
             </div>
 
@@ -488,13 +498,14 @@ export default function Home() {
           {/* ── 01 PROFILE ───────────────────── */}
           <section
             id="profile"
+            aria-labelledby="heading-profile"
             className="section-pad"
             style={{ padding: "64px 48px", borderBottom: "1px solid var(--border)" }}
           >
-            <SectionLabel number="01" label="PROFILE" />
+            <SectionLabel number="01" label="PROFILE" id="heading-profile" />
 
-            {/* About — bio left, photo right */}
-            <div className="profile-bio-row" style={{ display: "flex", gap: 48, marginBottom: 56, alignItems: "flex-start" }}>
+            {/* About — bio left, photo right — flex-end so bio bottom aligns with photo bottom */}
+            <div className="profile-bio-row" style={{ display: "flex", gap: 48, marginBottom: 56, alignItems: "flex-end" }}>
 
               {/* Bio column — starts at left edge, aligned with masthead */}
               <div style={{ flex: 1, minWidth: 0, maxWidth: 560 }}>
@@ -522,6 +533,7 @@ export default function Home() {
                   width={1333}
                   height={2000}
                   priority
+                  data-cursor="read"
                   className="profile-photo"
                   style={{ width: "100%", height: 220, objectFit: "cover", objectPosition: "center bottom", display: "block" }}
                 />
@@ -588,16 +600,18 @@ export default function Home() {
           {/* ── 02 WORK ──────────────────────── */}
           <section
             id="work"
+            aria-labelledby="heading-work"
             className="section-pad"
             style={{ padding: "64px 48px", borderBottom: "1px solid var(--border)" }}
           >
-            <SectionLabel number="02" label="WORK" />
+            <SectionLabel number="02" label="WORK" id="heading-work" />
 
             <div>
               {projects.map((project, i) => (
                 <div key={project.id}>
                   <div
                     className="project-row"
+                    data-cursor="read"
                     style={{
                       padding: "28px 0 28px 12px",
                       display: "grid",
@@ -606,7 +620,7 @@ export default function Home() {
                       alignItems: "start",
                     }}
                   >
-                    <span className="project-num" style={{ ...MONO, fontSize: 10, color: "var(--fg-muted)", paddingTop: 4, letterSpacing: "0.04em" }}>
+                    <span className="project-num" style={{ ...MONO, fontSize: 10, color: "var(--fg-secondary)", paddingTop: 4, letterSpacing: "0.04em" }}>
                       {String(i + 1).padStart(2, "0")}
                     </span>
 
@@ -669,10 +683,11 @@ export default function Home() {
           {/* ── 03 NOTES ─────────────────────── */}
           <section
             id="notes"
+            aria-labelledby="heading-notes"
             className="section-pad"
             style={{ padding: "64px 48px", borderBottom: "1px solid var(--border)" }}
           >
-            <SectionLabel number="03" label="NOTES" />
+            <SectionLabel number="03" label="NOTES" id="heading-notes" />
 
             <p style={{ ...MONO, fontSize: 12, color: "var(--fg-secondary)", letterSpacing: "0.04em", marginBottom: 40 }}>
               A log of things I am building and figuring out.
@@ -697,9 +712,9 @@ export default function Home() {
                       </span>
                     </div>
 
-                    <h4 style={{ ...BEBAS, fontSize: 18, letterSpacing: "0.06em", lineHeight: 1, marginBottom: 8, color: "var(--fg)" }}>
+                    <h3 style={{ ...BEBAS, fontSize: 18, letterSpacing: "0.06em", lineHeight: 1, marginBottom: 8, color: "var(--fg)" }}>
                       {item.title.toUpperCase()}
-                    </h4>
+                    </h3>
 
                     <p style={{ ...MONO, fontSize: 14, lineHeight: 1.9, color: "var(--fg-body)" }}>
                       {item.description}
@@ -729,10 +744,11 @@ export default function Home() {
           {/* ── 04 CONTACT ───────────────────── */}
           <section
             id="contact"
+            aria-labelledby="heading-contact"
             className="section-pad"
             style={{ padding: "64px 48px 96px" }}
           >
-            <SectionLabel number="04" label="CONTACT" />
+            <SectionLabel number="04" label="CONTACT" id="heading-contact" />
 
             <div style={{ maxWidth: 440 }}>
               {/* Availability note */}
@@ -749,6 +765,7 @@ export default function Home() {
                 <button
                   onClick={copyEmail}
                   data-cursor="copy"
+                  aria-label={emailCopied ? "Email address copied" : `Copy email address: ${siteContent.contact.email}`}
                   style={{
                     ...MONO,
                     background: "none",
@@ -756,11 +773,11 @@ export default function Home() {
                     padding: 0,
                     fontSize: 13,
                     letterSpacing: "0.02em",
-                    color: emailCopied ? "var(--fg-muted)" : "var(--fg-body)",
+                    color: emailCopied ? "var(--fg-secondary)" : "var(--fg-body)",
                     transition: "color 0.2s",
                   }}
                 >
-                  {emailCopied ? "Copied." : siteContent.contact.email}
+                  <span aria-live="polite">{emailCopied ? "Copied." : siteContent.contact.email}</span>
                 </button>
               </div>
 
@@ -792,16 +809,20 @@ export default function Home() {
 }
 
 /* ─── Section label ──────────────────────────────────── */
-function SectionLabel({ number, label }: { number: string; label: string }) {
+function SectionLabel({ number, label, id }: { number: string; label: string; id?: string }) {
   return (
     <div style={{ display: "flex", alignItems: "center", gap: 14, marginBottom: 40 }}>
-      <span style={{ ...MONO, fontSize: 10, color: "var(--fg-muted)", letterSpacing: "0.05em" }}>
+      <span style={{ ...MONO, fontSize: 10, color: "var(--fg-secondary)", letterSpacing: "0.05em" }} aria-hidden="true">
         {number}
       </span>
-      <span style={{ ...BEBAS, fontSize: 26, letterSpacing: "0.1em", color: "var(--fg)" }}>
+      {/* h2 for correct heading hierarchy: h1 (name) → h2 (section) → h3 (project/note) */}
+      <h2
+        id={id}
+        style={{ ...BEBAS, fontSize: 26, letterSpacing: "0.1em", color: "var(--fg)", margin: 0 }}
+      >
         {label}
-      </span>
-      <div style={{ flex: 1, borderTop: "1px solid var(--fg)" }} />
+      </h2>
+      <div style={{ flex: 1, borderTop: "1px solid var(--fg)" }} aria-hidden="true" />
     </div>
   );
 }

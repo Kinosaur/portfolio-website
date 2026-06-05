@@ -136,6 +136,9 @@ a:hover {
   .project-title,
   .project-num,
   .project-row { transition: none !important; }
+
+  /* Stop availability pulse for users who prefer reduced motion */
+  * { animation: none !important; }
 }
 
 /* ─── Nav hover & focus ──────────────────────────────── */

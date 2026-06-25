@@ -2,17 +2,18 @@
 
 import { useEffect, useRef, useState } from "react";
 import Image from "next/image";
-import { projects } from "@/data/projects";
+import { projects, personalProjects } from "@/data/projects";
 import { skills } from "@/data/skills";
 import { siteContent } from "@/data/content";
 import { buildingItems } from "@/data/building";
 
 /* ─── Nav ────────────────────────────────────────────── */
 const NAV = [
-  { id: "profile", label: "PROFILE", num: "01" },
-  { id: "work",    label: "WORK",    num: "02" },
-  { id: "notes",   label: "NOTES",   num: "03" },
-  { id: "contact", label: "CONTACT", num: "04" },
+  { id: "profile",  label: "PROFILE",  num: "01" },
+  { id: "work",     label: "WORK",     num: "02" },
+  { id: "personal", label: "PERSONAL", num: "03" },
+  { id: "notes",    label: "NOTES",    num: "04" },
+  { id: "contact",  label: "CONTACT",  num: "05" },
 ];
 
 /* ─── Shared font fragments ──────────────────────────── */
@@ -36,6 +37,7 @@ export default function Home() {
   const labelRef    = useRef<HTMLSpanElement>(null);
   const rafRef      = useRef<number>(0);
   const progressRef = useRef<HTMLDivElement>(null);
+  const topBtnRef   = useRef<HTMLButtonElement>(null);
 
   const mouse       = useRef({ x: -100, y: -100 });
   const ring        = useRef({ x: -100, y: -100 });
@@ -203,6 +205,14 @@ export default function Home() {
         progressRef.current.style.transform = `scaleX(${maxScroll > 0 ? Math.min(scrollY / maxScroll, 1) : 0})`;
       }
 
+      /* back-to-top — ref toggle, no re-render. Shows once past ~first screen */
+      if (topBtnRef.current) {
+        const show = scrollY > viewportH * 0.8;
+        topBtnRef.current.style.opacity       = show ? "1" : "0";
+        topBtnRef.current.style.transform     = show ? "translateY(0)" : "translateY(10px)";
+        topBtnRef.current.style.pointerEvents  = show ? "auto" : "none";
+      }
+
       if (scrollY + viewportH >= pageH - 50) {
         setActiveId(NAV[NAV.length - 1].id);
         return;
@@ -224,6 +234,9 @@ export default function Home() {
 
   const scrollTo = (id: string) =>
     document.getElementById(id)?.scrollIntoView({ behavior: "smooth" });
+
+  const scrollToTop = () =>
+    window.scrollTo({ top: 0, behavior: "smooth" });
 
   const copyEmail = () => {
     navigator.clipboard.writeText(siteContent.contact.email);
@@ -307,6 +320,41 @@ export default function Home() {
           </div>
         </>
       )}
+
+      {/* ── Back to top — fixed bottom-right, fades in past first screen ── */}
+      <button
+        ref={topBtnRef}
+        onClick={scrollToTop}
+        data-cursor="read"
+        aria-label="Back to top"
+        className="back-to-top"
+        style={{
+          ...MONO,
+          position: "fixed",
+          right: 28,
+          bottom: 28,
+          zIndex: 90,
+          background: "var(--bg-sidebar)",
+          border: "1px solid var(--border)",
+          color: "var(--fg)",
+          padding: "0 12px",
+          height: 44,
+          minHeight: 44,
+          display: "inline-flex",
+          alignItems: "center",
+          gap: 7,
+          fontSize: 10,
+          letterSpacing: "0.14em",
+          textTransform: "uppercase",
+          opacity: 0,
+          transform: "translateY(10px)",
+          pointerEvents: "none",
+          transition: "opacity 0.25s ease, transform 0.25s ease, border-color 0.18s ease",
+        }}
+      >
+        <span aria-hidden="true" style={{ fontSize: 13, lineHeight: 1 }}>↑</span>
+        TOP
+      </button>
 
       {/* ── Mobile top strip ─────────────────────── */}
       <div className="sidebar-mobile">
@@ -490,8 +538,8 @@ export default function Home() {
             </div>
 
             <div style={{ ...MONO, fontSize: "clamp(12px, 1.4vw, 15px)", lineHeight: 1.65, marginBottom: 48, color: "var(--fg-body)" }}>
-              LEARNING DATA ENGINEERING.<br />
-              BUILDING REAL PIPELINES IN BANGKOK.
+              BUILDING REAL DATA-BACKED PRODUCTS IN BANGKOK.<br />
+              PIPELINES, ANALYTICS APIS, AND CIVIC DASHBOARDS.
             </div>
           </section>
 
@@ -609,70 +657,33 @@ export default function Home() {
             <div>
               {projects.map((project, i) => (
                 <div key={project.id}>
-                  <div
-                    className="project-row"
-                    data-cursor="read"
-                    style={{
-                      padding: "28px 0 28px 12px",
-                      display: "grid",
-                      gridTemplateColumns: "36px 1fr",
-                      gap: "0 20px",
-                      alignItems: "start",
-                    }}
-                  >
-                    <span className="project-num" style={{ ...MONO, fontSize: 10, color: "var(--fg-secondary)", paddingTop: 4, letterSpacing: "0.04em" }}>
-                      {String(i + 1).padStart(2, "0")}
-                    </span>
-
-                    <div>
-                      <span style={{ ...MONO, fontSize: 10, letterSpacing: "0.12em", color: "var(--fg-secondary)", textTransform: "uppercase", display: "block", marginBottom: 6 }}>
-                        {project.tag}
-                      </span>
-                      <h3 className="project-title" style={{ ...BEBAS, fontSize: 22, letterSpacing: "0.05em", lineHeight: 1, marginBottom: 8, color: "var(--fg)" }}>
-                        {project.title.toUpperCase()}
-                      </h3>
-                      <p style={{ ...MONO, fontSize: 14, color: "var(--fg-body)", lineHeight: 1.75, marginBottom: 10, maxWidth: 520 }}>
-                        {project.subtitle}
-                      </p>
-                      <p style={{ ...MONO, fontSize: 14, color: "var(--fg-secondary)", lineHeight: 1.85, marginBottom: 14, maxWidth: 520 }}>
-                        {project.description}
-                      </p>
-
-                      {/* Stack tags */}
-                      <div style={{ display: "flex", flexWrap: "wrap", gap: 5, marginBottom: 14 }}>
-                        {project.stack.map((s) => (
-                          <span
-                            key={s}
-                            style={{
-                              ...MONO,
-                              fontSize: 10,
-                              letterSpacing: "0.08em",
-                              textTransform: "uppercase",
-                              border: "1px solid var(--border)",
-                              padding: "3px 7px",
-                              color: "var(--fg-secondary)",
-                            }}
-                          >
-                            {s}
-                          </span>
-                        ))}
-                      </div>
-
-                      {/* Links */}
-                      <div style={{ display: "flex", gap: 20, flexWrap: "wrap" }}>
-                        <a href={project.githubUrl} target="_blank" rel="noopener noreferrer" data-cursor="code" style={LINK}>
-                          GitHub ↗
-                        </a>
-                        {project.liveUrl && (
-                          <a href={project.liveUrl} target="_blank" rel="noopener noreferrer" data-cursor="run" style={LINK}>
-                            {project.liveLabel} ↗
-                          </a>
-                        )}
-                      </div>
-                    </div>
-                  </div>
-
+                  <ProjectRow project={project} index={i} />
                   {i < projects.length - 1 && (
+                    <div style={{ borderTop: "1px solid var(--border-light)" }} />
+                  )}
+                </div>
+              ))}
+            </div>
+          </section>
+
+          {/* ── 03 PERSONAL ──────────────────── */}
+          <section
+            id="personal"
+            aria-labelledby="heading-personal"
+            className="section-pad"
+            style={{ padding: "64px 48px", borderBottom: "1px solid var(--border)" }}
+          >
+            <SectionLabel number="03" label="PERSONAL" id="heading-personal" />
+
+            <p style={{ ...MONO, fontSize: 12, color: "var(--fg-secondary)", letterSpacing: "0.04em", marginBottom: 40 }}>
+              Smaller tools and digital places I build for real life.
+            </p>
+
+            <div>
+              {personalProjects.map((project, i) => (
+                <div key={project.id}>
+                  <ProjectRow project={project} index={i} />
+                  {i < personalProjects.length - 1 && (
                     <div style={{ borderTop: "1px solid var(--border-light)" }} />
                   )}
                 </div>
@@ -687,7 +698,7 @@ export default function Home() {
             className="section-pad"
             style={{ padding: "64px 48px", borderBottom: "1px solid var(--border)" }}
           >
-            <SectionLabel number="03" label="NOTES" id="heading-notes" />
+            <SectionLabel number="04" label="NOTES" id="heading-notes" />
 
             <p style={{ ...MONO, fontSize: 12, color: "var(--fg-secondary)", letterSpacing: "0.04em", marginBottom: 40 }}>
               A log of things I am building and figuring out.
@@ -748,7 +759,7 @@ export default function Home() {
             className="section-pad"
             style={{ padding: "64px 48px 96px" }}
           >
-            <SectionLabel number="04" label="CONTACT" id="heading-contact" />
+            <SectionLabel number="05" label="CONTACT" id="heading-contact" />
 
             <div style={{ maxWidth: 440 }}>
               {/* Availability note */}
@@ -805,6 +816,76 @@ export default function Home() {
         </div>
       </div>
     </>
+  );
+}
+
+/* ─── Project row ────────────────────────────────────── */
+function ProjectRow({ project, index }: { project: import("@/data/projects").Project; index: number }) {
+  return (
+    <div
+      className="project-row"
+      data-cursor="read"
+      style={{
+        padding: "28px 0 28px 12px",
+        display: "grid",
+        gridTemplateColumns: "36px 1fr",
+        gap: "0 20px",
+        alignItems: "start",
+      }}
+    >
+      <span className="project-num" style={{ ...MONO, fontSize: 10, color: "var(--fg-secondary)", paddingTop: 4, letterSpacing: "0.04em" }}>
+        {String(index + 1).padStart(2, "0")}
+      </span>
+
+      <div>
+        <span style={{ ...MONO, fontSize: 10, letterSpacing: "0.12em", color: "var(--fg-secondary)", textTransform: "uppercase", display: "block", marginBottom: 6 }}>
+          {project.tag}
+        </span>
+        <h3 className="project-title" style={{ ...BEBAS, fontSize: 22, letterSpacing: "0.05em", lineHeight: 1, marginBottom: 8, color: "var(--fg)" }}>
+          {project.title.toUpperCase()}
+        </h3>
+        <p style={{ ...MONO, fontSize: 14, color: "var(--fg-body)", lineHeight: 1.75, marginBottom: 10, maxWidth: 520 }}>
+          {project.subtitle}
+        </p>
+        <p style={{ ...MONO, fontSize: 14, color: "var(--fg-secondary)", lineHeight: 1.85, marginBottom: 14, maxWidth: 520 }}>
+          {project.description}
+        </p>
+
+        {/* Stack tags */}
+        <div style={{ display: "flex", flexWrap: "wrap", gap: 5, marginBottom: 14 }}>
+          {project.stack.map((s) => (
+            <span
+              key={s}
+              style={{
+                ...MONO,
+                fontSize: 10,
+                letterSpacing: "0.08em",
+                textTransform: "uppercase",
+                border: "1px solid var(--border)",
+                padding: "3px 7px",
+                color: "var(--fg-secondary)",
+              }}
+            >
+              {s}
+            </span>
+          ))}
+        </div>
+
+        {/* Links — GitHub only when public (Kino's repo is private) */}
+        <div style={{ display: "flex", gap: 20, flexWrap: "wrap" }}>
+          {project.githubUrl && (
+            <a href={project.githubUrl} target="_blank" rel="noopener noreferrer" data-cursor="code" style={LINK}>
+              GitHub ↗
+            </a>
+          )}
+          {project.liveUrl && (
+            <a href={project.liveUrl} target="_blank" rel="noopener noreferrer" data-cursor="run" style={LINK}>
+              {project.liveLabel} ↗
+            </a>
+          )}
+        </div>
+      </div>
+    </div>
   );
 }
 

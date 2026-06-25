@@ -5,7 +5,7 @@ export interface Project {
   subtitle: string;
   description: string;
   stack: string[];
-  githubUrl: string;
+  githubUrl?: string;
   liveUrl?: string;
   liveLabel?: string;
   featured?: boolean;
@@ -49,15 +49,41 @@ export const projects: Project[] = [
   },
   {
     id: "seeit-cv",
-    tag: "UNSTRUCTURED DATA",
+    tag: "ACCESSIBILITY · CV",
     title: "SEEiT — Computer Vision Capstone",
-    subtitle: "Pipeline for ingesting and processing image data",
+    subtitle: "Real-time object detection and audio feedback for visually impaired users",
     description:
-      "Senior capstone built around a CV model. Included here for the data side: ingestion, preprocessing, and storage of unstructured image data — a concern that scales differently than tabular pipelines.",
-    stack: ["TypeScript", "CV libraries", "image processing"],
+      "Accessibility-focused mobile app using on-device object detection and text-to-speech to help visually impaired users understand their surroundings. Built around live camera input and unstructured image data, with color-blind support and an accessibility-first UI.",
+    stack: ["React Native", "ML Kit", "Text-to-Speech", "Android"],
     githubUrl: "https://github.com/Kinosaur/SEEiT-CV",
     liveUrl: "https://github.com/Kinosaur/SEEiT-CV/blob/main/docs/SEEiT_Senior_Porject_1_report.pdf",
     liveLabel: "Documentation",
+  },
+];
+
+/* Personal projects — shown in their own section. Kino's repo is private,
+   so it has no githubUrl; Motion Ghost has no public live demo. */
+export const personalProjects: Project[] = [
+  {
+    id: "kino-library",
+    tag: "FULL-STACK",
+    title: "Kino Library",
+    subtitle: "A personal bookshelf with a private admin workflow",
+    description:
+      "A quiet public shelf for a real book collection, paired with a local-only admin for data entry. Next.js public site backed by Supabase Postgres and Storage; a separate local FastAPI tool handles image uploads, keeping a clean public/private data boundary.",
+    stack: ["Next.js", "Supabase", "PostgreSQL", "FastAPI", "ISR"],
+    liveUrl: "https://kino-library.vercel.app/",
+    liveLabel: "Live Site",
+  },
+  {
+    id: "motion-ghost",
+    tag: "CREATIVE CODING",
+    title: "Motion Ghost",
+    subtitle: "A browser camera that reveals only movement",
+    description:
+      "A real-time WebGL2 camera effect that isolates motion and renders it as light. Everything runs locally — webcam frames become a motion mask, then a shader pass, with MediaRecorder export. No footage ever leaves the device.",
+    stack: ["WebGL2", "GLSL", "TypeScript", "MediaRecorder API"],
+    githubUrl: "https://github.com/Kinosaur/motion-ghost-camera",
   },
 ];
 

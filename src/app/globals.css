@@ -135,7 +135,8 @@ a:hover {
 @media (prefers-reduced-motion: reduce) {
   .project-title,
   .project-num,
-  .project-row { transition: none !important; }
+  .project-row,
+  .back-to-top { transition: none !important; }
 
   /* Stop availability pulse for users who prefer reduced motion */
   * { animation: none !important; }
@@ -144,6 +145,17 @@ a:hover {
 /* ─── Nav hover & focus ──────────────────────────────── */
 .no-touch .nav-item:hover {
   color: var(--fg) !important;
+}
+
+/* ─── Back to top ────────────────────────────────────── */
+.no-touch .back-to-top:hover {
+  border-color: var(--fg) !important;
+}
+@media (max-width: 768px) {
+  .back-to-top {
+    right: 16px !important;
+    bottom: 16px !important;
+  }
 }
 
 button:focus-visible,

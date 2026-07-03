@@ -26,16 +26,17 @@ export const viewport: Viewport = {
   ],
 };
 
-const BASE_URL = "https://kaungkhantlin-porfolio-website.vercel.app";
+const BASE_URL = "https://kaungkhantlin-portfolio-website.vercel.app";
+const TITLE = "Kaung Khant Lin — Data Engineering";
 const DESCRIPTION =
-  "Data engineering student in Bangkok. Building pipelines, dashboards, and small useful systems.";
+  "Building real data-backed products in Bangkok. Pipelines, analytics APIs, and civic dashboards. Open to data engineering roles, graduating 2026.";
 
 export const metadata: Metadata = {
   metadataBase: new URL(BASE_URL),
-  title: "Kaung Khant Lin",
+  title: TITLE,
   description: DESCRIPTION,
   openGraph: {
-    title: "Kaung Khant Lin",
+    title: TITLE,
     description: DESCRIPTION,
     url: BASE_URL,
     siteName: "Kaung Khant Lin",
@@ -44,7 +45,7 @@ export const metadata: Metadata = {
   },
   twitter: {
     card: "summary_large_image",
-    title: "Kaung Khant Lin",
+    title: TITLE,
     description: DESCRIPTION,
   },
   icons: {
@@ -57,6 +58,37 @@ export const metadata: Metadata = {
   },
 };
 
+/* Person schema — helps Google surface name, role, and profiles correctly */
+const personJsonLd = {
+  "@context": "https://schema.org",
+  "@type": "Person",
+  name: "Kaung Khant Lin",
+  url: BASE_URL,
+  jobTitle: "Data Engineering Student",
+  alumniOf: {
+    "@type": "CollegeOrUniversity",
+    name: "Assumption University of Thailand",
+  },
+  address: {
+    "@type": "PostalAddress",
+    addressLocality: "Bangkok",
+    addressCountry: "TH",
+  },
+  nationality: "Myanmar",
+  sameAs: [
+    "https://github.com/Kinosaur",
+    "https://www.linkedin.com/in/kaungkhantlin-kinosaur/",
+  ],
+  knowsAbout: [
+    "Data Engineering",
+    "Python",
+    "Data Pipelines",
+    "Data Visualization",
+    "PostgreSQL",
+    "Civic Technology",
+  ],
+};
+
 export default function RootLayout({
   children,
 }: {
@@ -64,7 +96,14 @@ export default function RootLayout({
 }) {
   return (
     <html lang="en" className={`${bebasNeue.variable} ${ibmPlexMono.variable}`}>
-      <body>{children}<Analytics /></body>
+      <body>
+        {children}
+        <script
+          type="application/ld+json"
+          dangerouslySetInnerHTML={{ __html: JSON.stringify(personJsonLd) }}
+        />
+        <Analytics />
+      </body>
     </html>
   );
 }

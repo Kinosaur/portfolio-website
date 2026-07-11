@@ -1,7 +1,7 @@
 "use client";
 
 import { useEffect, useRef, useState } from "react";
-import Image from "next/image";
+import AsciiPortrait from "./AsciiPortrait";
 import { projects, personalProjects } from "@/data/projects";
 import { skills } from "@/data/skills";
 import { siteContent } from "@/data/content";
@@ -573,17 +573,13 @@ export default function Home() {
                 ))}
               </div>
 
-              {/* Photo column — right side, bigger */}
-              <div className="profile-photo-col" style={{ width: 220, flexShrink: 0, overflow: "hidden" }}>
-                <Image
+              {/* Photo column — right side, bigger. ASCII portrait that
+                  reveals the photo along the cursor path (mouse devices). */}
+              <div className="profile-photo-col" style={{ width: 300, flexShrink: 0, overflow: "hidden" }}>
+                <AsciiPortrait
                   src="/images/profile_no_bg.png"
                   alt="Kaung Khant Lin"
-                  width={1333}
-                  height={2000}
-                  priority
-                  data-cursor="read"
-                  className="profile-photo"
-                  style={{ width: "100%", height: 270, objectFit: "cover", objectPosition: "center bottom", display: "block" }}
+                  isDark={isDark}
                 />
               </div>
             </div>

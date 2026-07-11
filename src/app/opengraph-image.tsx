@@ -8,15 +8,24 @@ export const size = { width: 1200, height: 630 };
 export const contentType = "image/png";
 
 /* Fetch a TTF subset from Google Fonts (satori can't render woff2 or
-   system fonts). css2 without a modern UA returns truetype sources. */
-async function loadGoogleFont(family: string, text: string) {
-  const url = `https://fonts.googleapis.com/css2?family=${encodeURIComponent(
-    family
-  )}&text=${encodeURIComponent(text)}`;
-  const css = await (await fetch(url)).text();
-  const match = css.match(/src: url\((.+)\) format\('(opentype|truetype)'\)/);
-  if (!match) throw new Error(`Failed to load font: ${family}`);
-  return (await fetch(match[1])).arrayBuffer();
+   system fonts). css2 without a modern UA returns truetype sources.
+   Returns null on any failure so the image still renders in satori's
+   default font rather than failing the build. */
+async function loadGoogleFont(
+  family: string,
+  text: string
+): Promise<ArrayBuffer | null> {
+  try {
+    const url = `https://fonts.googleapis.com/css2?family=${encodeURIComponent(
+      family
+    )}&text=${encodeURIComponent(text)}`;
+    const css = await (await fetch(url)).text();
+    const match = css.match(/src: url\((.+)\) format\('(opentype|truetype)'\)/);
+    if (!match) return null;
+    return await (await fetch(match[1])).arrayBuffer();
+  } catch {
+    return null;
+  }
 }
 
 const NAME = "KAUNG KHANT LIN";
@@ -28,6 +37,11 @@ export default async function OgImage() {
     loadGoogleFont("Bebas Neue", NAME),
     loadGoogleFont("IBM Plex Mono:wght@500", MONO_TEXT),
   ]);
+
+  const fonts = [
+    bebas && { name: "Bebas Neue", data: bebas, weight: 400 as const, style: "normal" as const },
+    mono && { name: "IBM Plex Mono", data: mono, weight: 500 as const, style: "normal" as const },
+  ].filter(Boolean) as { name: string; data: ArrayBuffer; weight: 400 | 500; style: "normal" }[];
 
   return new ImageResponse(
     (
@@ -135,12 +149,6 @@ export default async function OgImage() {
         </div>
       </div>
     ),
-    {
-      ...size,
-      fonts: [
-        { name: "Bebas Neue", data: bebas, weight: 400, style: "normal" },
-        { name: "IBM Plex Mono", data: mono, weight: 500, style: "normal" },
-      ],
-    }
+    { ...size, fonts }
   );
 }

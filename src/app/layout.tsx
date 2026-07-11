@@ -1,6 +1,7 @@
 import type { Metadata, Viewport } from "next";
 import { Bebas_Neue, IBM_Plex_Mono } from "next/font/google";
 import { Analytics } from "@vercel/analytics/next";
+import { SITE_URL } from "@/lib/site";
 import "./globals.css";
 
 const bebasNeue = Bebas_Neue({
@@ -26,7 +27,7 @@ export const viewport: Viewport = {
   ],
 };
 
-const BASE_URL = "https://kaungkhantlin-portfolio-website.vercel.app";
+const BASE_URL = SITE_URL;
 const TITLE = "Kaung Khant Lin — Data Engineering";
 const DESCRIPTION =
   "Building real data-backed products in Bangkok. Pipelines, analytics APIs, and civic dashboards. Open to data engineering roles, graduating 2026.";
